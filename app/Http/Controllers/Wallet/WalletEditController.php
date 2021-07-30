@@ -63,7 +63,7 @@ class WalletEditController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => 'You cannot edit that wallet',
+                'message' => __('You cannot edit this wallet.'),
                 'status' => 'danger'
             ]);
     }
@@ -73,7 +73,7 @@ class WalletEditController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => 'That wallet does not exist.',
+                'message' => __('Wallet does not exist.'),
                 'status' => 'danger'
             ]);
     }
@@ -83,7 +83,7 @@ class WalletEditController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => ('Wallet ' . $successMethod . ' successfully.'),
+                'message' => __('Wallet :action successfully.', ['action' => __($successMethod)]),
                 'status' => 'success'
             ]);
     }

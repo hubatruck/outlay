@@ -11,7 +11,7 @@
                     <div class="card-header">{{ __('Wallets') }}</div>
                     <div class="card-body">
                         <div class="col">
-                            <a href="{{ route('wallet.view.create') }}" class="btn btn-success">Add</a>
+                            <a href="{{ route('wallet.view.create') }}" class="btn btn-success">{{ __('Add') }}</a>
                         </div>
                         <hr/>
 
@@ -19,26 +19,30 @@
                             <table class="table table-hover table-responsive">
                                 <thead>
                                 <tr class="font-weight-bold">
-                                    <td>Actions</td>
-                                    <td>Name</td>
-                                    <td>Current balance</td>
-                                    <td>Credit card</td>
+                                    <td>{{ __('Actions') }}</td>
+                                    <td>{{ __('Name') }}</td>
+                                    <td>{{ __('Current balance') }}</td>
+                                    <td>{{ __('Credit card') }}</td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach(Auth::user()->wallets as $wallet)
                                     <tr>
-                                        <td><a class="btn btn-primary btn-sm"
-                                               href="{{ url("/wallets/edit/{$wallet->id}") }}">Edit</a></td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm"
+                                               href="{{ url("/wallets/edit/{$wallet->id}") }}">
+                                                {{ __('Edit') }}
+                                            </a>
+                                        </td>
                                         <td>{{ $wallet->name }}</td>
-                                        <td class="{{ $wallet->balance<0 ? 'table-danger' : 'table-default' }}">{{ $wallet->balance }}</td>
-                                        <td>{{ $wallet->is_card ? 'yes' : 'no' }}</td>
+                                        <td class="{{ $wallet->balance < 0 ? 'table-danger' : 'table-default' }}">{{ $wallet->balance }}</td>
+                                        <td>{{ $wallet->is_card ? __('yes') : __('no') }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         @else
-                            You don't have any wallets available.
+                            {{ __('You don\'t have any wallets available.') }}
                         @endif
                     </div>
                 </div>
