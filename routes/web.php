@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Wallet\WalletEditController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,10 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('wallets')->middleware(['auth'])->group(function () {
+    Route::get('/create', [WalletEditController::class, 'createView'])->name('wallet.view.create');
+    Route::get('/edit/{id}', [WalletEditController::class, 'editView'])->name('wallet.view.update');
+    Route::post('/create', [WalletEditController::class, 'storeWallet'])->name('wallet.data.create');
+    Route::post('/edit/{id}', [WalletEditController::class, 'updateWallet'])->name('wallet.data.update');
+});
