@@ -14,7 +14,13 @@
                             </div>
                         @endif
 
-                        {{ __('You are logged in!') }}
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ __('Wallets')}}</h5>
+                                <p class="card-text">{{ __('View wallets linked to your account.') }}</p>
+                                <a href="{{ route('wallet.view.all')}}" class="btn btn-outline-primary">{{ __('Visit') }}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
