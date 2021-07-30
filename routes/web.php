@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Wallet\WalletEditController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,16 @@ Route::prefix('wallets')->middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [WalletEditController::class, 'editView'])->name('wallet.view.update');
     Route::post('/create', [WalletEditController::class, 'storeWallet'])->name('wallet.data.create');
     Route::post('/edit/{id}', [WalletEditController::class, 'updateWallet'])->name('wallet.data.update');
+});
+
+
+Route::prefix('transactions')->middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('transaction/list');
+    })->name('transaction.view.all');
+
+    Route::get('/create', [TransactionController::class, 'createView'])->name('transaction.view.create');
+    Route::get('/edit/{id}', [TransactionController::class, 'editView'])->name('transaction.view.update');
+    Route::post('/create', [TransactionController::class, 'storeTransaction'])->name('transaction.data.create');
+    Route::post('/edit/{id}', [TransactionController::class, 'updateTransaction'])->name('transaction.data.update');
 });
