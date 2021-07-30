@@ -14,11 +14,23 @@
                             </div>
                         @endif
 
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ __('Wallets')}}</h5>
-                                <p class="card-text">{{ __('View wallets linked to your account.') }}</p>
-                                <a href="{{ route('wallet.view.all')}}" class="btn btn-outline-primary">{{ __('Visit') }}</a>
+                        <div class="card-group">
+                            <div class="card mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ __('Transactions')}}</h5>
+                                    <p class="card-text">{{ __('View your transactions.') }}</p>
+                                    <a href="{{ route('transaction.view.all')}}"
+                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ __('Wallets')}}</h5>
+                                    <p class="card-text">{{ __('View wallets linked to your account.') }}</p>
+                                    <a href="{{ route('wallet.view.all')}}"
+                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
+                                </div>
                             </div>
                         </div>
                     </div>
