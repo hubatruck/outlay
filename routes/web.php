@@ -32,6 +32,10 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::prefix('wallets')->middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('wallet/list');
+    })->name('wallet.view.all');
+
     Route::get('/create', [WalletEditController::class, 'createView'])->name('wallet.view.create');
     Route::get('/edit/{id}', [WalletEditController::class, 'editView'])->name('wallet.view.update');
     Route::post('/create', [WalletEditController::class, 'storeWallet'])->name('wallet.data.create');
