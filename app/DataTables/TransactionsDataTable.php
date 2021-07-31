@@ -31,7 +31,11 @@ class TransactionsDataTable extends DataTable
      */
     public function query(Transaction $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()
+            ->with(['transactionType', 'wallet'])
+            ->join('wallets', 'wallet_id', '=', 'wallets.id')
+            ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id')
+            ->select('transactions.*', 'transaction_types.name', 'wallets.name'); /// to prevent createdAt ambiguity
     }
 
     /**
@@ -68,11 +72,11 @@ class TransactionsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            __('Scope') => ['name' => 'scope', 'data' => 'scope',],
-            __('Amount') => ['name' => 'amount', 'data' => 'amount',],
-            __('Wallet') => ['name' => 'wallet', 'data' => 'wallet', 'filterable' => false],
-            __('Type') => ['name' => 'type', 'data' => 'type', 'filterable' => false],
-            __('Date') => ['name' => 'created_at', 'data' => 'created_at',]
+            __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope',],
+            __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount',],
+            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name'],
+            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet.name'],
+            __('Date') => ['name' => 'transactions.created_at', 'data' => 'created_at', 'formatted' => true]
         ];
     }
 
