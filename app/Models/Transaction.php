@@ -17,6 +17,8 @@ class Transaction extends Model
         'transaction_type_id',
     ];
 
+    protected $appends = ['wallet', 'type'];
+
     /**
      * Type of the transaction
      * @return BelongsTo
@@ -33,5 +35,23 @@ class Transaction extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class);
+    }
+
+    /**
+     * Append the wallet name
+     * @return string
+     */
+    public function getWalletAttribute(): string
+    {
+        return Wallet::find($this->wallet_id)->name;
+    }
+
+    /**
+     * Append transaction type
+     * @return string
+     */
+    public function getTypeAttribute(): string
+    {
+        return TransactionType::find($this->transaction_type_id)->name;
     }
 }
