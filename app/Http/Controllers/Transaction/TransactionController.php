@@ -7,20 +7,26 @@ use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class TransactionController extends Controller
 {
     private $viewName = 'transaction/edit';
 
-    public function createView(): View
+    public function createView()
     {
+        if (!count(Auth::user()->wallets)) {
+            return $this->noWallet();
+        }
         return view($this->viewName);
     }
 
     /// https://stackoverflow.com/a/59745972
     public function editView(string $id)
     {
+        if (!count(Auth::user()->wallets)) {
+            return $this->noWallet();
+        }
+
         $transaction = Transaction::find($id);
         $wallet = $transaction->wallet;
         if (empty($transaction) || empty($wallet)) {
@@ -74,6 +80,16 @@ class TransactionController extends Controller
             ->route('transaction.view.all')
             ->with([
                 'message' => __('Transaction does not exist.'),
+                'status' => 'danger'
+            ]);
+    }
+
+    public function noWallet(): RedirectResponse
+    {
+        return redirect()
+            ->route('transaction.view.all')
+            ->with([
+                'message' => __('No wallet linked to account found.'),
                 'status' => 'danger'
             ]);
     }

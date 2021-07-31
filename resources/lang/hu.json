@@ -5,6 +5,7 @@
     "Balance": "Egyenleg",
     "Cancel": "Mégse",
     "Create": "Létrehozás",
+    "Create a wallet by clicking here.": "Hozz létre tárcát ide kattintva.",
     "created": "létrehozva",
     "Credit card": "Bankkártya",
     "Current balance": "Egyenleg",
@@ -15,6 +16,7 @@
     "Logout": "Kilépés",
     "Name": "Név",
     "no": "nem",
+    "No wallet linked to account found.": "Nem található tárca ehhez a fiókhoz csatlakoztatva.",
     "Notes": "Jegyzetek",
     "Expense": "Kiadás",
     "Password": "Jelszó",
@@ -41,5 +43,6 @@
     "yes": "igen",
     "You cannot edit this wallet.": "Ezt a tárcát nem szerkesztheted.",
     "You don't have any transactions available.": "Nincs elérhető tranzakciód.",
-    "You don't have any wallets available.": "Nincs elérhető tárcád."
+    "You don't have any wallets available.": "Nincs elérhető tárcád.",
+    "You don't have any wallet connected to you account, so the \"transactions\" feature is not available.":"Nincs a fiókodhoz csatlakoztatva tárca, így a \"tranzakciók\" funkció nem elérhető."
 }
