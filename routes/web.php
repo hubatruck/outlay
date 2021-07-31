@@ -1,5 +1,6 @@
 <?php
 
+use App\DataTables\TransactionsDataTable;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Wallet\WalletEditController;
 use Illuminate\Support\Facades\Auth;
@@ -41,8 +42,8 @@ Route::prefix('wallets')->middleware(['auth'])->group(function () {
 
 
 Route::prefix('transactions')->middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('transaction/list');
+    Route::get('/', function (TransactionsDataTable $dataTable) {
+        return $dataTable->render('transaction/list');
     })->name('transaction.view.all');
 
     Route::get('/create', [TransactionController::class, 'createView'])->name('transaction.view.create');
