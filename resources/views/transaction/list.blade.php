@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
@@ -38,10 +38,11 @@
                                     <td>{{ __('Amount') }}</td>
                                     <td>{{ __('Type') }}</td>
                                     <td>{{ __('Wallet') }}</td>
+                                    <td>{{ __('Date') }}</td>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach(Auth::user()->transactions->sortBy('createdAt') as $transaction)
+                                @foreach(Auth::user()->transactions->sortByDesc('created_at') as $transaction)
                                     <tr>
                                         <td>
                                             <a class="btn btn-primary btn-sm"
@@ -53,6 +54,7 @@
                                         <td>{{ $transaction->amount }}</td>
                                         <td>{{ __($transaction->transactionType->name)  }}</td>
                                         <td>{{ $transaction->wallet->name }}</td>
+                                        <td>{{ $transaction->created_at }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
