@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.3"
+        "laravel/ui": "^3.3",
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

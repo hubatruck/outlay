@@ -11,6 +11,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('datatables.net-bs5');
+    require('datatables.net-buttons-bs5');
 } catch (e) {
 }
 
