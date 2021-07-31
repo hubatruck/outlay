@@ -18,7 +18,7 @@
                             @csrf
 
                             <div class="col-md-12">
-                                <label for="name" class="form-label">Name</label>
+                                <label for="name" class="form-label">{{ __('Name') }}</label>
                                 <input
                                     id="name"
                                     class="form-control @error('name') is-invalid @enderror"
