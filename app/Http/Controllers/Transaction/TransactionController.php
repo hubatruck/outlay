@@ -28,11 +28,10 @@ class TransactionController extends Controller
         }
 
         $transaction = Transaction::find($id);
-        $wallet = $transaction->wallet;
-        if (empty($transaction) || empty($wallet)) {
+        if (empty($transaction) || empty($transaction->wallet)) {
             return $this->transactionDoesNotExist();
         }
-        if ($wallet->user_id !== Auth::user()->id) {
+        if ($transaction->wallet->user_id !== Auth::user()->id) {
             return $this->cannotEditTransaction();
         }
         return view($this->viewName, compact('transaction'));
@@ -52,7 +51,7 @@ class TransactionController extends Controller
 
         $transaction = Transaction::find($id);
 
-        if (empty($transaction)) {
+        if (empty($transaction) || empty($transaction->wallet)) {
             return $this->transactionDoesNotExist();
         }
         if ($transaction->wallet->user_id !== Auth::user()->id) {
