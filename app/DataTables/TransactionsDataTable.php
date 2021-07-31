@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -20,7 +21,10 @@ class TransactionsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'transactions.action');
+            ->smart(true)
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->format('Y/m/d H:i');
+            });
     }
 
     /**
