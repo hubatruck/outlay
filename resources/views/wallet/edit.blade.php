@@ -18,7 +18,7 @@
                             @csrf
 
                             <div class="col-md-12">
-                                <label for="name" class="form-label">{{ __('Name') }}</label>
+                                <label for="name" class="form-label">{{ __('Name') }}<span class="text-danger">*</span></label>
                                 <input
                                     id="name"
                                     class="form-control @error('name') is-invalid @enderror"
@@ -81,6 +81,7 @@
                                 </div>
                             </div>
 
+                            <div class="col-12 text-danger">{{ __('Fields marked with * are required.') }}</div>
                             <div class="col-12 mt-2">
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($wallet) ? __('Save') : __('Create') }}

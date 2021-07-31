@@ -18,7 +18,9 @@
                             @csrf
 
                             <div class="col-md-12">
-                                <label for="scope" class="form-label">{{ __('Scope') }}</label>
+                                <label for="scope" class="form-label">
+                                    {{ __('Scope') }}<span class="text-danger">*</span>
+                                </label>
                                 <input
                                     id="scope"
                                     class="form-control @error('scope') is-invalid @enderror"
@@ -53,7 +55,8 @@
                             </div>
 
                             <div class=" col-md-12">
-                                <label for="wallet_id" class="form-label">{{ __('Wallet') }}</label>
+                                <label for="wallet_id" class="form-label">
+                                    {{ __('Wallet') }}<span class="text-danger">*</span></label>
                                 <select id="wallet_id" class="form-select form-control" name="wallet_id" required>
                                     <option @if(!isset($transaction)) selected @endif disabled hidden value="">{{ __('Select...') }}</option>
                                     @foreach(Auth::user()->wallets as $wallet)
@@ -70,7 +73,9 @@
                             </div>
 
                             <div class=" col-md-12">
-                                <label for="transaction_type_id" class="form-label">{{ __('Type') }}</label>
+                                <label for="transaction_type_id" class="form-label">
+                                    {{ __('Type') }}<span class="text-danger">*</span>
+                                </label>
                                 <select id="transaction_type_id" class="form-select form-control" name="transaction_type_id"
                                         required>
                                     <option @if(!isset($transaction)) selected @endif disabled hidden value="">{{ __('Select...') }}</option>
@@ -85,6 +90,7 @@
                                 </select>
                             </div>
 
+                            <div class="col-12 text-danger">{{ __('Fields marked with * are required.') }}</div>
                             <div class="col-12 mt-2">
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($transaction) ? __('Save') : __('Create') }}
