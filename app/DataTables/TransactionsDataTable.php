@@ -22,7 +22,20 @@ class TransactionsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->smart(true);
+            ->smart(true)
+            ->addColumn('actions', function ($row) {
+                return '<div class="dropdown mx-auto">
+                            <button class="btn dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
+                                ' . __('Actions') . '<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="' . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit') . '</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="alert(\'Feature disabled\');">' . __('Delete') . '</a></li>
+                            </ul>
+                        </div>';
+            })
+            ->rawColumns(['actions'])
+            ->blacklist(['actions']);
     }
 
     /**
@@ -80,9 +93,10 @@ class TransactionsDataTable extends DataTable
         return [
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope',],
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount',],
-            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name'],
-            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet.name'],
-            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date']
+            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name',],
+            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet.name',],
+            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date',],
+            __('Actions') => ['data' => 'actions',],
         ];
     }
 
