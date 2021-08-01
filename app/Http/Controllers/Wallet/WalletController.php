@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class WalletEditController extends Controller
+class WalletController extends Controller
 {
     /**
      * Editor view name

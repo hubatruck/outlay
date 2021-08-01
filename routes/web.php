@@ -3,7 +3,7 @@
 use App\DataTables\TransactionsDataTable;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Transaction\TransactionController;
-use App\Http\Controllers\Wallet\WalletEditController;
+use App\Http\Controllers\Wallet\WalletController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +37,12 @@ Route::middleware(['auth'])->group(function () {
             return view('wallet/list');
         })->name('wallet.view.all');
 
-        Route::get('create', [WalletEditController::class, 'createView'])->name('wallet.view.create');
-        Route::post('create', [WalletEditController::class, 'storeWallet'])->name('wallet.data.create');
+        Route::get('create', [WalletController::class, 'createView'])->name('wallet.view.create');
+        Route::post('create', [WalletController::class, 'storeWallet'])->name('wallet.data.create');
         Route::prefix('{id}')->group(function () {
-            Route::get('edit', [WalletEditController::class, 'editView'])->name('wallet.view.update');
-            Route::post('edit', [WalletEditController::class, 'updateWallet'])->name('wallet.data.update');
+            Route::get('edit', [WalletController::class, 'editView'])->name('wallet.view.update');
+            Route::post('edit', [WalletController::class, 'updateWallet'])->name('wallet.data.update');
+            Route::get('manage', [WalletController::class, 'manageView'])->name('wallet.view.manage');
         });
     });
 
