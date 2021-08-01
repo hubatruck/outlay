@@ -30,7 +30,7 @@
                                     <tr>
                                         <td>
                                             <a
-                                                href="{{ url("/wallets/edit/$wallet->id") }}"
+                                                href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
                                                 class="btn btn-primary btn-sm"
                                             >
                                                 {{ __('Edit') }}
