@@ -151,6 +151,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'wallet_id' => 'wallet',
+        'transaction_type_id' => 'transaction type',
+    ],
 
 ];
