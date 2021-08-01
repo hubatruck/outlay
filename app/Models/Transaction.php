@@ -18,7 +18,7 @@ class Transaction extends Model
         'transaction_date',
     ];
 
-    protected $appends = ['wallet', 'type'];
+    protected $appends = ['wallet_name', 'type'];
 
     /**
      * Type of the transaction
@@ -42,7 +42,7 @@ class Transaction extends Model
      * Append the wallet name
      * @return string
      */
-    public function getWalletAttribute(): string
+    public function getWalletNameAttribute(): string
     {
         return Wallet::find($this->wallet_id)->name;
     }
