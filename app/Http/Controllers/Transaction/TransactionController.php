@@ -113,7 +113,6 @@ class TransactionController extends Controller
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
 
-        $data['is_card'] = isset($data['is_card']);
         return $data;
     }
 }
