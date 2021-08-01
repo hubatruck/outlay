@@ -40,7 +40,7 @@
                                 <label for="amount" class="form-label">{{ __('Amount') }}</label>
                                 <input
                                     id="amount"
-                                    class="form-control @error('balance') is-invalid @enderror"
+                                    class="form-control @error('amount') is-invalid @enderror"
                                     name="amount"
                                     type="number"
                                     value="{{ old('amount', $transaction->amount ?? 0) }}"
@@ -54,10 +54,15 @@
                                 @enderror
                             </div>
 
-                            <div class=" col-md-12">
+                            <div class="col-md-12">
                                 <label for="wallet_id" class="form-label">
                                     {{ __('Wallet') }}<span class="text-danger">*</span></label>
-                                <select id="wallet_id" class="form-select form-control" name="wallet_id" required>
+                                <select
+                                    id="wallet_id"
+                                    class="form-select @error('wallet_id') is-invalid @enderror form-control"
+                                    name="wallet_id"
+                                    required
+                                >
                                     <option @if(!isset($transaction)) selected @endif disabled hidden value="">
                                         {{ __('Select...') }}
                                     </option>
@@ -75,15 +80,21 @@
                                         </option>
                                     @endforeach
                                 </select>
+
+                                @error('wallet_id')
+                                <span class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
 
-                            <div class=" col-md-12">
+                            <div class="col-md-12">
                                 <label for="transaction_type_id" class="form-label">
                                     {{ __('Type') }}<span class="text-danger">*</span>
                                 </label>
                                 <select
                                     id="transaction_type_id"
-                                    class="form-select form-control"
+                                    class="form-select @error('transaction_type_id') is-invalid @enderror form-control"
                                     name="transaction_type_id"
                                     required
                                 >
@@ -102,6 +113,12 @@
                                         >{{ __($tt->name) }}</option>
                                     @endforeach
                                 </select>
+
+                                @error('transaction_type_id')
+                                <span class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
 
                             <div class="col-md-12">
