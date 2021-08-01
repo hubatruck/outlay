@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Models\Transaction;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
@@ -22,10 +21,7 @@ class TransactionsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->smart(true)
-            ->editColumn('created_at', function ($row) {
-                return Carbon::parse($row->created_at)->format('Y/m/d H:i');
-            });
+            ->smart(true);
     }
 
     /**
@@ -81,7 +77,7 @@ class TransactionsDataTable extends DataTable
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount',],
             __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name'],
             __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet.name'],
-            __('Date') => ['name' => 'transactions.created_at', 'data' => 'created_at', 'formatted' => true]
+            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date']
         ];
     }
 
