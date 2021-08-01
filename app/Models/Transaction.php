@@ -15,6 +15,7 @@ class Transaction extends Model
         'amount',
         'scope',
         'transaction_type_id',
+        'transaction_date',
     ];
 
     protected $appends = ['wallet', 'type'];

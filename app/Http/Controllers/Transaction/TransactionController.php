@@ -110,6 +110,7 @@ class TransactionController extends Controller
             'scope' => 'required|max:255',
             'amount' => 'numeric',
             'transaction_type_id' => 'required|integer',
+            'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
 
         $data['is_card'] = isset($data['is_card']);
