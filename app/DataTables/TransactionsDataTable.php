@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
@@ -35,7 +36,10 @@ class TransactionsDataTable extends DataTable
                         </div>';
             })
             ->rawColumns(['actions'])
-            ->blacklist(['actions']);
+            ->blacklist(['actions'])
+            ->editColumn('transaction_date', function ($row) {
+                return Carbon::parse($row->transaction_date)->format('Y/m/d');
+            });
     }
 
     /**

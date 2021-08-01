@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,10 @@ class Transaction extends Model
     ];
 
     protected $appends = ['wallet_name', 'type'];
+
+    protected $casts = [
+        'transaction_date' => 'date'
+    ];
 
     /**
      * Type of the transaction
@@ -54,5 +59,14 @@ class Transaction extends Model
     public function getTypeAttribute(): string
     {
         return TransactionType::find($this->transaction_type_id)->name;
+    }
+
+    /**
+     * Set transaction type from DATE format to DATETIME format
+     * @param string $value
+     */
+    public function setTransactionDateAttribute($value): void
+    {
+        $this->attributes['transaction_date'] = Carbon::parse($value)->format('Y-m-d H:i:s');
     }
 }

@@ -129,7 +129,7 @@
                                     class="form-control @error('transaction_date') is-invalid @enderror"
                                     name="transaction_date"
                                     type="date"
-                                    value="{{ old('transaction_date', $transaction->transaction_date ?? date('Y-m-d')) }}"
+                                    value="{{ \Carbon\Carbon::parse(old('transaction_date',$transaction->transaction_date ?? now()))->format('Y-m-d') }}"
                                 />
 
                                 @error('transaction_date')
