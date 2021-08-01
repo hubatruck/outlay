@@ -31,7 +31,7 @@ class TransactionsDataTable extends DataTable
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li><a class="dropdown-item" href="' . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit') . '</a></li>
-                                <li><a class="dropdown-item" href="#" onclick="alert(\'Feature disabled\');">' . __('Delete') . '</a></li>
+                                <li><a class="dropdown-item" href="' . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete') . '</a></li>
                             </ul>
                         </div>';
             })
@@ -56,7 +56,7 @@ class TransactionsDataTable extends DataTable
             ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id')
             ->whereIn('wallet_id', function ($query) {
                 /// https://stackoverflow.com/a/16815955
-                $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id);
+                $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
             })
             ->select('transactions.*', 'transaction_types.name', 'wallets.name as wallet_name'); /// to prevent createdAt ambiguity
     }

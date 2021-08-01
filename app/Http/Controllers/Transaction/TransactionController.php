@@ -113,4 +113,26 @@ class TransactionController extends Controller
         $transaction->save();
         return $this->redirectSuccess('updated');
     }
+
+    /**
+     * Delete a transaction from the database
+     *
+     * @param Request $request
+     * @param string $id
+     * @return RedirectResponse
+     */
+    public function deleteTransaction(Request $request, string $id): RedirectResponse
+    {
+        $transaction = Transaction::find($id);
+
+        if (empty($transaction) || empty($transaction->wallet)) {
+            return $this->transactionDoesNotExist();
+        }
+        if ($transaction->wallet->user_id !== Auth::user()->id) {
+            return $this->cannotEditTransaction();
+        }
+
+        $transaction->delete();
+        return $this->redirectSuccess('removed');
+    }
 }

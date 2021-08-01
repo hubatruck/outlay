@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('{id}')->group(function () {
             Route::get('edit', [TransactionController::class, 'editView'])->name('transaction.view.update');
             Route::post('edit', [TransactionController::class, 'updateTransaction'])->name('transaction.data.update');
+            Route::get('delete', [TransactionController::class, 'deleteTransaction'])->name('transaction.data.delete');
         });
     });
 });
