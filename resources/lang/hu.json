@@ -28,7 +28,8 @@
     "This field is optional.": "Ez a mező opcionális.",
     "transaction": "tranzakció",
     "Transactions": "Tranzakciók",
-    "Transaction :action successfully.":"Tranzakció sikeresen :action.",
+    "Transaction does not exist.": "A tranzakció nem létezik.",
+    "Transaction :action successfully.": "Tranzakció sikeresen :action.",
     "Type": "Típus",
     ":action transaction": "Tranzakció :action",
     "Username": "Felhasználónév",
@@ -45,7 +46,8 @@
     ":action wallet": "Tárca :action",
     "yes": "igen",
     "You cannot edit this wallet.": "Ezt a tárcát nem szerkesztheted.",
+    "You cannot edit this transaction.": "Ezt a tranzakciót nem szerkesztheted.",
     "You don't have any transactions available.": "Nincs elérhető tranzakciód.",
     "You don't have any wallets available.": "Nincs elérhető tárcád.",
-    "You don't have any wallet connected to you account, so the \"transactions\" feature is not available.":"Nincs a fiókodhoz csatlakoztatva tárca, így a \"tranzakciók\" funkció nem elérhető."
+    "You don't have any wallet connected to you account, so the \"transactions\" feature is not available.": "Nincs a fiókodhoz csatlakoztatva tárca, így a \"tranzakciók\" funkció nem elérhető."
 }
