@@ -26,7 +26,7 @@
                                     class="form-control @error('scope') is-invalid @enderror"
                                     name="scope"
                                     type="text"
-                                    value="{{ old('scope', isset($transaction) ? $transaction->scope : '') }}"
+                                    value="{{ old('scope', $transaction->scope ?? '') }}"
                                 />
 
                                 @error('scope')
@@ -43,7 +43,7 @@
                                     class="form-control @error('balance') is-invalid @enderror"
                                     name="amount"
                                     type="number"
-                                    value="{{ old('amount', isset($transaction) ? $transaction->amount : 0) }}"
+                                    value="{{ old('amount', $transaction->amount ?? 0) }}"
                                     step="0.01"
                                 />
 
