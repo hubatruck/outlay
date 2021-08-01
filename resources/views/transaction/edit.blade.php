@@ -67,6 +67,9 @@
                                             @if(isset($transaction) && $wallet->id === $transaction->wallet_id)
                                             selected
                                             @endif
+                                            @if(old('wallet_id') && (string)$wallet->id === old('wallet_id'))
+                                            selected
+                                            @endif
                                         >
                                             {{ $wallet->name }}
                                         </option>
@@ -90,7 +93,10 @@
                                     @foreach(\App\Models\TransactionType::all() as $tt)
                                         <option
                                             value="{{ $tt->id }}"
-                                            @if(isset($transaction)&&$transaction->transactionType->id===$tt->id)
+                                            @if(isset($transaction) && $transaction->transactionType->id === $tt->id)
+                                            selected
+                                            @endif
+                                            @if(old('transaction_type_id') && (string)$tt->id === old('transaction_type_id'))
                                             selected
                                             @endif
                                         >{{ __($tt->name) }}</option>
