@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -36,7 +37,11 @@ class TransactionsDataTable extends DataTable
             ->with(['transactionType', 'wallet'])
             ->join('wallets', 'wallet_id', '=', 'wallets.id')
             ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id')
-            ->select('transactions.*', 'transaction_types.name', 'wallets.name'); /// to prevent createdAt ambiguity
+            ->whereIn('wallet_id', function ($query) {
+                /// https://stackoverflow.com/a/16815955
+                $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id);
+            })
+            ->select('transactions.*', 'transaction_types.name', 'wallets.name as wallet_name'); /// to prevent createdAt ambiguity
     }
 
     /**
