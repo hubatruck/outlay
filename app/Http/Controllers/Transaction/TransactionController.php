@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,14 +15,24 @@ class TransactionController extends Controller
 {
     private $viewName = 'transaction/edit';
 
+    /**
+     * Show the view for creating a transaction
+     *
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function createView()
     {
-        if (!count(Auth::user()->wallets)) {
+        if (!count(Auth::user()->wallets ?? null)) {
             return $this->noWallet();
         }
         return view($this->viewName);
     }
 
+    /**
+     * Redirect user with 'no wallet found' error
+     *
+     * @return RedirectResponse
+     */
     public function noWallet(): RedirectResponse
     {
         return redirect()
@@ -30,10 +43,18 @@ class TransactionController extends Controller
             ]);
     }
 
-    /// https://stackoverflow.com/a/59745972
+
+    /**
+     * Show the view for editing a movie
+     *
+     * see also: https://stackoverflow.com/a/59745972
+     *
+     * @param string $id
+     * @return Application|Factory|View|RedirectResponse
+     */
     public function editView(string $id)
     {
-        if (!count(Auth::user()->wallets)) {
+        if (!count(Auth::user()->wallets ?? null)) {
             return $this->noWallet();
         }
 
@@ -41,12 +62,17 @@ class TransactionController extends Controller
         if (empty($transaction) || empty($transaction->wallet)) {
             return $this->transactionDoesNotExist();
         }
-        if ($transaction->wallet->user_id !== Auth::user()->id) {
+        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
             return $this->cannotEditTransaction();
         }
         return view($this->viewName, compact('transaction'));
     }
 
+    /**
+     * Redirect user with 'transaction does not exist' error
+     *
+     * @return RedirectResponse
+     */
     private function transactionDoesNotExist(): RedirectResponse
     {
         return redirect()
@@ -57,6 +83,11 @@ class TransactionController extends Controller
             ]);
     }
 
+    /**
+     * Redirect user with 'cannot edit this transaction' error
+     *
+     * @return RedirectResponse
+     */
     private function cannotEditTransaction(): RedirectResponse
     {
         return redirect()
@@ -67,6 +98,12 @@ class TransactionController extends Controller
             ]);
     }
 
+    /**
+     * Store a transaction in the database
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function storeTransaction(Request $request): RedirectResponse
     {
         $newTransactionData = $this->validateRequest($request);
@@ -75,6 +112,12 @@ class TransactionController extends Controller
         return $this->redirectSuccess();
     }
 
+    /**
+     * Validate request data
+     *
+     * @param Request $request
+     * @return array
+     */
     public function validateRequest(Request $request): array
     {
         return $request->validate([
@@ -86,6 +129,12 @@ class TransactionController extends Controller
         ]);
     }
 
+    /**
+     * Redirect user with success message
+     *
+     * @param string $successMethod
+     * @return RedirectResponse
+     */
     private function redirectSuccess(string $successMethod = 'created'): RedirectResponse
     {
         return redirect()
@@ -96,6 +145,13 @@ class TransactionController extends Controller
             ]);
     }
 
+    /**
+     * Update a transaction
+     *
+     * @param Request $request
+     * @param string $id
+     * @return RedirectResponse
+     */
     public function updateTransaction(Request $request, string $id): RedirectResponse
     {
         $validated = $this->validateRequest($request);
@@ -105,7 +161,7 @@ class TransactionController extends Controller
         if (empty($transaction) || empty($transaction->wallet)) {
             return $this->transactionDoesNotExist();
         }
-        if ($transaction->wallet->user_id !== Auth::user()->id) {
+        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
             return $this->cannotEditTransaction();
         }
 
@@ -128,7 +184,7 @@ class TransactionController extends Controller
         if (empty($transaction) || empty($transaction->wallet)) {
             return $this->transactionDoesNotExist();
         }
-        if ($transaction->wallet->user_id !== Auth::user()->id) {
+        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
             return $this->cannotEditTransaction();
         }
 
