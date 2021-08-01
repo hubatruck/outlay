@@ -105,14 +105,12 @@ class TransactionController extends Controller
 
     public function validateRequest(Request $request): array
     {
-        $data = $request->validate([
+        return $request->validate([
             'wallet_id' => 'required|integer',
             'scope' => 'required|max:255',
-            'amount' => 'numeric',
+            'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => 'required|integer',
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
-
-        return $data;
     }
 }
