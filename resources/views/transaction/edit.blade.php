@@ -104,6 +104,24 @@
                                 </select>
                             </div>
 
+                            <div class="col-md-12">
+                                <label for="transaction_date" class="form-label">
+                                    {{ __('Date') }}<span class="text-danger">*</span></label>
+                                <input
+                                    id="transaction_date"
+                                    class="form-control @error('transaction_date') is-invalid @enderror"
+                                    name="transaction_date"
+                                    type="date"
+                                    value="{{ old('transaction_date', $transaction->transaction_date ?? date('Y-m-d')) }}"
+                                />
+
+                                @error('transaction_date')
+                                <span class="invalid-feedback">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+
                             <div class="col-12 text-danger">{{ __('Fields marked with * are required.') }}</div>
                             <div class="col-12 mt-2">
                                 <button type="submit" class="btn btn-success">
