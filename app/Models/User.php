@@ -55,7 +55,7 @@ class User extends Authenticatable
     /**
      * Transactions belonging to the user
      *
-     * @return HasMany
+     * @return HasManyThrough
      */
     public function transactions(): HasManyThrough
     {

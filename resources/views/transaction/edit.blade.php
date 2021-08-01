@@ -58,7 +58,9 @@
                                 <label for="wallet_id" class="form-label">
                                     {{ __('Wallet') }}<span class="text-danger">*</span></label>
                                 <select id="wallet_id" class="form-select form-control" name="wallet_id" required>
-                                    <option @if(!isset($transaction)) selected @endif disabled hidden value="">{{ __('Select...') }}</option>
+                                    <option @if(!isset($transaction)) selected @endif disabled hidden value="">
+                                        {{ __('Select...') }}
+                                    </option>
                                     @foreach(Auth::user()->wallets as $wallet)
                                         <option
                                             value="{{ $wallet->id }}"
@@ -76,9 +78,15 @@
                                 <label for="transaction_type_id" class="form-label">
                                     {{ __('Type') }}<span class="text-danger">*</span>
                                 </label>
-                                <select id="transaction_type_id" class="form-select form-control" name="transaction_type_id"
-                                        required>
-                                    <option @if(!isset($transaction)) selected @endif disabled hidden value="">{{ __('Select...') }}</option>
+                                <select
+                                    id="transaction_type_id"
+                                    class="form-select form-control"
+                                    name="transaction_type_id"
+                                    required
+                                >
+                                    <option @if(!isset($transaction)) selected @endif disabled hidden value="">
+                                        {{ __('Select...') }}
+                                    </option>
                                     @foreach(\App\Models\TransactionType::all() as $tt)
                                         <option
                                             value="{{ $tt->id }}"

@@ -29,8 +29,10 @@
                                 @foreach(Auth::user()->wallets as $wallet)
                                     <tr>
                                         <td>
-                                            <a class="btn btn-primary btn-sm"
-                                               href="{{ url("/wallets/edit/{$wallet->id}") }}">
+                                            <a
+                                                href="{{ url("/wallets/edit/$wallet->id") }}"
+                                                class="btn btn-primary btn-sm"
+                                            >
                                                 {{ __('Edit') }}
                                             </a>
                                         </td>

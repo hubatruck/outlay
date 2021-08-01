@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -17,7 +18,7 @@ class TransactionsDataTable extends DataTable
      * @param mixed $query Results from query() method.
      * @return DataTableAbstract
      */
-    public function dataTable($query)
+    public function dataTable($query): DataTableAbstract
     {
         return datatables()
             ->eloquent($query)
@@ -31,9 +32,9 @@ class TransactionsDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param Transaction $model
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return EloquentBuilder
      */
-    public function query(Transaction $model)
+    public function query(Transaction $model): EloquentBuilder
     {
         return $model->newQuery()
             ->with(['transactionType', 'wallet'])
@@ -47,7 +48,7 @@ class TransactionsDataTable extends DataTable
      *
      * @return Builder
      */
-    public function html()
+    public function html(): Builder
     {
         return $this->builder()
             ->setTableId('transactions-table')
@@ -64,7 +65,7 @@ class TransactionsDataTable extends DataTable
                 Button::make('reload')
             )->parameters([
                 'buttons' => ['create', 'export', 'print', 'reset'],
-                'language' => ['url' => url('/vendor/datatables/lang/datatables.'.config('app.locale').'.json')]
+                'language' => ['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')]
             ]);
     }
 
@@ -73,7 +74,7 @@ class TransactionsDataTable extends DataTable
      *
      * @return array
      */
-    protected function getColumns()
+    protected function getColumns(): array
     {
         return [
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope',],
@@ -89,7 +90,7 @@ class TransactionsDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Transactions_' . date('YmdHis');
     }
