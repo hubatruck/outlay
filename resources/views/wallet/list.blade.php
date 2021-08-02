@@ -30,10 +30,10 @@
                                     <tr>
                                         <td>
                                             <a
-                                                href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
+                                                href="{{ route('wallet.view.details', ['id' => $wallet->id]) }}"
                                                 class="btn btn-primary btn-sm"
                                             >
-                                                {{ __('Edit') }}
+                                                {{ __('Details') }}
                                             </a>
                                         </td>
                                         <td>{{ $wallet->name }}</td>

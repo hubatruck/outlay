@@ -1,9 +1,12 @@
 <?php
 
+use App\Charts\MonthlyChartByTransactionType;
+use App\Charts\MonthlyChartByDay;
 use App\DataTables\TransactionsDataTable;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Wallet\WalletController;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +45,11 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('{id}')->group(function () {
             Route::get('edit', [WalletController::class, 'editView'])->name('wallet.view.update');
             Route::post('edit', [WalletController::class, 'updateWallet'])->name('wallet.data.update');
-            Route::get('manage', [WalletController::class, 'manageView'])->name('wallet.view.manage');
+            Route::get('details', function () {
+                $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build('15');
+                $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build('15');
+                return view('wallet.details', compact('dailyChart', 'typeChart'));
+            })->name('wallet.view.details');
         });
     });
 
