@@ -144,7 +144,7 @@
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($transaction) ? __('Save') : __('Create') }}
                                 </button>
-                                <a type="submit" href="{{ route('transaction.view.all') }}"
+                                <a type="submit" href="{{ url()->previous() }}"
                                    class="btn btn-outline-danger">
                                     {{ __('Cancel') }}
                                 </a>

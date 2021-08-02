@@ -86,7 +86,7 @@
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($wallet) ? __('Save') : __('Create') }}
                                 </button>
-                                <a type="submit" href="{{ route('wallet.view.all') }}" class="btn btn-outline-danger">
+                                <a type="submit" href="{{ url()->previous() }}" class="btn btn-outline-danger">
                                     {{ __('Cancel') }}
                                 </a>
                             </div>
