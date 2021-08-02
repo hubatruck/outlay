@@ -40,7 +40,7 @@ class Transaction extends Model
      */
     public function wallet(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class);
+        return $this->belongsTo(Wallet::class)->withTrashed();
     }
 
     /**
@@ -49,7 +49,7 @@ class Transaction extends Model
      */
     public function getWalletNameAttribute(): string
     {
-        return Wallet::find($this->wallet_id)->name;
+        return Wallet::withTrashed()->find($this->wallet_id)->name;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Rules\WalletAvailable;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -59,7 +60,7 @@ class TransactionController extends Controller
         }
 
         $transaction = Transaction::find($id);
-        if (empty($transaction) || empty($transaction->wallet)) {
+        if (empty($transaction) || $transaction->wallet === null) {
             return $this->transactionDoesNotExist();
         }
         if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
@@ -121,7 +122,7 @@ class TransactionController extends Controller
     public function validateRequest(Request $request): array
     {
         return $request->validate([
-            'wallet_id' => 'required|integer',
+            'wallet_id' => ['required', 'integer', new WalletAvailable],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => 'required|integer',
@@ -183,7 +184,7 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        if (empty($transaction) || empty($transaction->wallet)) {
+        if (empty($transaction) || $transaction->wallet === null) {
             return $this->transactionDoesNotExist();
         }
         if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
