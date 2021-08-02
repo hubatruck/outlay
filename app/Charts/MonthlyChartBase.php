@@ -20,7 +20,8 @@ class MonthlyChartBase
                 $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
             })
             ->where('wallet_id', '=', $walletID)
-            ->whereBetween('transaction_date', [date('Y-m-01'), $this->lastDate()]);
+            ->whereDate('transaction_date', '>=', date('Y-m-01'))
+            ->whereDate('transaction_date', '<=', $this->lastDate());
     }
 
     /**
