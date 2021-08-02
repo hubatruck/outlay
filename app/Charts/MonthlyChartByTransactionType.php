@@ -24,8 +24,20 @@ class MonthlyChartByTransactionType extends MonthlyChartBase
 
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))
-            ->addData($baseQuery->pluck('amount')->toArray())
+            ->addData($this->reduceDataPrecision($baseQuery->pluck('amount')->toArray()))
             ->setLabels($this->translateLabels(TransactionType::all()->pluck('name')->toArray()));
+    }
+
+    /**
+     * Reduce precision of data to 2 decimals
+     * @param array $data
+     * @return array
+     */
+    private function reduceDataPrecision(array $data): array
+    {
+        return array_map(static function ($item) {
+            return floor($item * 100) / 100;
+        }, $data);
     }
 
     /**
