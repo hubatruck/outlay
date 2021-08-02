@@ -52,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
                 $wallet = Wallet::findOrFail($id);
                 return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
             })->name('wallet.view.details');
+            Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');
+            Route::get('toggle_hidden', [WalletController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
         });
     });
 

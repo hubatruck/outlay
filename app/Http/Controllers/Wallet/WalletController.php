@@ -140,7 +140,7 @@ class WalletController extends Controller
     {
         $validated = $this->validateRequest($request);
 
-        $wallet = Wallet::find($id);
+        $wallet = Wallet::withTrashed()->find($id);
 
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
@@ -152,5 +152,60 @@ class WalletController extends Controller
         $wallet->fill($validated);
         $wallet->save();
         return $this->redirectSuccess('updated');
+    }
+
+    /**
+     * Delete a wallet if it does not have transactions tied to it
+     *
+     * @param string $id
+     * @return RedirectResponse
+     */
+    public function deleteWallet(string $id): RedirectResponse
+    {
+        $wallet = Wallet::find($id);
+
+        if (empty($wallet)) {
+            return $this->walletDoesNotExist();
+        }
+        if ($wallet->user_id !== (Auth::user()->id ?? '-1')) {
+            $this->cannotEditWallet();
+        }
+        if ($wallet::has('transactions')->get()) {
+            return redirect()
+                ->route('wallet.view.all')
+                ->with([
+                    'message' => __('Wallet has transactions linked to it. Cannot be deleted.'),
+                    'status' => 'danger'
+                ]);
+        }
+        return $this->redirectSuccess('deleted');
+    }
+
+    /**
+     * Toggle the trashed/active status of a wallet
+     *
+     * @param string $id
+     * @return RedirectResponse
+     */
+    public function toggleHidden(string $id): RedirectResponse
+    {
+        $wallet = Wallet::withTrashed()->find($id);
+
+        if (empty($wallet)) {
+            return $this->walletDoesNotExist();
+        }
+        if ($wallet->user_id !== (Auth::user()->id ?? '-1')) {
+            $this->cannotEditWallet();
+        }
+
+        if ($wallet->trashed()) {
+            $action = 'restored';
+            $wallet->restore();
+        } else {
+            $action = 'hidden';
+            $wallet->delete();
+        }
+
+        return $this->redirectSuccess($action);
     }
 }
