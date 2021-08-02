@@ -38,7 +38,7 @@ class WalletController extends Controller
      */
     public function editView(string $id)
     {
-        $wallet = Wallet::find($id);
+        $wallet = Wallet::withTrashed()->find($id);
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
         }
@@ -162,7 +162,7 @@ class WalletController extends Controller
      */
     public function deleteWallet(string $id): RedirectResponse
     {
-        $wallet = Wallet::find($id);
+        $wallet = Wallet::withTrashed()->find($id);
 
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
