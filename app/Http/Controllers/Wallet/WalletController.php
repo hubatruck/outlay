@@ -105,7 +105,7 @@ class WalletController extends Controller
             'user_id' => 'integer',
             'name' => 'required|max:255',
             'notes' => 'nullable|string',
-            'balance' => 'numeric',
+            'balance' => 'numeric|max:999999.99',
             'is_card' => 'nullable',
         ]);
 
