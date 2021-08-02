@@ -156,17 +156,19 @@ class TransactionController extends Controller
     {
         $validated = $this->validateRequest($request);
 
-        $transaction = Transaction::find($id);
+        $updatedTransaction = new Transaction($validated);
 
-        if (empty($transaction) || empty($transaction->wallet)) {
-            return $this->transactionDoesNotExist();
-        }
-        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
+        if ($updatedTransaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
             return $this->cannotEditTransaction();
         }
 
-        $transaction->fill($validated);
-        $transaction->save();
+        $oldTransaction = Transaction::find($id);
+        if (empty($oldTransaction) || $oldTransaction->wallet === null) {
+            return $this->transactionDoesNotExist();
+        }
+
+        $oldTransaction->fill($updatedTransaction->attributesToArray());
+        $oldTransaction->save();
         return $this->redirectSuccess('updated');
     }
 
