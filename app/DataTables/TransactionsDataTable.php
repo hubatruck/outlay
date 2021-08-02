@@ -30,8 +30,8 @@ class TransactionsDataTable extends DataTable
                                 ' . __('Actions') . '<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" href="' . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit') . '</a></li>
-                                <li><a class="dropdown-item" href="' . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete') . '</a></li>
+                                <li><a class="dropdown-item btn-outline-primray" href="' . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit') . '</a></li>
+                                <li><a class="dropdown-item btn-outline-danger" href="' . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete') . '</a></li>
                             </ul>
                         </div>';
             })
