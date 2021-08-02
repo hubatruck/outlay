@@ -58,7 +58,7 @@ class TransactionsDataTable extends DataTable
                 /// https://stackoverflow.com/a/16815955
                 $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
             })
-            ->select('transactions.*', 'transaction_types.name', 'wallets.name as wallet_name'); /// to prevent createdAt ambiguity
+            ->select(['transactions.*', 'transaction_types.name', 'wallets.name as wallet_name']); /// to prevent createdAt ambiguity
     }
 
     /**
