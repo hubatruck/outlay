@@ -9,6 +9,7 @@ public/views
 /vendor
 .env
 .env.backup
+.env.testing
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json
@@ -17,4 +18,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 .phpstorm.meta.php
+_ide_helper.php
 /.vscode
