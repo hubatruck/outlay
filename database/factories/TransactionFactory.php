@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Transaction;
+use App\Models\TransactionType;
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TransactionFactory extends Factory
@@ -22,10 +24,11 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'wallet_id' => $this->faker->numberBetween(1, 10),
+            'wallet_id' => $this->faker->randomElement(Wallet::all()->pluck('id')->toArray()),
             'scope' => $this->faker->sentence,
             'amount' => $this->faker->randomFloat(2, 0, 250),
-            'transaction_type_id' => $this->faker->numberBetween(1, 2)
+            'transaction_type_id' => $this->faker->randomElement(TransactionType::all()->pluck('id')->toArray()),
+            'transaction_date' => $this->faker->dateTimeBetween(date('Y-m-01'), date('Y-m-t')),
         ];
     }
 }
