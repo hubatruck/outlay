@@ -22,11 +22,12 @@
                                     <td>{{ __('Name') }}</td>
                                     <td>{{ __('Current balance') }}</td>
                                     <td>{{ __('Credit card') }}</td>
+                                    <td>{{ __('Status') }}</td>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($wallets as $wallet)
-                                    <tr>
+                                    <tr @if($wallet->deleted_at) style="opacity: 0.6;" @endif>
                                         <td>
                                             <a
                                                 href="{{ route('wallet.view.details', ['id' => $wallet->id]) }}"
@@ -38,6 +39,7 @@
                                         <td>{{ $wallet->name }}</td>
                                         <td class="{{ $wallet->balance < 0 ? 'table-danger' : 'table-default' }}">{{ $wallet->balance }}</td>
                                         <td>{{ $wallet->is_card ? __('yes') : __('no') }}</td>
+                                        <td>{{ isset($wallet->deleted_at) ? __('HIDDEN') : __('Active') }}
                                     </tr>
                                 @endforeach
                                 </tbody>
