@@ -12,6 +12,12 @@
                         {{ __('No transactions for this wallet. Charts are hidden.') }}
                     </div>
                 @endif
+                @if ($wallet->deleted_at)
+                    <div class="alert alert-info">
+                        <span class="font-weight-bolder">{{ __('Note') }}</span>:
+                        {{ __('This wallet is marked as hidden, meaning cannot be used for new transactions until reactivated.') }}
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</h4>
@@ -27,7 +33,20 @@
                                     >
                                         {{ __('Edit') }}
                                     </a>
-                                    <a class="btn btn-outline-danger" href="#">{{ __('Delete') }}</a>
+                                    <a
+                                        class="btn btn-outline-danger"
+                                        href="{{ route('wallet.manage.toggle_hidden', ['id' => $wallet->id]) }}"
+                                    >
+                                        {{ $wallet->deleted_at ? __('Reactivate') : __('Hide') }}
+                                    </a>
+                                    @if(!count($wallet->transactions))
+                                        <a
+                                            class="btn btn-danger"
+                                            href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+                                        >
+                                            {{ __('Delete') }}
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                             @if (count($wallet->transactions))
