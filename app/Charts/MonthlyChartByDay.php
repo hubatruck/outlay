@@ -26,10 +26,11 @@ class MonthlyChartByDay extends MonthlyChartBase
         $income = $this->getForTransactionTypeOf($baseQuery, 1);
         $expense = $this->getForTransactionTypeOf($baseQuery, 2);
         return $this->chart->areaChart()
-            ->setTitle(__('Daily transactions in :month', ['month' => __(date('F'))]))
+            ->setTitle(__('Daily transactions'))
             ->addData(__('Income'), $this->addEmptyDays($income->pluck('daily_amount', 'day')->toArray()))
             ->addData(__('Expense'), $this->addEmptyDays($expense->pluck('daily_amount', 'day')->toArray()))
-            ->setXAxis($this->createAxisData());
+            ->setXAxis($this->createAxisData())
+            ->setGrid(false);
     }
 
     /**

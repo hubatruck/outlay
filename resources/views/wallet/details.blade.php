@@ -7,6 +7,11 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
+                @if (!count($wallet->transactions->toArray()))
+                    <div class="alert alert-warning">
+                        {{ __('No transactions for this wallet. Charts are hidden.') }}
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-header">
                         {{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'UNDEFINED']) }}
