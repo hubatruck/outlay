@@ -38,7 +38,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('wallets')->group(function () {
         Route::get('/', function () {
-            return view('wallet/list');
+            $wallets = Auth::user()->wallets()->withTrashed()->get()->sortBy('deleted_at');
+            return view('wallet/list', compact('wallets'));
         })->name('wallet.view.all');
 
         Route::get('create', [WalletController::class, 'createView'])->name('wallet.view.create');
@@ -49,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('details', function ($id) {
                 $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build('15');
                 $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build('15');
-                $wallet = Wallet::findOrFail($id);
+                $wallet = Wallet::withTrashed()->findOrFail($id);
                 return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
             })->name('wallet.view.details');
             Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');

@@ -98,7 +98,7 @@ class TransactionsDataTable extends DataTable
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope',],
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount',],
             __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name',],
-            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet.name',],
+            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name',],
             __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date',],
             __('Actions') => ['data' => 'actions',],
         ];

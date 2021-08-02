@@ -49,7 +49,7 @@ class User extends Authenticatable
      */
     public function wallets(): HasMany
     {
-        return $this->hasMany(Wallet::class);
+        return $this->hasMany(Wallet::class)->withTrashed();
     }
 
     /**

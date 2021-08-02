@@ -14,8 +14,7 @@
                             <a href="{{ route('wallet.view.create') }}" class="btn btn-success">{{ __('Add') }}</a>
                         </div>
                         <hr/>
-
-                        @if (count(Auth::user()->wallets))
+                        @if (count($wallets ?? []))
                             <table class="table table-hover table-responsive">
                                 <thead>
                                 <tr class="font-weight-bold">
@@ -26,7 +25,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach(Auth::user()->wallets as $wallet)
+                                @foreach($wallets as $wallet)
                                     <tr>
                                         <td>
                                             <a
