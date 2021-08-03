@@ -68,6 +68,14 @@ class TransactionsDataTable extends DataTable
      */
     public function html(): Builder
     {
+        $buttonArr = array();
+        if (Auth::user()->hasAnyActiveWallet()) {
+            $buttonArr[] = Button::make('create');
+        }
+        $buttonArr[] = Button::make('export');
+        $buttonArr[] = Button::make('print');
+        $buttonArr[] = Button::make('reset');
+
         return $this->builder()
             ->setTableId('transactions-table')
             ->columns($this->getColumns())
@@ -75,14 +83,8 @@ class TransactionsDataTable extends DataTable
             ->dom('Bfrtip')
             ->orderBy(1)
             ->responsive()
-            ->buttons(
-                Button::make('create'),
-                Button::make('export'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            )->parameters([
-                'buttons' => ['create', 'export', 'print', 'reset'],
+            ->buttons($buttonArr)
+            ->parameters([
                 'language' => ['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')]
             ]);
     }
