@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletAvailable;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -123,7 +124,7 @@ class TransactionController extends Controller
     public function validateRequest(Request $request): array
     {
         return $request->validate([
-            'wallet_id' => ['integer', new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
+            'wallet_id' => ['bail', new UserOwnsWalletRule, new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => 'required|integer',
