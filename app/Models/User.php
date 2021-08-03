@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Log;
 
 class User extends Authenticatable
 {
@@ -69,7 +71,16 @@ class User extends Authenticatable
      */
     public function hasAnyActiveWallet(): bool
     {
-        return count($this->wallets()->withoutTrashed()->get());
+        return count($this->activeWallets());
+    }
+
+    /**
+     * Get all active wallets for user
+     * @return Collection
+     */
+    public function activeWallets(): Collection
+    {
+        return $this->wallets()->withoutTrashed()->get();
     }
 
     /**
@@ -90,5 +101,23 @@ class User extends Authenticatable
     public function hasWallet(): bool
     {
         return count($this->wallets);
+    }
+
+    /**
+     * Che
+     * @param Transaction|Wallet|null $item
+     * @return bool
+     */
+    public function owns($item): bool
+    {
+        if ($item instanceof Transaction) {
+            $item = $item->wallet;
+        }
+        if ($item instanceof Wallet) {
+            return (string)$this->id === (string)$item->user_id;
+        }
+
+        Log::warning('Invalid argument type for ownership check.');
+        return false;
     }
 }
