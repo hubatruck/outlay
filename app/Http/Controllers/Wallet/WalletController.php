@@ -97,15 +97,15 @@ class WalletController extends Controller
      * Validate request data
      *
      * @param Request $request
+     * @param bool $isNewModelInstance
      * @return array
      */
-    public function validateRequest(Request $request): array
+    public function validateRequest(Request $request, bool $isNewModelInstance = true): array
     {
         $data = $request->validate([
-            'user_id' => 'integer',
-            'name' => 'required|max:255',
+            'name' => ($isNewModelInstance ? 'required|' : 'nullable|') . 'max:255',
             'notes' => 'nullable|string',
-            'balance' => 'numeric|max:999999.99',
+            'balance' => ($isNewModelInstance ? '' : 'nullable|') . 'numeric|max:999999.99',
             'is_card' => 'nullable',
         ]);
 
@@ -138,7 +138,7 @@ class WalletController extends Controller
      */
     public function updateWallet(Request $request, string $id): RedirectResponse
     {
-        $validated = $this->validateRequest($request);
+        $validated = $this->validateRequest($request, false);
 
         $wallet = Wallet::withTrashed()->find($id);
 
