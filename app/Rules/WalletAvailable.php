@@ -26,7 +26,7 @@ class WalletAvailable implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return Wallet::find($value) !== null ?? false;
+        return Wallet::find($value) !== null;
     }
 
     /**

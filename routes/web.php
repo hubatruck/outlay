@@ -32,13 +32,12 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('wallets')->group(function () {
         Route::get('/', function () {
-            $wallets = Auth::user()->wallets()->withTrashed()->get()->sortBy('deleted_at');
+            $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
             return view('wallet/list', compact('wallets'));
         })->name('wallet.view.all');
 

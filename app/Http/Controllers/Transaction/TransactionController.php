@@ -189,7 +189,7 @@ class TransactionController extends Controller
      * @param string $id
      * @return RedirectResponse
      */
-    public function deleteTransaction(Request $request, string $id): RedirectResponse
+    public function deleteTransaction(string $id): RedirectResponse
     {
         $transaction = Transaction::find($id);
 
