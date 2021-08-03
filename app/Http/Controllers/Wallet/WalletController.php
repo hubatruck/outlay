@@ -168,7 +168,7 @@ class WalletController extends Controller
             return $this->walletDoesNotExist();
         }
         if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
-            $this->cannotEditWallet();
+            return $this->cannotEditWallet();
         }
         if (count($wallet->transactions)) {
             return redirect()
@@ -197,7 +197,7 @@ class WalletController extends Controller
             return $this->walletDoesNotExist();
         }
         if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
-            $this->cannotEditWallet();
+            return $this->cannotEditWallet();
         }
 
         if ($wallet->trashed()) {
