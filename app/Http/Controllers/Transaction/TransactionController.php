@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\TransactionType;
 use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletAvailable;
 use Illuminate\Contracts\Foundation\Application;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TransactionController extends Controller
 {
@@ -127,7 +129,7 @@ class TransactionController extends Controller
             'wallet_id' => ['bail', new UserOwnsWalletRule, new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
-            'transaction_type_id' => 'required|integer',
+            'transaction_type_id' => ['required', Rule::in(TransactionType::all()->pluck('name'))],
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
     }
