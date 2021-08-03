@@ -7,9 +7,9 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
-                @if (!count(Auth::user()->wallets))
+                @if (!Auth::user()->hasWallet())
                     <div class="alert alert-warning">
-                        {{ __('You don\'t have any wallet connected to you account, so the "transactions" feature is not available.') }}
+                        {{ __('You don\'t have any wallet connected to you account. Transactions feature is not available.') }}<br/>
                         <a class="alert-link" href="{{ route('wallet.view.create') }}">
                             {{ __('Create a wallet by clicking here.') }}
                         </a>
@@ -18,11 +18,11 @@
                 <div class="card">
                     <div class="card-header">{{ __('Transactions') }}</div>
                     <div class="card-body">
-                        @if (count(Auth::user()->transactions))
+                        @if (Auth::user()->hasTransactions())
                             {{ $dataTable->table(['class' => 'table  table-response table-hover dt-responsive', 'width' => '100%']) }}
                         @else
                             {{ __('You don\'t have any transactions available.') }}
-                            @if(count(Auth::user()->wallets))
+                            @if(Auth::user()->hasAnyActiveWallet())
                                 <a href="{{ route('transaction.view.create') }}">{{ __('Create') }}.</a>
                             @endif
                         @endif
