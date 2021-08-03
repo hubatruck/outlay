@@ -170,7 +170,7 @@ class WalletController extends Controller
         if ($wallet->user_id !== (Auth::user()->id ?? '-1')) {
             $this->cannotEditWallet();
         }
-        if ($wallet::has('transactions')->get()) {
+        if (count($wallet->transactions)) {
             return redirect()
                 ->route('wallet.view.all')
                 ->with([
@@ -178,6 +178,8 @@ class WalletController extends Controller
                     'status' => 'danger'
                 ]);
         }
+
+        $wallet->forceDelete();
         return $this->redirectSuccess('deleted');
     }
 
