@@ -42,7 +42,7 @@ class WalletController extends Controller
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
         }
-        if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
+        if ((string)$wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
             return $this->cannotEditWallet();
         }
         return view($this->editorViewName, compact('wallet'));
@@ -145,7 +145,7 @@ class WalletController extends Controller
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
         }
-        if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
+        if ((string)$wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
             return $this->cannotEditWallet();
         }
 
@@ -167,7 +167,7 @@ class WalletController extends Controller
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
         }
-        if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
+        if ((string)$wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
             return $this->cannotEditWallet();
         }
         if (count($wallet->transactions)) {
@@ -196,7 +196,7 @@ class WalletController extends Controller
         if (empty($wallet)) {
             return $this->walletDoesNotExist();
         }
-        if ($wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
+        if ((string)$wallet->user_id !== (string)(Auth::user()->id ?? '-1')) {
             return $this->cannotEditWallet();
         }
 
