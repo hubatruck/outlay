@@ -49,7 +49,7 @@ class Transaction extends Model
      */
     public function getWalletNameAttribute(): string
     {
-        return Wallet::withTrashed()->find($this->wallet_id)->name;
+        return Wallet::withTrashed()->find($this->wallet_id)->name ?? 'ERR::WALLET_404';
     }
 
     /**

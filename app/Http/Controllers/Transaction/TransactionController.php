@@ -23,8 +23,8 @@ class TransactionController extends Controller
      */
     public function createView()
     {
-        if (!count(Auth::user()->wallets ?? null)) {
-            return $this->noWallet();
+        if (!Auth::user()->hasAnyActiveWallet()) {
+            return $this->noWallet(Auth::user()->hasWallet() ? 'active' : '');
         }
         return view($this->viewName);
     }
@@ -32,14 +32,15 @@ class TransactionController extends Controller
     /**
      * Redirect user with 'no wallet found' error
      *
+     * @param string $type
      * @return RedirectResponse
      */
-    public function noWallet(): RedirectResponse
+    public function noWallet(string $type = ''): RedirectResponse
     {
         return redirect()
             ->route('transaction.view.all')
             ->with([
-                'message' => __('No wallet linked to account found.'),
+                'message' => __('No :type wallet linked to your account found.', ['type' => __($type)]),
                 'status' => 'danger'
             ]);
     }
@@ -122,7 +123,7 @@ class TransactionController extends Controller
     public function validateRequest(Request $request): array
     {
         return $request->validate([
-            'wallet_id' => ['required', 'integer', new WalletAvailable],
+            'wallet_id' => ['integer', new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => 'required|integer',
@@ -159,7 +160,7 @@ class TransactionController extends Controller
 
         $updatedTransaction = new Transaction($validated);
 
-        if ($updatedTransaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
+        if (($updatedTransaction->wallet->user_id ?? -1) !== (Auth::user()->id ?? -1) && Auth::user()->hasAnyActiveWallet()) {
             return $this->cannotEditTransaction();
         }
 
