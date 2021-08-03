@@ -43,6 +43,36 @@ class User extends Authenticatable
     ];
 
     /**
+     * Transactions belonging to the user
+     *
+     * @return HasManyThrough
+     */
+    public function transactions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Transaction::class, Wallet::class)->withTrashedParents();
+    }
+
+    /**
+     * Check if user has transactions
+     *
+     * @return bool
+     */
+    public function hasTransactions(): bool
+    {
+        return count($this->transactions);
+    }
+
+    /**
+     * Check if user has any active wallet
+     *
+     * @return bool
+     */
+    public function hasAnyActiveWallet(): bool
+    {
+        return count($this->wallets()->withoutTrashed()->get());
+    }
+
+    /**
      * Wallets belonging to the user
      *
      * @return HasMany
@@ -53,12 +83,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Transactions belonging to the user
+     * Check if user has wallet of any status
      *
-     * @return HasManyThrough
+     * @return bool
      */
-    public function transactions(): HasManyThrough
+    public function hasWallet(): bool
     {
-        return $this->hasManyThrough(Transaction::class, Wallet::class);
+        return count($this->wallets);
     }
 }
