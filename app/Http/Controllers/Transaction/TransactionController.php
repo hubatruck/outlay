@@ -67,7 +67,7 @@ class TransactionController extends Controller
         if (empty($transaction) || $transaction->wallet === null) {
             return $this->transactionDoesNotExist();
         }
-        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
+        if (!Auth::user()->owns($transaction)) {
             return $this->cannotEditTransaction();
         }
         return view($this->viewName, compact('transaction'));
@@ -168,8 +168,12 @@ class TransactionController extends Controller
             $this->transactionDoesNotExist();
         }
 
+        if (!Auth::user()->owns($updatedTransaction)) {
+            return $this->cannotEditTransaction();
+        }
+
         $wallet = $oldTransaction->wallet;
-        if (Auth::user()->id !== $wallet->user_id) {
+        if (!Auth::user()->owns($wallet)) {
             return $this->cannotEditTransaction();
         }
 
@@ -192,7 +196,7 @@ class TransactionController extends Controller
         if (empty($transaction) || $transaction->wallet === null) {
             return $this->transactionDoesNotExist();
         }
-        if ($transaction->wallet->user_id !== (Auth::user()->id ?? -1)) {
+        if (!Auth::user()->owns($transaction)) {
             return $this->cannotEditTransaction();
         }
 
