@@ -61,7 +61,11 @@
                                     id="wallet_id"
                                     class="form-select @error('wallet_id') is-invalid @enderror form-control"
                                     name="wallet_id"
+                                    @if (Auth::user()->hasAnyActiveWallet())
                                     required
+                                    @else
+                                    disabled
+                                    @endif
                                 >
                                     <option @if(!isset($transaction)) selected @endif disabled hidden value="">
                                         {{ __('Select...') }}
@@ -80,7 +84,11 @@
                                         </option>
                                     @endforeach
                                 </select>
-
+                                @if (!Auth::user()->hasAnyActiveWallet())
+                                    <span class="alert-info">
+                                        {{ __('No active wallets; this field cannot be changed.') }}
+                                    </span>
+                                @endif
                                 @error('wallet_id')
                                 <span class="invalid-feedback">
                                     <strong>{{ $message }}</strong>
