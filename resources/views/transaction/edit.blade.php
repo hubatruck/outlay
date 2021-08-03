@@ -71,17 +71,22 @@
                                         {{ __('Select...') }}
                                     </option>
                                     @foreach(Auth::user()->wallets as $wallet)
-                                        <option
-                                            value="{{ $wallet->id }}"
-                                            @if(isset($transaction) && $wallet->id === $transaction->wallet_id)
-                                            selected
-                                            @endif
-                                            @if(old('wallet_id') && (string)$wallet->id === old('wallet_id'))
-                                            selected
-                                            @endif
-                                        >
-                                            {{ $wallet->name }}
-                                        </option>
+                                        @if ($wallet->deleted_at === null
+                                            || (isset($transaction) && $transaction->wallet_id === $wallet->id)
+                                            || (old('wallet_id')&&(string)$wallet->id===old('wallet_id')))
+                                            <option
+                                                value="{{ $wallet->id }}"
+                                                @if((isset($transaction) && $wallet->id === $transaction->wallet_id)
+                                                    ||(old('wallet_id') && (string)$wallet->id === old('wallet_id')))
+                                                selected
+                                                @endif
+                                                @if ($wallet->deleted_at !== null)
+                                                disabled
+                                                @endif
+                                            >
+                                                {{ $wallet->name }}
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 @if (!Auth::user()->hasAnyActiveWallet())

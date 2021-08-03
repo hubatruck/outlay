@@ -129,7 +129,7 @@ class TransactionController extends Controller
             'wallet_id' => ['bail', new UserOwnsWalletRule, new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
-            'transaction_type_id' => ['required', Rule::in(TransactionType::all()->pluck('name'))],
+            'transaction_type_id' => ['required', Rule::in(TransactionType::all()->pluck('id')->toArray())],
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
     }
