@@ -59,7 +59,7 @@ class WalletController extends Controller
             ->route('wallet.view.all')
             ->with([
                 'message' => __('Wallet does not exist.'),
-                'status' => 'danger'
+                'status' => 'danger',
             ]);
     }
 
@@ -74,7 +74,7 @@ class WalletController extends Controller
             ->route('wallet.view.all')
             ->with([
                 'message' => __('You cannot edit this wallet.'),
-                'status' => 'danger'
+                'status' => 'danger',
             ]);
     }
 
@@ -124,8 +124,12 @@ class WalletController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => __('Wallet :action successfully.', ['action' => __($successMethod)]),
-                'status' => 'success'
+                'message' => __(
+                    'Wallet :action successfully.', [
+                        'action' => __($successMethod)
+                    ]
+                ),
+                'status' => 'success',
             ]);
     }
 
@@ -175,7 +179,7 @@ class WalletController extends Controller
                 ->route('wallet.view.all')
                 ->with([
                     'message' => __('Wallet has transactions linked to it. Cannot be deleted.'),
-                    'status' => 'danger'
+                    'status' => 'danger',
                 ]);
         }
 

@@ -51,7 +51,8 @@ class User extends Authenticatable
      */
     public function transactions(): HasManyThrough
     {
-        return $this->hasManyThrough(Transaction::class, Wallet::class)->withTrashedParents();
+        return $this->hasManyThrough(Transaction::class, Wallet::class)
+            ->withTrashedParents();
     }
 
     /**
@@ -114,7 +115,7 @@ class User extends Authenticatable
             $item = $item->wallet;
         }
         if ($item instanceof Wallet) {
-            return (string)$this->id === (string)$item->user_id;
+            return (string) $this->id === (string) $item->user_id;
         }
 
         Log::warning('Invalid argument type for ownership check.');

@@ -43,11 +43,14 @@ class TransactionController extends Controller
         return redirect()
             ->route('transaction.view.all')
             ->with([
-                'message' => __('No :type wallet linked to your account found.', ['type' => __($type)]),
-                'status' => 'danger'
+                'message' => __(
+                    'No :type wallet linked to your account found.', [
+                        'type' => __($type),
+                    ]
+                ),
+                'status' => 'danger',
             ]);
     }
-
 
     /**
      * Show the view for editing a movie
@@ -84,7 +87,7 @@ class TransactionController extends Controller
             ->route('transaction.view.all')
             ->with([
                 'message' => __('Transaction does not exist.'),
-                'status' => 'danger'
+                'status' => 'danger',
             ]);
     }
 
@@ -99,7 +102,7 @@ class TransactionController extends Controller
             ->route('transaction.view.all')
             ->with([
                 'message' => __('You cannot edit this transaction.'),
-                'status' => 'danger'
+                'status' => 'danger',
             ]);
     }
 
@@ -126,10 +129,18 @@ class TransactionController extends Controller
     public function validateRequest(Request $request): array
     {
         return $request->validate([
-            'wallet_id' => ['bail', new UserOwnsWalletRule, new WalletAvailable, Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable'],
+            'wallet_id' => [
+                'bail',
+                new UserOwnsWalletRule(),
+                new WalletAvailable(),
+                Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable',
+            ],
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
-            'transaction_type_id' => ['required', Rule::in(TransactionType::all()->pluck('id')->toArray())],
+            'transaction_type_id' => [
+                'required',
+                Rule::in(TransactionType::all()->pluck('id')->toArray())
+            ],
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
     }
@@ -145,8 +156,12 @@ class TransactionController extends Controller
         return redirect()
             ->route('transaction.view.all')
             ->with([
-                'message' => __('Transaction :action successfully.', ['action' => __($successMethod)]),
-                'status' => 'success'
+                'message' => __(
+                    'Transaction :action successfully.', [
+                        'action' => __($successMethod)
+                    ]
+                ),
+                'status' => 'success',
             ]);
     }
 
@@ -161,19 +176,17 @@ class TransactionController extends Controller
     {
         $validated = $this->validateRequest($request);
 
-        $updatedTransaction = new Transaction($validated);
-
         $oldTransaction = Transaction::find($id);
         if ($oldTransaction === null) {
             $this->transactionDoesNotExist();
         }
 
+        $updatedTransaction = new Transaction($validated);
         if (!Auth::user()->owns($updatedTransaction)) {
             return $this->cannotEditTransaction();
         }
 
-        $wallet = $oldTransaction->wallet;
-        if (!Auth::user()->owns($wallet)) {
+        if (!Auth::user()->owns($oldTransaction->wallet)) {
             return $this->cannotEditTransaction();
         }
 

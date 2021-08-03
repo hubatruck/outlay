@@ -30,8 +30,12 @@ class TransactionsDataTable extends DataTable
                                 ' . __('Actions') . '<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item btn-outline-primray" href="' . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit') . '</a></li>
-                                <li><a class="dropdown-item btn-outline-danger" href="' . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete') . '</a></li>
+                                <li><a class="dropdown-item btn-outline-primray" href="'
+                    . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit')
+                    . '</a></li>
+                                <li><a class="dropdown-item btn-outline-danger" href="'
+                    . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete')
+                    . '</a></li>
                             </ul>
                         </div>';
             })
@@ -68,7 +72,7 @@ class TransactionsDataTable extends DataTable
      */
     public function html(): Builder
     {
-        $buttonArr = array();
+        $buttonArr = [];
         if (Auth::user()->hasAnyActiveWallet()) {
             $buttonArr[] = Button::make('create');
         }
@@ -85,7 +89,9 @@ class TransactionsDataTable extends DataTable
             ->responsive()
             ->buttons($buttonArr)
             ->parameters([
-                'language' => ['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')]
+                'language' => [
+                    'url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json'),
+                ]
             ]);
     }
 
@@ -97,12 +103,12 @@ class TransactionsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope',],
-            __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount',],
-            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name',],
-            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name',],
-            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date',],
-            __('Actions') => ['data' => 'actions',],
+            __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope'],
+            __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount'],
+            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name'],
+            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name'],
+            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date'],
+            __('Actions') => ['data' => 'actions'],
         ];
     }
 

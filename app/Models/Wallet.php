@@ -14,7 +14,7 @@ class Wallet extends Model
 
     /**
      * Fields that are fillable for the model
-     * @var string[]
+     * @var string
      */
     protected $fillable = ['user_id', 'name', 'balance', 'notes', 'is_card'];
 

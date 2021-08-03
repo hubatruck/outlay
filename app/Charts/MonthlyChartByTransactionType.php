@@ -20,7 +20,8 @@ class MonthlyChartByTransactionType extends MonthlyChartBase
         /// https://stackoverflow.com/a/24888904
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
         $baseQuery = $this->getBaseQuery($walletID)
-            ->selectRaw('transaction_type_id as type, sum(amount) as amount')->groupBy('type');
+            ->selectRaw('transaction_type_id as type, sum(amount) as amount')
+            ->groupBy('type');
 
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
     'register' => false,
     'reset' => false,
-    'confirm' => false
+    'confirm' => false,
 ]);
 
 Route::get('/', function () {
@@ -43,15 +43,18 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('create', [WalletController::class, 'createView'])->name('wallet.view.create');
         Route::post('create', [WalletController::class, 'storeWallet'])->name('wallet.data.create');
+
         Route::prefix('{id}')->group(function () {
             Route::get('edit', [WalletController::class, 'editView'])->name('wallet.view.update');
             Route::post('edit', [WalletController::class, 'updateWallet'])->name('wallet.data.update');
+
             Route::get('details', function ($id) {
-                $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build('15');
-                $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build('15');
+                $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
+                $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
                 $wallet = Wallet::withTrashed()->findOrFail($id);
                 return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
             })->name('wallet.view.details');
+
             Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');
             Route::get('toggle_hidden', [WalletController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
         });
@@ -64,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('create', [TransactionController::class, 'createView'])->name('transaction.view.create');
         Route::post('create', [TransactionController::class, 'storeTransaction'])->name('transaction.data.create');
+
         Route::prefix('{id}')->group(function () {
             Route::get('edit', [TransactionController::class, 'editView'])->name('transaction.view.update');
             Route::post('edit', [TransactionController::class, 'updateTransaction'])->name('transaction.data.update');
