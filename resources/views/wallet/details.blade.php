@@ -7,15 +7,16 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
-                @if (!count($wallet->transactions->toArray()))
-                    <div class="alert alert-warning">
-                        {{ __('No transactions for this wallet. Charts are hidden.') }}
-                    </div>
-                @endif
                 @if ($wallet->deleted_at)
                     <div class="alert alert-info">
                         <span class="font-weight-bolder">{{ __('Note') }}</span>:
-                        {{ __('This wallet is marked as hidden, meaning cannot be used for new transactions until reactivated.') }}
+                        {{ __('This wallet is marked as hidden. Cannot be used for new transactions until reactivated.') }}
+                    </div>
+                @endif
+                @if (!count($wallet->transactions->toArray()))
+                    <div class="alert alert-info">
+                        <span class="font-weight-bolder">{{ __('Note') }}</span>:
+                        {{ __('No transactions for this wallet. Charts are hidden.') }}
                     </div>
                 @endif
                 <div class="card">
