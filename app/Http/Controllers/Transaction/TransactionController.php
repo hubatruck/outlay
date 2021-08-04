@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Transaction;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\TransactionType;
+use App\Models\Wallet;
 use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletAvailable;
 use Illuminate\Contracts\Foundation\Application;
@@ -22,14 +23,27 @@ class TransactionController extends Controller
     /**
      * Show the view for creating a transaction
      *
+     * @param Request $request
      * @return Application|Factory|View|RedirectResponse
      */
-    public function createView()
+    public function createView(Request $request)
     {
+        /// pre-select the wallet, if there is intent
+        if ($request->wallet_id) {
+            $wallet = Wallet::find($request->wallet_id);
+
+            if ($wallet === null || !Auth::user()->owns($wallet) || $wallet->trashed()) {
+                return $this->redirect(route('wallet.view.all'), [
+                    'status' => 'danger',
+                    'message' => __('Error: ') . __('Wallet unavailable for quick transaction creation.'),
+                ]);
+            }
+        }
+
         if (!Auth::user()->hasAnyActiveWallet()) {
             return $this->noWallet(Auth::user()->hasWallet() ? 'active' : '');
         }
-        return view($this->viewName);
+        return view($this->viewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
     }
 
     /**

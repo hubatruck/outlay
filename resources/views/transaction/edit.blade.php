@@ -78,7 +78,8 @@
                                             <option
                                                 value="{{ $wallet->id }}"
                                                 @if((isset($transaction) && $wallet->id === $transaction->wallet_id)
-                                                    ||(old('wallet_id') && (string)$wallet->id === old('wallet_id')))
+                                                    || ($selected_wallet_id ?? '') === (string) $wallet->id
+                                                    || (old('wallet_id') && (string) $wallet->id === old('wallet_id')))
                                                 selected
                                                 @endif
                                                 @if ($wallet->deleted_at !== null)

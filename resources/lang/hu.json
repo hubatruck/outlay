@@ -66,6 +66,7 @@
     "Wallet has transactions linked to it. Cannot be deleted.": "A tárcához tranzakciók tartoznak. Nem lehet törölni.",
     "Wallet represents credit card": "A tárca bankkártyát képvisel",
     "Wallet :action successfully.": "Tárca sikeresen :action.",
+    "Wallet unavailable for quick transaction creation.": "A tárca nem elérhető gyors tranzakció létrehozásra.",
     ":action wallet": "Tárca :action",
     "yes": "igen",
     "You cannot edit this wallet.": "Ezt a tárcát nem szerkesztheted.",
