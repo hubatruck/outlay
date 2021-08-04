@@ -27,6 +27,7 @@
                                     name="scope"
                                     type="text"
                                     value="{{ old('scope', $transaction->scope ?? '') }}"
+                                    required
                                 />
 
                                 @error('scope')
@@ -157,8 +158,10 @@
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($transaction) ? __('Save') : __('Create') }}
                                 </button>
-                                <a type="submit" href="{{ url()->previous() }}"
-                                   class="btn btn-outline-danger">
+                                <a type="submit"
+                                   href="{{ url()->current() !== url()->previous() ? url()->previous() : route('transaction.view.all')}}"
+                                   class="btn btn-outline-danger"
+                                >
                                     {{ __('Cancel') }}
                                 </a>
                             </div>
