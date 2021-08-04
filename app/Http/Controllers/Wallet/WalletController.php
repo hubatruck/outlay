@@ -103,7 +103,7 @@ class WalletController extends Controller
     public function validateRequest(Request $request, bool $isNewModelInstance = true): array
     {
         $data = $request->validate([
-            'name' => ($isNewModelInstance ? 'required|' : 'nullable|') . 'max:255',
+            'name' => 'required|max:255',
             'notes' => 'nullable|string',
             'balance' => ($isNewModelInstance ? '' : 'nullable|') . 'numeric|max:999999.99',
             'is_card' => 'nullable',
