@@ -13,6 +13,13 @@
                         {{ __('No transactions for this wallet. Charts are hidden.') }}
                     </div>
                 @endif
+                <a
+                    class="btn btn-lg btn-outline-info mb-3"
+                    href="{{ route('wallet.view.all') }}"
+                >
+                    {{ __('< Wallet list') }}
+                </a>
+
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</h4>
