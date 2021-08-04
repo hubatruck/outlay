@@ -25,6 +25,10 @@ class Transaction extends Model
         'transaction_date' => 'date'
     ];
 
+    protected $dates = [
+        'transaction_date'
+    ];
+
     /**
      * Type of the transaction
      * @return BelongsTo
@@ -69,8 +73,8 @@ class Transaction extends Model
      * Set transaction type from DATE format to DATETIME format
      * @param string $value
      */
-    public function setTransactionDateAttribute($value): void
+    public function setTransactionDateAttribute(string $value): void
     {
-        $this->attributes['transaction_date'] = Carbon::parse($value)->format('Y-m-d H:i:s');
+        $this->attributes['transaction_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
     }
 }
