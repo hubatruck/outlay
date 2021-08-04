@@ -56,6 +56,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Get previous transaction date created by the user.
+     * This function is used to determine the prefill date for transaction
+     * creation.
+     * @return string
+     */
+    public function previousTransactionDate(): string
+    {
+        $last_transaction = $this->transactions->last();
+        return ($last_transaction !== null) ? (string) $last_transaction->transaction_date : (string) now();
+    }
+
+    /**
      * Check if user has transactions
      *
      * @return bool
