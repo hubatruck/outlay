@@ -40,13 +40,19 @@
                                     >
                                         {{ $wallet->deleted_at ? __('Reactivate') : __('Hide') }}
                                     </a>
-                                    @if(!count($wallet->transactions))
-                                        <a
-                                            class="btn btn-danger"
-                                            href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+                                    @if(count($wallet->transactions))
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                              title="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
                                         >
-                                            {{ __('Delete') }}
-                                        </a>
+                                    @endif
+                                            <a
+                                                class="btn btn-danger @if(count($wallet->transactions))disabled @endif"
+                                                href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+                                            >
+                                                {{ __('Delete') }}
+                                            </a>
+                                    @if(count($wallet->transactions))
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -81,4 +87,9 @@
     <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
     {{ $dailyChart->script() }}
     {{ $typeChart->script() }}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 @endpush
