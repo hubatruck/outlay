@@ -25,6 +25,7 @@
                                     name="name"
                                     type="text"
                                     value="{{ old('name', isset($wallet) ? $wallet->name : '') }}"
+                                    required
                                 />
 
                                 @error('name')
@@ -86,7 +87,11 @@
                                 <button type="submit" class="btn btn-success">
                                     {{ isset($wallet) ? __('Save') : __('Create') }}
                                 </button>
-                                <a type="submit" href="{{ url()->previous() }}" class="btn btn-outline-danger">
+                                <a
+                                    type="submit"
+                                    href="{{ url()->current() !== url()->previous() ? url()->previous() : route('wallet.view.all')}}"
+                                    class="btn btn-outline-danger"
+                                >
                                     {{ __('Cancel') }}
                                 </a>
                             </div>
