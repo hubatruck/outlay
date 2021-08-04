@@ -7,12 +7,6 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
-                @if ($wallet->deleted_at)
-                    <div class="alert alert-info">
-                        <span class="font-weight-bolder">{{ __('Note') }}</span>:
-                        {{ __('This wallet is marked as hidden. Cannot be used for new transactions until reactivated.') }}
-                    </div>
-                @endif
                 @if (!count($wallet->transactions->toArray()))
                     <div class="alert alert-info">
                         <span class="font-weight-bolder">{{ __('Note') }}</span>:
@@ -28,6 +22,20 @@
                                     {{ __('Manage wallet') }}
                                 </div>
                                 <div class="card-body">
+                                    @if($wallet->deleted_at)
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                              title="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"
+                                        >
+                                        @endif
+                                        <a
+                                            class="btn btn-success @if($wallet->deleted_at)disabled @endif"
+                                            href="{{ route('transaction.view.create', ['wallet_id' => $wallet->id]) }}"
+                                        >
+                                            {{ __('Add transaction') }}
+                                        </a>
+                                        @if($wallet->deleted_at)
+                                        </span>
+                                    @endif
                                     <a
                                         class="btn btn-outline-success"
                                         href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
