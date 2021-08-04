@@ -136,15 +136,17 @@ class TransactionController extends Controller
      * @param Request $request
      * @return array
      */
-    public function validateRequest(Request $request): array
+    public function validateRequest(Request $request, bool $walletMustBeActive = true): array
     {
+        $walletRules = ['bail'];
+        if ($walletMustBeActive) {
+            $walletRules[] = new UserOwnsWalletRule();
+            $walletRules[] = new WalletAvailable();
+            $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
+        }
+
         return $request->validate([
-            'wallet_id' => [
-                'bail',
-                new UserOwnsWalletRule(),
-                new WalletAvailable(),
-                Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable',
-            ],
+            'wallet_id' => $walletRules,
             'scope' => 'required|max:255',
             'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => [
