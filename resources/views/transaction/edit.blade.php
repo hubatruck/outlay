@@ -73,8 +73,7 @@
                                     </option>
                                     @foreach(Auth::user()->wallets as $wallet)
                                         @if ($wallet->deleted_at === null
-                                            || (isset($transaction) && $transaction->wallet_id === $wallet->id)
-                                            || (old('wallet_id')&&(string)$wallet->id===old('wallet_id')))
+                                            || (isset($transaction) && $transaction->wallet_id === $wallet->id))
                                             <option
                                                 value="{{ $wallet->id }}"
                                                 @if((isset($transaction) && $wallet->id === $transaction->wallet_id)
