@@ -185,19 +185,19 @@ class TransactionController extends Controller
      */
     public function updateTransaction(Request $request, string $id): RedirectResponse
     {
-        $validated = $this->validateRequest($request);
-
         $oldTransaction = Transaction::find($id);
         if ($oldTransaction === null) {
             $this->transactionDoesNotExist();
         }
 
-        $updatedTransaction = new Transaction($validated);
-        if (!Auth::user()->owns($updatedTransaction)) {
-            return $this->cannotEditTransaction();
-        }
+        $walletMustBeActive = $request->wallet_id && ((string) $oldTransaction->wallet_id !== (string) $request->wallet_id);
+        $validated = $this->validateRequest($request, $walletMustBeActive);
 
-        if (!Auth::user()->owns($oldTransaction->wallet)) {
+        $updatedTransaction = new Transaction($validated);
+        if (
+            !Auth::user()->owns($oldTransaction)
+            || ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction))
+        ) {
             return $this->cannotEditTransaction();
         }
 
