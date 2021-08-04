@@ -154,7 +154,7 @@ class WalletController extends Controller
 
         $wallet->fill($validated);
         $wallet->save();
-        return $this->redirectSuccess('updated');
+        return $this->redirectSuccess('updated', route('wallet.view.details', ['id' => $id]));
     }
 
     /**
@@ -174,8 +174,7 @@ class WalletController extends Controller
             return $this->cannotEditWallet();
         }
         if (count($wallet->transactions)) {
-            return redirect()
-                ->route('wallet.view.all')
+            return redirect(url()->previous())
                 ->with([
                     'message' => __('Wallet has transactions linked to it. Cannot be deleted.'),
                     'status' => 'danger',
@@ -211,6 +210,6 @@ class WalletController extends Controller
             $wallet->delete();
         }
 
-        return $this->redirectSuccess($action);
+        return $this->redirectSuccess($action, url()->previous());
     }
 }
