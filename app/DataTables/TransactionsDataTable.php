@@ -42,6 +42,9 @@ class TransactionsDataTable extends DataTable
             ->blacklist(['actions'])
             ->editColumn('transaction_date', function ($row) {
                 return $row->transaction_date->translatedFormat('Y/m/d, l');
+            })
+            ->editColumn('type', function ($row) {
+                return __($row->type);
             });
     }
 
@@ -61,7 +64,7 @@ class TransactionsDataTable extends DataTable
                 /// https://stackoverflow.com/a/16815955
                 $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
             })
-            ->select(['transactions.*', 'transaction_types.name', 'wallets.name as wallet_name']); /// to prevent createdAt ambiguity
+            ->select(['transactions.*', 'transaction_types.name as type', 'wallets.name as wallet_name']); /// to prevent createdAt ambiguity
     }
 
     /**
@@ -104,7 +107,7 @@ class TransactionsDataTable extends DataTable
         return [
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope'],
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount'],
-            __('Type') => ['name' => 'transaction_types.name', 'data' => 'transaction_type.name'],
+            __('Type') => ['name' => 'transaction_types.name', 'data' => 'type'],
             __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name'],
             __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date'],
             __('Actions') => ['data' => 'actions'],
