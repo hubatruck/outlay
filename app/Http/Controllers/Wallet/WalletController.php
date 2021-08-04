@@ -119,10 +119,9 @@ class WalletController extends Controller
      * @param string $successMethod
      * @return RedirectResponse
      */
-    private function redirectSuccess(string $successMethod = 'created'): RedirectResponse
+    private function redirectSuccess(string $successMethod = 'created', string $url = null): RedirectResponse
     {
-        return redirect()
-            ->route('wallet.view.all')
+        return redirect($url ?? route('wallet.view.all'))
             ->with([
                 'message' => __(
                     'Wallet :action successfully.', [
