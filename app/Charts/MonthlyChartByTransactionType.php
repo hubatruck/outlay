@@ -36,9 +36,10 @@ class MonthlyChartByTransactionType extends MonthlyChartBase
      */
     private function reduceDataPrecision(array $data): array
     {
-        return array_map(static function ($item) {
+        $arr = array_map(static function ($item) {
             return floor($item * 100) / 100;
         }, $data);
+        return array_sum($arr) ? $arr : [];
     }
 
     /**
