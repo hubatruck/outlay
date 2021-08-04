@@ -40,16 +40,14 @@ class TransactionController extends Controller
      */
     public function noWallet(string $type = ''): RedirectResponse
     {
-        return redirect()
-            ->route('transaction.view.all')
-            ->with([
-                'message' => __(
+        return $this->redirect(url()->previous(), [
+            'message' => __('Error: ') . __(
                     'No :type wallet linked to your account found.', [
                         'type' => __($type),
                     ]
                 ),
-                'status' => 'danger',
-            ]);
+            'status' => 'danger',
+        ]);
     }
 
     /**
@@ -83,10 +81,9 @@ class TransactionController extends Controller
      */
     private function transactionDoesNotExist(): RedirectResponse
     {
-        return redirect()
-            ->route('transaction.view.all')
-            ->with([
-                'message' => __('Transaction does not exist.'),
+        return $this->redirect(route('transaction.view.all'),
+            [
+                'message' => __('Error: ') . __('Transaction does not exist.'),
                 'status' => 'danger',
             ]);
     }
@@ -98,10 +95,9 @@ class TransactionController extends Controller
      */
     private function cannotEditTransaction(): RedirectResponse
     {
-        return redirect()
-            ->route('transaction.view.all')
-            ->with([
-                'message' => __('You cannot edit this transaction.'),
+        return $this->redirect(route('transaction.view.all'),
+            [
+                'message' => __('Error: ') . __('You cannot edit this transaction.'),
                 'status' => 'danger',
             ]);
     }
@@ -153,9 +149,8 @@ class TransactionController extends Controller
      */
     private function redirectSuccess(string $successMethod = 'created'): RedirectResponse
     {
-        return redirect()
-            ->route('transaction.view.all')
-            ->with([
+        return $this->redirect(route('transaction.view.all'),
+            [
                 'message' => __(
                     'Transaction :action successfully.', [
                         'action' => __($successMethod)
@@ -215,5 +210,17 @@ class TransactionController extends Controller
 
         $transaction->delete();
         return $this->redirectSuccess('removed');
+    }
+
+    /**
+     * Redirect wrapper function
+     *
+     * @param string $url
+     * @param array|null $response
+     * @return RedirectResponse
+     */
+    private function redirect(string $url, array $response = null): RedirectResponse
+    {
+        return redirect($url)->with($response);
     }
 }
