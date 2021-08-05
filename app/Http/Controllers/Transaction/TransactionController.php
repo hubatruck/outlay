@@ -31,8 +31,9 @@ class TransactionController extends Controller
     public function createView(Request $request)
     {
         /// pre-select the wallet, if there is intent
-        if ($request->wallet_id) {
-            $wallet = Wallet::find($request->wallet_id);
+        $wallet_id = $request->get('wallet_id');
+        if ($wallet_id !== null) {
+            $wallet = Wallet::find($wallet_id);
 
             if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
                 return WalletFeedback::quickCreateError();
