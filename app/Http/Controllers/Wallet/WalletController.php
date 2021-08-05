@@ -62,7 +62,7 @@ class WalletController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => __('Wallet does not exist.'),
+                'message' => __('Error') . ': ' . __('Wallet does not exist.'),
                 'status' => 'danger',
             ]);
     }
@@ -77,7 +77,7 @@ class WalletController extends Controller
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => __('You cannot edit this wallet.'),
+                'message' => __('Error') . ': ' . __('You cannot edit this wallet.'),
                 'status' => 'danger',
             ]);
     }
@@ -97,7 +97,7 @@ class WalletController extends Controller
         if (!Auth::user()->owns($wallet)) {
             return redirect(route('wallet.view.all'))
                 ->with([
-                    'message' => __('Error: ') . __('You cannot view this wallet.'),
+                    'message' => __('Error') . ': ' . __('You cannot view this wallet.'),
                     'status' => 'danger',
                 ]);
         }
@@ -203,7 +203,7 @@ class WalletController extends Controller
         if (count($wallet->transactions)) {
             return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
                 ->with([
-                    'message' => __('Wallet has transactions linked to it. Cannot be deleted.'),
+                    'message' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
                     'status' => 'danger',
                 ]);
         }
