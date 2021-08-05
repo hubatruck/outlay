@@ -43,13 +43,26 @@ class WalletController extends Controller
     public function editView(string $id)
     {
         $wallet = Wallet::withTrashed()->find($id);
-        if (empty($wallet)) {
+
+        $permissionCheck = $this->checkWallet($wallet);
+        return $permissionCheck ?: view($this->editorViewName, compact('wallet'));
+    }
+
+    /**
+     * Check if the provided wallet is wallet or if the user owns the wallet
+     *
+     * @param Wallet $wallet
+     * @return RedirectResponse|null
+     */
+    private function checkWallet(Wallet $wallet = null)
+    {
+        if ($wallet === null) {
             return $this->walletDoesNotExist();
         }
         if (!Auth::user()->owns($wallet)) {
             return $this->cannotEditWallet();
         }
-        return view($this->editorViewName, compact('wallet'));
+        return null;
     }
 
     /**
@@ -172,11 +185,9 @@ class WalletController extends Controller
 
         $wallet = Wallet::withTrashed()->find($id);
 
-        if (empty($wallet)) {
-            return $this->walletDoesNotExist();
-        }
-        if (!Auth::user()->owns($wallet)) {
-            return $this->cannotEditWallet();
+        $permissionCheck = $this->checkWallet($wallet);
+        if ($permissionCheck !== null) {
+            return $permissionCheck;
         }
 
         $wallet->fill($validated);
@@ -194,12 +205,11 @@ class WalletController extends Controller
     {
         $wallet = Wallet::withTrashed()->find($id);
 
-        if (empty($wallet)) {
-            return $this->walletDoesNotExist();
+        $permissionCheck = $this->checkWallet($wallet);
+        if ($permissionCheck !== null) {
+            return $permissionCheck;
         }
-        if (!Auth::user()->owns($wallet)) {
-            return $this->cannotEditWallet();
-        }
+
         if (count($wallet->transactions)) {
             return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
                 ->with([
@@ -222,11 +232,9 @@ class WalletController extends Controller
     {
         $wallet = Wallet::withTrashed()->find($id);
 
-        if (empty($wallet)) {
-            return $this->walletDoesNotExist();
-        }
-        if (!Auth::user()->owns($wallet)) {
-            return $this->cannotEditWallet();
+        $permissionCheck = $this->checkWallet($wallet);
+        if ($permissionCheck !== null) {
+            return $permissionCheck;
         }
 
         if ($wallet->trashed()) {
