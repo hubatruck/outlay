@@ -3,14 +3,53 @@
 namespace App\Models;
 
 use App\Feedbacks\WalletFeedback;
+use Database\Factories\WalletFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class Wallet
+ *
+ * @package App\Models
+ * @property string|int $id
+ * @property int $user_id
+ * @property string $name
+ * @property string|null $notes
+ * @property float $balance
+ * @property int $is_card
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection|Transaction[] $transactions
+ * @property-read int|null $transactions_count
+ * @property-read User $user
+ * @method static WalletFactory factory(...$parameters)
+ * @method static Builder|Wallet newModelQuery()
+ * @method static Builder|Wallet newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Wallet onlyTrashed()
+ * @method static Builder|Wallet query()
+ * @method static Builder|Wallet whereBalance($value)
+ * @method static Builder|Wallet whereCreatedAt($value)
+ * @method static Builder|Wallet whereDeletedAt($value)
+ * @method static Builder|Wallet whereId($value)
+ * @method static Builder|Wallet whereIsCard($value)
+ * @method static Builder|Wallet whereName($value)
+ * @method static Builder|Wallet whereNotes($value)
+ * @method static Builder|Wallet whereUpdatedAt($value)
+ * @method static Builder|Wallet whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Wallet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Wallet withoutTrashed()
+ * @mixin Eloquent
+ */
 class Wallet extends Model
 {
     use HasFactory, SoftDeletes;

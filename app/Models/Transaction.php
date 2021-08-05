@@ -4,12 +4,46 @@ namespace App\Models;
 
 use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
+use Database\Factories\TransactionFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Transaction
+ *
+ * @property string|int $id
+ * @property string|int $wallet_id
+ * @property float $amount
+ * @property string|null $scope
+ * @property int $transaction_type_id
+ * @property \Illuminate\Support\Carbon|null $transaction_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read string $type
+ * @property-read string $wallet_name
+ * @property-read TransactionType $transactionType
+ * @property-read Wallet $wallet
+ * @method static TransactionFactory factory(...$parameters)
+ * @method static Builder|Transaction newModelQuery()
+ * @method static Builder|Transaction newQuery()
+ * @method static Builder|Transaction query()
+ * @method static Builder|Transaction whereAmount($value)
+ * @method static Builder|Transaction whereCreatedAt($value)
+ * @method static Builder|Transaction whereDeletedAt($value)
+ * @method static Builder|Transaction whereId($value)
+ * @method static Builder|Transaction whereScope($value)
+ * @method static Builder|Transaction whereTransactionDate($value)
+ * @method static Builder|Transaction whereTransactionTypeId($value)
+ * @method static Builder|Transaction whereUpdatedAt($value)
+ * @method static Builder|Transaction whereWalletId($value)
+ * @mixin Eloquent
+ */
 class Transaction extends Model
 {
     use HasFactory;
