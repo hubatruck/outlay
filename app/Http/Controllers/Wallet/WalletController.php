@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wallet;
 
 use App\Charts\MonthlyChartByDay;
 use App\Charts\MonthlyChartByTransactionType;
+use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
@@ -11,7 +12,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -44,62 +44,15 @@ class WalletController extends Controller
     {
         $wallet = Wallet::withTrashed()->find($id);
 
-        $permissionCheck = $this->checkWallet($wallet);
+        $permissionCheck = Wallet::check($wallet);
         return $permissionCheck ?: view($this->editorViewName, compact('wallet'));
-    }
-
-    /**
-     * Check if the provided wallet is wallet or if the user owns the wallet
-     *
-     * @param Wallet $wallet
-     * @return RedirectResponse|null
-     */
-    private function checkWallet(Wallet $wallet = null)
-    {
-        if ($wallet === null) {
-            return $this->walletDoesNotExist();
-        }
-        if (!Auth::user()->owns($wallet)) {
-            return $this->cannotEditWallet();
-        }
-        return null;
-    }
-
-    /**
-     * Redirect user to wallet list if wallet does not exist
-     *
-     * @return RedirectResponse
-     */
-    private function walletDoesNotExist(): RedirectResponse
-    {
-        return redirect()
-            ->route('wallet.view.all')
-            ->with([
-                'message' => __('Error') . ': ' . __('Wallet does not exist.'),
-                'status' => 'danger',
-            ]);
-    }
-
-    /**
-     * Redirect user to wallet list, if user cannot edit wallet
-     *
-     * @return RedirectResponse
-     */
-    private function cannotEditWallet(): RedirectResponse
-    {
-        return redirect()
-            ->route('wallet.view.all')
-            ->with([
-                'message' => __('Error') . ': ' . __('You cannot edit this wallet.'),
-                'status' => 'danger',
-            ]);
     }
 
     /**
      * Show details page for wallet, if user owns it
      *
      * @param string $id
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse|Redirector
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
      */
     public function detailsView(string $id)
     {
@@ -108,11 +61,7 @@ class WalletController extends Controller
         $wallet = Wallet::withTrashed()->findOrFail($id);
 
         if (!Auth::user()->owns($wallet)) {
-            return redirect(route('wallet.view.all'))
-                ->with([
-                    'message' => __('Error') . ': ' . __('You cannot view this wallet.'),
-                    'status' => 'danger',
-                ]);
+            return WalletFeedback::viewError();
         }
 
         return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
@@ -130,7 +79,7 @@ class WalletController extends Controller
         $newWalletData['user_id'] = Auth::user()->id;
         Wallet::create($newWalletData);
 
-        return $this->redirectSuccess();
+        return WalletFeedback::success();
     }
 
     /**
@@ -154,25 +103,6 @@ class WalletController extends Controller
     }
 
     /**
-     * Redirect user to wallet list with success message
-     *
-     * @param string $successMethod
-     * @return RedirectResponse
-     */
-    private function redirectSuccess(string $successMethod = 'created', string $url = null): RedirectResponse
-    {
-        return redirect($url ?? route('wallet.view.all'))
-            ->with([
-                'message' => __(
-                    'Wallet :action successfully.', [
-                        'action' => __($successMethod)
-                    ]
-                ),
-                'status' => 'success',
-            ]);
-    }
-
-    /**
      * Update a wallet
      *
      * @param Request $request
@@ -185,14 +115,14 @@ class WalletController extends Controller
 
         $wallet = Wallet::withTrashed()->find($id);
 
-        $permissionCheck = $this->checkWallet($wallet);
+        $permissionCheck = Wallet::check($wallet);
         if ($permissionCheck !== null) {
             return $permissionCheck;
         }
 
         $wallet->fill($validated);
         $wallet->save();
-        return $this->redirectSuccess('updated', route('wallet.view.details', ['id' => $id]));
+        return WalletFeedback::success('updated', route('wallet.view.details', ['id' => $id]));
     }
 
     /**
@@ -205,21 +135,17 @@ class WalletController extends Controller
     {
         $wallet = Wallet::withTrashed()->find($id);
 
-        $permissionCheck = $this->checkWallet($wallet);
+        $permissionCheck = Wallet::check($wallet);
         if ($permissionCheck !== null) {
             return $permissionCheck;
         }
 
         if (count($wallet->transactions)) {
-            return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
-                ->with([
-                    'message' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
-                    'status' => 'danger',
-                ]);
+            return WalletFeedback::hasTransactionsError($wallet);
         }
 
         $wallet->forceDelete();
-        return $this->redirectSuccess('deleted');
+        return WalletFeedback::success('deleted');
     }
 
     /**
@@ -232,7 +158,7 @@ class WalletController extends Controller
     {
         $wallet = Wallet::withTrashed()->find($id);
 
-        $permissionCheck = $this->checkWallet($wallet);
+        $permissionCheck = Wallet::check($wallet);
         if ($permissionCheck !== null) {
             return $permissionCheck;
         }
@@ -245,7 +171,7 @@ class WalletController extends Controller
             $wallet->delete();
         }
 
-        return $this->redirectSuccess(
+        return WalletFeedback::success(
             $action,
             previousUrlOr(route('wallet.view.details', ['id' => $id]))
         );
