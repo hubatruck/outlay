@@ -101,7 +101,7 @@ class RoutingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->get('/wallets/9999/details')->assertStatus(302);
+        $this->actingAs($user)->get('/wallets/9999/details')->assertStatus(404);
         $this->assertAuthenticatedAs($user);
     }
 

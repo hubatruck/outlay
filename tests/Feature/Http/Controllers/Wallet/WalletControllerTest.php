@@ -32,6 +32,7 @@ class WalletControllerTest extends TestCase
     public function test_create_wallet_route_displays_the_wallet_edit_view(): void
     {
         $user = User::factory()->create();
+        $this->followingRedirects();
         $response = $this->actingAs($user)
             ->get(route('wallet.view.create'));
 
@@ -62,7 +63,7 @@ class WalletControllerTest extends TestCase
         $wallet = $this->createWalletFor($otherUser);
 
         $response = $this->actingAs($user)
-            ->get(route('wallet.view.update', ['id' => (string)$wallet->id]));
+            ->get(route('wallet.view.update', ['id' => (string) $wallet->id]));
 
         $response->assertRedirect(route('wallet.view.all'));
         $response->assertSessionHasAll(['status' => 'danger']);
@@ -75,7 +76,7 @@ class WalletControllerTest extends TestCase
      */
     private function createWalletFor(Model $user): Wallet
     {
-        return Wallet::factory()->create(['user_id' => (string)$user->id]);
+        return Wallet::factory()->create(['user_id' => (string) $user->id]);
     }
 
     /**
@@ -87,7 +88,7 @@ class WalletControllerTest extends TestCase
         $wallet = $this->createWalletFor($user);
 
         $response = $this->actingAs($user)
-            ->get(route('wallet.view.update', ['id' => (string)$wallet->user_id]));
+            ->get(route('wallet.view.update', ['id' => (string) $wallet->user_id]));
 
         $response->assertViewIs('wallet.edit');
         $response->assertOk();
@@ -118,7 +119,7 @@ class WalletControllerTest extends TestCase
      */
     private function rawWallet(User $user): array
     {
-        return Wallet::factory(['user_id' => (string)$user->id])->raw();
+        return Wallet::factory(['user_id' => (string) $user->id])->raw();
     }
 
     /**
@@ -194,10 +195,10 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => (string)$wallet->id
+                'id' => (string) $wallet->id,
             ]), []);
 
-        $response->assertSessionHasNoErrors();
+        $response->assertSessionHasErrors(['name']);
         $response->assertRedirect();
     }
 
@@ -212,7 +213,7 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => (string)$wallet->id
+                'id' => (string) $wallet->id,
             ]), ['name' => bin2hex(random_bytes(1000))]);
 
         $response->assertSessionHasErrors(['name']);
@@ -229,7 +230,7 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => (string)$wallet->id
+                'id' => (string) $wallet->id,
             ]), ['balance' => 'definitely not a number']);
 
         $response->assertSessionHasErrors(['balance']);
@@ -246,7 +247,7 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => (string)$wallet->id
+                'id' => (string) $wallet->id,
             ]), ['balance' => 9999999999]);
 
         $response->assertSessionHasErrors(['balance']);
@@ -262,7 +263,7 @@ class WalletControllerTest extends TestCase
         $wallet = $this->rawWallet($user);
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => 9999
+                'id' => 9999,
             ]), $wallet);
 
         $response->assertSessionHas(['status' => 'danger']);
@@ -280,7 +281,7 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => (string)$wallet->id
+                'id' => (string) $wallet->id,
             ]), $wallet->attributesToArray());
 
         $response->assertRedirect(route('wallet.view.all'));
@@ -297,7 +298,7 @@ class WalletControllerTest extends TestCase
         $wallet2 = $this->createWalletFor($user);
         $response = $this->actingAs($user)
             ->post(route('wallet.data.update', [
-                'id' => $wallet->id
+                'id' => $wallet->id,
             ]), $wallet2->attributesToArray());
 
         $saved = Wallet::find(1);
@@ -306,7 +307,7 @@ class WalletControllerTest extends TestCase
         self::assertEquals($wallet2->only($shared_data_keys), $saved->only($shared_data_keys));
 
         $response->assertSessionHas(['status' => 'success']);
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertRedirect(route('wallet.view.details', ['id' => $wallet->id]));
     }
 
     /**
@@ -347,15 +348,26 @@ class WalletControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $wallet = $this->createWalletFor($user);
-        Transaction::factory()->create(['wallet_id' => (string)$wallet->id]);
+        Transaction::factory()->create(['wallet_id' => (string) $wallet->id]);
 
-        $response = $this->actingAs($user)->get(route('wallet.manage.delete', ['id' => $wallet->id]));
+        $response = $this->actingAs($user)
+            ->from(route('wallet.view.details', ['id' => $wallet->id]))
+            ->get(route('wallet.manage.delete', ['id' => $wallet->id]));
+
+        $deleted = Wallet::find($wallet->id);
+        self::assertNotNull($deleted);
+        $response->assertSessionHas(['status' => 'danger']);
+        $response->assertLocation(route('wallet.view.details', ['id' => $wallet->id]));
+
+        $response = $this->actingAs($user)
+            ->from(route('wallet.view.all'))
+            ->get(route('wallet.manage.delete', ['id' => $wallet->id]));
 
         $deleted = Wallet::find($wallet->id);
         self::assertNotNull($deleted);
 
-        $response->assertRedirect(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'danger']);
+        $response->assertLocation(route('wallet.view.all'));
     }
 
     /**
@@ -371,7 +383,7 @@ class WalletControllerTest extends TestCase
         $deleted = Wallet::find($wallet->id);
         self::assertNull($deleted);
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'success']);
     }
 
@@ -384,7 +396,7 @@ class WalletControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('wallet.manage.toggle_hidden', ['id' => 1]));
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'danger']);
     }
 
@@ -402,7 +414,7 @@ class WalletControllerTest extends TestCase
         $wallet->refresh();
         self::assertFalse($wallet->trashed());
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'danger']);
     }
 
@@ -413,14 +425,28 @@ class WalletControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $wallet = $this->createWalletFor($user);
-        Transaction::factory()->create(['wallet_id' => (string)$wallet->id]);
+        Transaction::factory()->create(['wallet_id' => (string) $wallet->id]);
 
-        $response = $this->actingAs($user)->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+        $response = $this->actingAs($user)
+            ->from(route('wallet.view.all'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
 
         $wallet->refresh();
         self::assertTrue($wallet->trashed());
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
+        $response->assertSessionHas(['status' => 'success']);
+
+        /// checking redirect
+        $wallet->delete();
+        $response = $this->actingAs($user)
+            ->from(route('login'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+
+        $wallet->refresh();
+        self::assertFalse($wallet->trashed());
+
+        $response->assertLocation(route('wallet.view.details', ['id' => $wallet->id]));
         $response->assertSessionHas(['status' => 'success']);
     }
 
@@ -432,12 +458,26 @@ class WalletControllerTest extends TestCase
         $user = User::factory()->create();
         $wallet = $this->createWalletFor($user);
 
-        $response = $this->actingAs($user)->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+        $response = $this->actingAs($user)
+            ->from(route('wallet.view.all'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
 
         $wallet->refresh();
         self::assertTrue($wallet->trashed());
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
+        $response->assertSessionHas(['status' => 'success']);
+
+        /// checking redirect
+        $wallet->delete();
+        $response = $this->actingAs($user)
+            ->from(route('login'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+
+        $wallet->refresh();
+        self::assertFalse($wallet->trashed());
+
+        $response->assertLocation(route('wallet.view.details', ['id' => $wallet->id]));
         $response->assertSessionHas(['status' => 'success']);
     }
 
@@ -450,12 +490,26 @@ class WalletControllerTest extends TestCase
         $wallet = $this->createWalletFor($user);
         $wallet->delete();
 
-        $response = $this->actingAs($user)->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+        $response = $this->actingAs($user)
+            ->from(route('wallet.view.all'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
 
         $wallet->refresh();
         self::assertFalse($wallet->trashed());
 
-        $response->assertRedirect(route('wallet.view.all'));
+        $response->assertLocation(route('wallet.view.all'));
+        $response->assertSessionHas(['status' => 'success']);
+
+        /// checking redirect
+        $wallet->delete();
+        $response = $this->actingAs($user)
+            ->from(route('login'))
+            ->get(route('wallet.manage.toggle_hidden', ['id' => $wallet->id]));
+
+        $wallet->refresh();
+        self::assertFalse($wallet->trashed());
+
+        $response->assertLocation(route('wallet.view.details', ['id' => $wallet->id]));
         $response->assertSessionHas(['status' => 'success']);
     }
 }

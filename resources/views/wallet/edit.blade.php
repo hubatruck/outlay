@@ -89,7 +89,7 @@
                                 </button>
                                 <a
                                     type="submit"
-                                    href="{{ previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])) }}"
+                                    href="{{ previousUrlOr(isset($wallet) ? route('wallet.view.details', ['id' => $wallet->id]) : route('wallet.view.all')) }}"
                                     class="btn btn-outline-danger"
                                 >
                                     {{ __('Cancel') }}
