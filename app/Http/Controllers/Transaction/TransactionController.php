@@ -54,7 +54,7 @@ class TransactionController extends Controller
      */
     public function noWallet(string $type = ''): RedirectResponse
     {
-        return $this->redirect(url()->previous(), [
+        return $this->redirect(previousUrlOr(route('transaction.view.all')), [
             'message' => __('Error: ') . __(
                     'No :type wallet linked to your account found.', [
                         'type' => __($type),

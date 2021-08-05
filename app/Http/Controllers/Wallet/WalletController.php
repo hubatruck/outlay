@@ -201,7 +201,7 @@ class WalletController extends Controller
             return $this->cannotEditWallet();
         }
         if (count($wallet->transactions)) {
-            return redirect(url()->previous())
+            return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
                 ->with([
                     'message' => __('Wallet has transactions linked to it. Cannot be deleted.'),
                     'status' => 'danger',
@@ -237,6 +237,9 @@ class WalletController extends Controller
             $wallet->delete();
         }
 
-        return $this->redirectSuccess($action, url()->previous());
+        return $this->redirectSuccess(
+            $action,
+            previousUrlOr(route('wallet.view.details', ['id' => $id]))
+        );
     }
 }

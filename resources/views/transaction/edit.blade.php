@@ -160,7 +160,7 @@
                                     {{ isset($transaction) ? __('Save') : __('Create') }}
                                 </button>
                                 <a type="submit"
-                                   href="{{ url()->current() !== url()->previous() ? url()->previous() : route('transaction.view.all')}}"
+                                   href="{{ previousUrlOr(route('transaction.view.all')) }}"
                                    class="btn btn-outline-danger"
                                 >
                                     {{ __('Cancel') }}
