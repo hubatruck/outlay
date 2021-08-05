@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use App\Charts\MonthlyChartByDay;
+use App\Charts\MonthlyChartByTransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -76,6 +80,29 @@ class WalletController extends Controller
                 'message' => __('You cannot edit this wallet.'),
                 'status' => 'danger',
             ]);
+    }
+
+    /**
+     * Show details page for wallet, if user owns it
+     *
+     * @param string $id
+     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse|Redirector
+     */
+    public function detailsView(string $id)
+    {
+        $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
+        $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
+        $wallet = Wallet::withTrashed()->findOrFail($id);
+
+        if (!Auth::user()->owns($wallet)) {
+            return redirect(route('wallet.view.all'))
+                ->with([
+                    'message' => __('Error: ') . __('You cannot view this wallet.'),
+                    'status' => 'danger',
+                ]);
+        }
+
+        return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
     }
 
     /**
