@@ -114,7 +114,7 @@ class WalletFeedback
      * @param string|null $url
      * @return RedirectResponse
      */
-    public function success(string $successMethod = 'created', string $url = null): RedirectResponse
+    public static function success(string $successMethod = 'created', string $url = null): RedirectResponse
     {
         return redirect($url ?? route('wallet.view.all'))
             ->with([
