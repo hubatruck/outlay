@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class Transaction extends Model
 {
@@ -28,6 +31,27 @@ class Transaction extends Model
     protected $dates = [
         'transaction_date'
     ];
+
+    /**
+     * The function checks the following:
+     * - Transaction is valid
+     * - User owns the transaction
+     *
+     * If one of the check is failed, an appropriate error redirect is returned
+     *
+     * @param Transaction|null $transaction
+     * @return RedirectResponse|null
+     */
+    public static function checkStatus(Transaction $transaction = null): ?RedirectResponse
+    {
+        if ($transaction === null || $transaction->wallet === null) {
+            return TransactionFeedback::existError();
+        }
+        if (!Auth::user()->owns($transaction)) {
+            return TransactionFeedback::editError();
+        }
+        return null;
+    }
 
     /**
      * Type of the transaction
