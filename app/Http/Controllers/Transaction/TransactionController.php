@@ -134,6 +134,7 @@ class TransactionController extends Controller
      * Validate request data
      *
      * @param Request $request
+     * @param bool $walletMustBeActive
      * @return array
      */
     public function validateRequest(Request $request, bool $walletMustBeActive = true): array
@@ -209,7 +210,6 @@ class TransactionController extends Controller
     /**
      * Delete a transaction from the database
      *
-     * @param Request $request
      * @param string $id
      * @return RedirectResponse
      */

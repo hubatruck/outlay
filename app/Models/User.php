@@ -154,7 +154,8 @@ class User extends Authenticatable
     }
 
     /**
-     * Che
+     * Check if the user owns a transaction or wallet
+     *
      * @param Transaction|Wallet|null $item
      * @return bool
      */
