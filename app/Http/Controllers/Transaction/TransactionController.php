@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use App\Feedbacks\TransactionFeedback;
+use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\TransactionType;
@@ -32,36 +34,15 @@ class TransactionController extends Controller
         if ($request->wallet_id) {
             $wallet = Wallet::find($request->wallet_id);
 
-            if ($wallet === null || !Auth::user()->owns($wallet) || $wallet->trashed()) {
-                return $this->redirect(route('wallet.view.all'), [
-                    'status' => 'danger',
-                    'message' => __('Error: ') . __('Wallet unavailable for quick transaction creation.'),
-                ]);
+            if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
+                return WalletFeedback::quickCreateError();
             }
         }
 
         if (!Auth::user()->hasAnyActiveWallet()) {
-            return $this->noWallet(Auth::user()->hasWallet() ? 'active' : '');
+            return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
         return view($this->viewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
-    }
-
-    /**
-     * Redirect user with 'no wallet found' error
-     *
-     * @param string $type
-     * @return RedirectResponse
-     */
-    public function noWallet(string $type = ''): RedirectResponse
-    {
-        return $this->redirect(previousUrlOr(route('transaction.view.all')), [
-            'message' => __('Error: ') . __(
-                    'No :type wallet linked to your account found.', [
-                        'type' => __($type),
-                    ]
-                ),
-            'status' => 'danger',
-        ]);
     }
 
     /**
@@ -75,45 +56,16 @@ class TransactionController extends Controller
     public function editView(string $id)
     {
         if (!count(Auth::user()->wallets ?? null)) {
-            return $this->noWallet();
+            return WalletFeedback::noWalletError();
         }
 
         $transaction = Transaction::find($id);
-        if (empty($transaction) || $transaction->wallet === null) {
-            return $this->transactionDoesNotExist();
-        }
-        if (!Auth::user()->owns($transaction)) {
-            return $this->cannotEditTransaction();
-        }
-        return view($this->viewName, compact('transaction'));
-    }
 
-    /**
-     * Redirect user with 'transaction does not exist' error
-     *
-     * @return RedirectResponse
-     */
-    private function transactionDoesNotExist(): RedirectResponse
-    {
-        return $this->redirect(route('transaction.view.all'),
-            [
-                'message' => __('Error: ') . __('Transaction does not exist.'),
-                'status' => 'danger',
-            ]);
-    }
+        $permissionCheck = Transaction::checkStatus($transaction);
+        return $permissionCheck === null
+            ? view($this->viewName, compact('transaction'))
+            : $permissionCheck;
 
-    /**
-     * Redirect user with 'cannot edit this transaction' error
-     *
-     * @return RedirectResponse
-     */
-    private function cannotEditTransaction(): RedirectResponse
-    {
-        return $this->redirect(route('transaction.view.all'),
-            [
-                'message' => __('Error: ') . __('You cannot edit this transaction.'),
-                'status' => 'danger',
-            ]);
     }
 
     /**
@@ -127,7 +79,7 @@ class TransactionController extends Controller
         $newTransactionData = $this->validateRequest($request);
         Transaction::create($newTransactionData);
 
-        return $this->redirectSuccess();
+        return TransactionFeedback::success();
     }
 
     /**
@@ -152,29 +104,10 @@ class TransactionController extends Controller
             'amount' => 'numeric|max:999999.99',
             'transaction_type_id' => [
                 'required',
-                Rule::in(TransactionType::all()->pluck('id')->toArray())
+                Rule::in(TransactionType::all()->pluck('id')->toArray()),
             ],
             'transaction_date' => 'required|date|date_format:Y-m-d',
         ]);
-    }
-
-    /**
-     * Redirect user with success message
-     *
-     * @param string $successMethod
-     * @return RedirectResponse
-     */
-    private function redirectSuccess(string $successMethod = 'created'): RedirectResponse
-    {
-        return $this->redirect(route('transaction.view.all'),
-            [
-                'message' => __(
-                    'Transaction :action successfully.', [
-                        'action' => __($successMethod)
-                    ]
-                ),
-                'status' => 'success',
-            ]);
     }
 
     /**
@@ -187,24 +120,23 @@ class TransactionController extends Controller
     public function updateTransaction(Request $request, string $id): RedirectResponse
     {
         $oldTransaction = Transaction::find($id);
-        if ($oldTransaction === null) {
-            $this->transactionDoesNotExist();
+        $permissionCheck = Transaction::checkStatus($oldTransaction);
+        if ($permissionCheck !== null) {
+            return $permissionCheck;
         }
 
-        $walletMustBeActive = $request->wallet_id && ((string) $oldTransaction->wallet_id !== (string) $request->wallet_id);
+        $wallet_id = $request->get('wallet_id');
+        $walletMustBeActive = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id);
         $validated = $this->validateRequest($request, $walletMustBeActive);
 
         $updatedTransaction = new Transaction($validated);
-        if (
-            !Auth::user()->owns($oldTransaction)
-            || ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction))
-        ) {
-            return $this->cannotEditTransaction();
+        if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {
+            return TransactionFeedback::editError();
         }
 
         $oldTransaction->fill($updatedTransaction->attributesToArray());
         $oldTransaction->save();
-        return $this->redirectSuccess('updated');
+        return TransactionFeedback::success('updated');
     }
 
     /**
@@ -217,26 +149,12 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        if (empty($transaction) || $transaction->wallet === null) {
-            return $this->transactionDoesNotExist();
-        }
-        if (!Auth::user()->owns($transaction)) {
-            return $this->cannotEditTransaction();
+        $permissionCheck = Transaction::checkStatus($transaction);
+        if ($permissionCheck !== null) {
+            return $permissionCheck;
         }
 
         $transaction->delete();
-        return $this->redirectSuccess('removed');
-    }
-
-    /**
-     * Redirect wrapper function
-     *
-     * @param string $url
-     * @param array|null $response
-     * @return RedirectResponse
-     */
-    private function redirect(string $url, array $response = null): RedirectResponse
-    {
-        return redirect($url)->with($response);
+        return TransactionFeedback::success('removed');
     }
 }
