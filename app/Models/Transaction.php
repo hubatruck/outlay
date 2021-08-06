@@ -85,7 +85,10 @@ class Transaction extends Model
      */
     public static function checkStatus(Transaction $transaction = null): ?RedirectResponse
     {
-        if ($transaction === null || $transaction->wallet === null) {
+        if (
+            $transaction === null
+            || ($transaction->sourceWallet === null && $transaction->destinationWallet === null)
+        ) {
             return TransactionFeedback::existError();
         }
         if (!Auth::user()->owns($transaction)) {
