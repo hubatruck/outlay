@@ -168,7 +168,15 @@ class User extends Authenticatable
     public function owns($item): bool
     {
         if ($item instanceof Transaction) {
-            $item = $item->wallet;
+            $source = $item->sourceWallet;
+            $dest = $item->destinationWallet;
+            if ($source !== null) {
+                if ($dest !== null) {
+                    return $this->owns($dest) && $this->owns($source);
+                }
+                return $this->owns($source);
+            }
+            return $this->owns($dest);
         }
         if ($item instanceof Wallet) {
             return (string) $this->id === (string) $item->user_id;
