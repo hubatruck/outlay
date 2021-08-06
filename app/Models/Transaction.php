@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
  * App\Models\Transaction
  *
  * @property string|int $id
- * @property string|int $wallet_id
+ * @property string|int $source_wallet_id
+ * @property string|int $destination_wallet_id
  * @property float $amount
  * @property string|null $scope
  * @property int $transaction_type_id
@@ -26,9 +27,11 @@ use Illuminate\Support\Facades\Auth;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property-read string $type
- * @property-read string $wallet_name
+ * @property-read string $source_wallet_name
+ * @property-read string $destination_wallet_name
  * @property-read TransactionType $transactionType
- * @property-read Wallet $wallet
+ * @property-read Wallet|null $sourceWallet
+ * @property-read Wallet|null $destinationWallet
  * @method static TransactionFactory factory(...$parameters)
  * @method static Builder|Transaction newModelQuery()
  * @method static Builder|Transaction newQuery()
@@ -56,7 +59,11 @@ class Transaction extends Model
         'transaction_date',
     ];
 
-    protected $appends = ['wallet_name', 'type'];
+    protected $appends = [
+        'source_wallet_name',
+        'destination_wallet_name',
+        'type',
+    ];
 
     protected $casts = [
         'transaction_date' => 'date'
@@ -97,12 +104,23 @@ class Transaction extends Model
     }
 
     /**
-     * Wallet that the transaction belongs to
+     * Wallet from where the funds came from
      * @return BelongsTo
      */
-    public function wallet(): BelongsTo
+    public function sourceWallet(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class)
+        return $this->belongsTo(Wallet::class, 'source_wallet_id', 'id')
+            ->withTrashed();
+    }
+
+    /**
+     * Wallet where the funds went to
+     *
+     * @return BelongsTo
+     */
+    public function destinationWallet(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class, 'destination_wallet_id', 'id')
             ->withTrashed();
     }
 
@@ -110,11 +128,31 @@ class Transaction extends Model
      * Append the wallet name
      * @return string
      */
-    public function getWalletNameAttribute(): string
+    public function getSourceWalletNameAttribute(): string
+    {
+        return $this->walletNameFor($this->source_wallet_id);
+    }
+
+    /**
+     * Get wallet name for a specified ID
+     *
+     * @param $wallet_id
+     * @return string
+     */
+    private function walletNameFor($wallet_id): string
     {
         return Wallet::withTrashed()
-                ->find($this->wallet_id)
-                ->name ?? 'ERR::WALLET_404';
+                ->find($wallet_id)
+                ->name ?? '-';
+    }
+
+    /**
+     * Append the wallet name
+     * @return string
+     */
+    public function getDestinationWalletNameAttribute(): string
+    {
+        return $this->walletNameFor($this->destination_wallet_id);
     }
 
     /**
