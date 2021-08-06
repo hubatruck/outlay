@@ -2,7 +2,6 @@
 
 namespace App\DataTables;
 
-use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
@@ -55,10 +54,9 @@ class TransactionsDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param Transaction $model
      * @return EloquentBuilder
      */
-    public function query(Transaction $model): EloquentBuilder
+    public function query(): EloquentBuilder
     {
         return Auth::user()->transactions()
             ->leftJoin('wallets as src_wallet', 'source_wallet_id', '=', 'src_wallet.id')
@@ -92,7 +90,7 @@ class TransactionsDataTable extends DataTable
             ->parameters([
                 'language' => [
                     'url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json'),
-                ]
+                ],
             ]);
     }
 

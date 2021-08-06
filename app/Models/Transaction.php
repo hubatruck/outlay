@@ -66,11 +66,11 @@ class Transaction extends Model
     ];
 
     protected $casts = [
-        'transaction_date' => 'date'
+        'transaction_date' => 'date',
     ];
 
     protected $dates = [
-        'transaction_date'
+        'transaction_date',
     ];
 
     /**
