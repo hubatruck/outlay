@@ -42,10 +42,14 @@ class TransactionsDataTable extends DataTable
             ->blacklist(['actions'])
             ->editColumn('transaction_date', function ($row) {
                 return $row->transaction_date->translatedFormat('Y/m/d, l');
-            })
-            ->editColumn('type', function ($row) {
-                return __($row->type);
             });
+//            ->editColumn('type', function ($row) {
+//                return __($row->type);
+//            });
+//            ->filterColumn('transaction_types.name', function ($query, $keyword) {
+//                $keyword = __(strtolower($keyword), [], 'en');
+//                $query->whereRaw('LOWER(`transaction_types`.`name`) LIKE ?', ["%{$keyword}%"]);
+//            });
     }
 
     /**
@@ -56,15 +60,10 @@ class TransactionsDataTable extends DataTable
      */
     public function query(Transaction $model): EloquentBuilder
     {
-        return $model->newQuery()
-            ->with(['transactionType', 'wallet'])
-            ->join('wallets', 'wallet_id', '=', 'wallets.id')
-            ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id')
-            ->whereIn('wallet_id', function ($query) {
-                /// https://stackoverflow.com/a/16815955
-                $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
-            })
-            ->select(['transactions.*', 'transaction_types.name as type', 'wallets.name as wallet_name']); /// to prevent createdAt ambiguity
+        return Auth::user()->transactions()
+            ->leftJoin('wallets as src_wallet', 'source_wallet_id', '=', 'src_wallet.id')
+            ->leftJoin('wallets as dest_wallet', 'destination_wallet_id', '=', 'dest_wallet.id')
+            ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id');
     }
 
     /**
@@ -108,7 +107,8 @@ class TransactionsDataTable extends DataTable
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope'],
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount'],
             __('Type') => ['name' => 'transaction_types.name', 'data' => 'type'],
-            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name'],
+            __('Source Wallet') => ['name' => 'src_wallet.name', 'data' => 'source_wallet_name'],
+            __('Destination Wallet') => ['name' => 'dest_wallet.name', 'data' => 'destination_wallet_name'],
             __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date'],
             __('Actions') => ['data' => 'actions'],
         ];
