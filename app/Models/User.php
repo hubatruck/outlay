@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -82,17 +81,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Transactions belonging to the user
-     *
-     * @return HasManyThrough
-     */
-    public function transactions(): HasManyThrough
-    {
-        return $this->hasManyThrough(Transaction::class, Wallet::class)
-            ->withTrashedParents();
-    }
-
-    /**
      * Get previous transaction date created by the user.
      * This function is used to determine the prefill date for transaction
      * creation.
@@ -111,7 +99,35 @@ class User extends Authenticatable
      */
     public function hasTransactions(): bool
     {
-        return count($this->transactions);
+        return count($this->transactions()->get()->toArray());
+    }
+
+    /// TODO: make this actually work with relationships
+    /**
+     * Transactions that belong to the user
+     *
+     * @return Builder
+     */
+    public function transactions(): Builder
+    {
+        $wallets = implode(
+            ', ',
+            $this->wallets()
+                ->pluck('id')
+                ->toArray()
+        );
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return Transaction::whereRaw('(source_wallet_id or destination_wallet_id in (?))', [$wallets]);
+    }
+
+    /**
+     * Wallets belonging to the user
+     *
+     * @return HasMany
+     */
+    public function wallets(): HasMany
+    {
+        return $this->hasMany(Wallet::class)->withTrashed();
     }
 
     /**
@@ -131,16 +147,6 @@ class User extends Authenticatable
     public function activeWallets(): Collection
     {
         return $this->wallets()->withoutTrashed()->get();
-    }
-
-    /**
-     * Wallets belonging to the user
-     *
-     * @return HasMany
-     */
-    public function wallets(): HasMany
-    {
-        return $this->hasMany(Wallet::class)->withTrashed();
     }
 
     /**
