@@ -168,21 +168,28 @@ class User extends Authenticatable
     public function owns($item): bool
     {
         if ($item instanceof Transaction) {
-            $source = $item->sourceWallet;
-            $dest = $item->destinationWallet;
-            if ($source !== null) {
-                if ($dest !== null) {
-                    return $this->owns($dest) && $this->owns($source);
-                }
-                return $this->owns($source);
-            }
-            return $this->owns($dest);
+            return $this->ownsWallet($item->sourceWallet) && $this->ownsWallet($item->destinationWallet);
         }
         if ($item instanceof Wallet) {
-            return (string) $this->id === (string) $item->user_id;
+            return $this->ownsWallet($item);
         }
 
         Log::warning('Invalid argument type for ownership check.');
         return false;
+    }
+
+    /**
+     * Check if current user owns the provided wallet.
+     * Note: null wallets are owned by everybody.
+     *
+     * @param Wallet|null $wallet
+     * @return bool
+     */
+    private function ownsWallet(Wallet $wallet = null): bool
+    {
+        if ($wallet === null) {
+            return true;
+        }
+        return (string) $this->id === (string) $wallet->user_id;
     }
 }
