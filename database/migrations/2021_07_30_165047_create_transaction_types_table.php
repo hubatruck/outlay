@@ -21,7 +21,7 @@ class CreateTransactionTypesTable extends Migration
             $table->softDeletesTz();
         });
 
-        $this->transactionTypeCreate('Income', 'Expense');
+        TransactionType::transactionTypeCreate('Income', 'Expense');
     }
 
     /**
@@ -32,15 +32,5 @@ class CreateTransactionTypesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('transaction_types');
-    }
-
-    /// https://stackoverflow.com/a/53872157
-    private function transactionTypeCreate(string ...$types): void
-    {
-        foreach ($types as $type) {
-            $tType = new TransactionType();
-            $tType->setAttribute('name', $type);
-            $tType->save();
-        }
     }
 }
