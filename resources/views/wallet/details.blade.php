@@ -29,6 +29,9 @@
                                     {{ __('Manage wallet') }}
                                 </div>
                                 <div class="card-body">
+                                    <a class="btn btn-lg btn-warning mb-5"
+                                       href="{{ route('wallet.view.debug', ['id' => $wallet->id])  }}"
+                                    > DEBUG DATA </a><br>
                                     @if($wallet->deleted_at)
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
                                               title="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"

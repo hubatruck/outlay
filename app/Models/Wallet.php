@@ -87,11 +87,15 @@ class Wallet extends Model
     }
 
     /**
-     * Transactions belonging to this wallet
+     * Transactions belonging to the current user
+     *
      * @return HasMany
      */
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class)
+            ->orWhereHas('destinationWallet', function ($query) {
+                return $query->where('destination_wallet_id', '=', $this->id);
+            });
     }
 }

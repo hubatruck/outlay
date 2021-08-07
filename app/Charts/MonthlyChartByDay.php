@@ -5,11 +5,10 @@ namespace App\Charts;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 class MonthlyChartByDay extends MonthlyChartBase
 {
-    protected $chart;
+    protected LarapexChart $chart;
 
     public function __construct(LarapexChart $chart)
     {
@@ -26,6 +25,12 @@ class MonthlyChartByDay extends MonthlyChartBase
 
         $income = $this->getForTransactionTypeOf($baseQuery, 1);
         $expense = $this->getForTransactionTypeOf($baseQuery, 2);
+
+        $transferBase = $this->getForTransactionTypeOf($baseQuery, 3);
+//        $transferOut = (clone $transferBase)->whereNotNull('destination_wallet_id');
+        $transferOut = $this->getForTransactionTypeOf($baseQuery, 3);
+//        $transferIn = (clone $transferBase)->where('destination_wallet_id', '=', $walletID);
+        $transferIn = $this->getForTransactionTypeOf($baseQuery, 4);
         return $this->chart->areaChart()
             ->setTitle(__('Daily transactions'))
             ->addData(
@@ -36,6 +41,14 @@ class MonthlyChartByDay extends MonthlyChartBase
                 __('Expense'),
                 $this->addEmptyDays($expense->pluck('daily_amount', 'day')->toArray())
             )
+            ->addData(
+                __('Transfer (in)'),
+                $this->addEmptyDays($transferIn->pluck('daily_amount', 'day')->toArray())
+            )
+            ->addData(
+                __('Transfer (out)'),
+                $this->addEmptyDays($transferOut->pluck('daily_amount', 'day')->toArray())
+            )
             ->setXAxis($this->createAxisData())
             ->setGrid(false);
     }
@@ -45,14 +58,13 @@ class MonthlyChartByDay extends MonthlyChartBase
      *
      * @param Builder $baseQuery
      * @param int $transactionType
-     * @return Builder[]|Collection
+     * @return Builder
      */
     private function getForTransactionTypeOf(Builder $baseQuery, int $transactionType)
     {
         /// https://stackoverflow.com/a/46227628 (comment)
         return (clone $baseQuery)
-            ->where('transaction_type_id', '=', $transactionType)
-            ->get();
+            ->where('transaction_type_id', '=', $transactionType);
     }
 
     /**
@@ -65,6 +77,18 @@ class MonthlyChartByDay extends MonthlyChartBase
     {
         return $this->fillFromStartOfMonth(function ($date) use ($data) {
             return floor(($data[$date->format('Y-m-d')] ?? 0) * 100) / 100;
+        });
+    }
+
+    /**
+     * Generate each as label
+     *
+     * @return array
+     */
+    private function createAxisData(): array
+    {
+        return $this->fillFromStartOfMonth(function ($date) {
+            return $date->format('Y-m-d');
         });
     }
 
@@ -83,17 +107,5 @@ class MonthlyChartByDay extends MonthlyChartBase
             $data[] = $callback($date);
         }
         return $data;
-    }
-
-    /**
-     * Generate each as label
-     *
-     * @return array
-     */
-    private function createAxisData(): array
-    {
-        return $this->fillFromStartOfMonth(function ($date) {
-            return $date->format('Y-m-d');
-        });
     }
 }

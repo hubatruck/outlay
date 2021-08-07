@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
  * App\Models\Transaction
  *
  * @property string|int $id
- * @property string|int $source_wallet_id
+ * @property string|int $wallet_id
  * @property string|int $destination_wallet_id
  * @property float $amount
  * @property string|null $scope
@@ -27,10 +27,10 @@ use Illuminate\Support\Facades\Auth;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property-read string $type
- * @property-read string $source_wallet_name
+ * @property-read string $wallet_name
  * @property-read string $destination_wallet_name
  * @property-read TransactionType $transactionType
- * @property-read Wallet|null $sourceWallet
+ * @property-read Wallet|null $wallet
  * @property-read Wallet|null $destinationWallet
  * @method static TransactionFactory factory(...$parameters)
  * @method static Builder|Transaction newModelQuery()
@@ -60,7 +60,7 @@ class Transaction extends Model
     ];
 
     protected $appends = [
-        'source_wallet_name',
+        'wallet_name',
         'destination_wallet_name',
         'type',
     ];
@@ -85,10 +85,7 @@ class Transaction extends Model
      */
     public static function checkStatus(Transaction $transaction = null): ?RedirectResponse
     {
-        if (
-            $transaction === null
-            || ($transaction->sourceWallet === null && $transaction->destinationWallet === null)
-        ) {
+        if ($transaction === null || $transaction->wallet === null) {
             return TransactionFeedback::existError();
         }
         if (!Auth::user()->owns($transaction)) {
@@ -110,9 +107,9 @@ class Transaction extends Model
      * Wallet from where the funds came from
      * @return BelongsTo
      */
-    public function sourceWallet(): BelongsTo
+    public function wallet(): BelongsTo
     {
-        return $this->belongsTo(Wallet::class, 'source_wallet_id', 'id')
+        return $this->belongsTo(Wallet::class)
             ->withTrashed();
     }
 
@@ -131,9 +128,9 @@ class Transaction extends Model
      * Append the wallet name
      * @return string
      */
-    public function getSourceWalletNameAttribute(): string
+    public function getWalletNameAttribute(): string
     {
-        return $this->walletNameFor($this->source_wallet_id);
+        return $this->walletNameFor($this->wallet_id);
     }
 
     /**

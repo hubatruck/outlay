@@ -8,12 +8,7 @@ use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 
 class MonthlyChartByTransactionType extends MonthlyChartBase
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
-    {
-        $this->chart = $chart;
-    }
+    protected LarapexChart $chart;
 
     public function build(string $walletID): PolarAreaChart
     {

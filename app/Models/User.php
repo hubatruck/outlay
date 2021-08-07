@@ -88,21 +88,10 @@ class User extends Authenticatable
      */
     public function previousTransactionDate(): string
     {
-        $last_transaction = $this->transactions->last();
+        $last_transaction = $this->transactions()->latest()->first();
         return ($last_transaction !== null) ? (string) $last_transaction->transaction_date : (string) now();
     }
 
-    /**
-     * Check if user has transactions
-     *
-     * @return bool
-     */
-    public function hasTransactions(): bool
-    {
-        return count($this->transactions()->get()->toArray());
-    }
-
-    /// TODO: make this actually work with relationships
     /**
      * Transactions that belong to the user
      *
@@ -110,14 +99,18 @@ class User extends Authenticatable
      */
     public function transactions(): Builder
     {
-        $wallets = implode(
-            ', ',
-            $this->wallets()
-                ->pluck('id')
-                ->toArray()
-        );
+        $wallets = $this->wallets()->pluck('id')->toArray();
+        $placeholder = implode(',', array_fill(0, count($wallets), '?'));
+        if ($placeholder === '') { /// no wallets
+            $placeholder = '?';
+            $wallets = [-1];
+        }
+
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return Transaction::whereRaw('(source_wallet_id or destination_wallet_id in (?))', [$wallets]);
+        return Transaction::whereRaw(
+            '(wallet_id in (' . $placeholder . ') or destination_wallet_id in (' . $placeholder . '))',
+            [$wallets, $wallets]
+        );
     }
 
     /**
@@ -128,6 +121,16 @@ class User extends Authenticatable
     public function wallets(): HasMany
     {
         return $this->hasMany(Wallet::class)->withTrashed();
+    }
+
+    /**
+     * Check if user has transactions
+     *
+     * @return bool
+     */
+    public function hasTransactions(): bool
+    {
+        return count($this->transactions()->get()->toArray());
     }
 
     /**
@@ -168,7 +171,7 @@ class User extends Authenticatable
     public function owns($item): bool
     {
         if ($item instanceof Transaction) {
-            return $this->ownsWallet($item->sourceWallet) && $this->ownsWallet($item->destinationWallet);
+            return $this->ownsWallet($item->wallet);
         }
         if ($item instanceof Wallet) {
             return $this->ownsWallet($item);
@@ -188,7 +191,7 @@ class User extends Authenticatable
     private function ownsWallet(Wallet $wallet = null): bool
     {
         if ($wallet === null) {
-            return true;
+            return false;
         }
         return (string) $this->id === (string) $wallet->user_id;
     }

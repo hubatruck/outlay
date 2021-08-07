@@ -16,13 +16,14 @@
                         <hr/>
                         @if (count($wallets ?? []))
                             <table class="table table-hover table-responsive">
+                                <caption>Table status</caption>
                                 <thead>
                                 <tr class="font-weight-bold">
-                                    <td>{{ __('Actions') }}</td>
-                                    <td>{{ __('Name') }}</td>
-                                    <td>{{ __('Current balance') }}</td>
-                                    <td>{{ __('Credit card') }}</td>
-                                    <td>{{ __('Status') }}</td>
+                                    <th scope="col">{{ __('Actions') }}</th>
+                                    <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Current balance') }}</th>
+                                    <th scope="col">{{ __('Credit card') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

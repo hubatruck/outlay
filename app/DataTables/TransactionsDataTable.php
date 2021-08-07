@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Facades\Auth;
+use Log;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -23,6 +24,7 @@ class TransactionsDataTable extends DataTable
             ->eloquent($query)
             ->smart(true)
             ->addColumn('actions', function ($row) {
+                Log::info($row);
                 return '<div class="dropdown mx-auto">
                             <button class="btn dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
                                 ' . __('Actions') . '<span class="caret"></span>
@@ -33,6 +35,9 @@ class TransactionsDataTable extends DataTable
                     . '</a></li>
                                 <li><a class="dropdown-item btn-outline-danger" href="'
                     . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete')
+                    . '</a></li>
+                                <li><a class="dropdown-item btn-outline-primray" href="'
+                    . route('transaction.view.debug', ['id' => $row->id]) . '">' . __('DEBUG')
                     . '</a></li>
                             </ul>
                         </div>';
@@ -59,9 +64,10 @@ class TransactionsDataTable extends DataTable
     public function query(): EloquentBuilder
     {
         return Auth::user()->transactions()
-            ->leftJoin('wallets as src_wallet', 'source_wallet_id', '=', 'src_wallet.id')
+            ->leftJoin('wallets as src_wallet', 'wallet_id', '=', 'src_wallet.id')
             ->leftJoin('wallets as dest_wallet', 'destination_wallet_id', '=', 'dest_wallet.id')
-            ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id');
+            ->join('transaction_types as types', 'transaction_type_id', '=', 'types.id')
+            ->select('types.name', 'transactions.*');
     }
 
     /**
@@ -105,7 +111,7 @@ class TransactionsDataTable extends DataTable
             __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope'],
             __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount'],
             __('Type') => ['name' => 'transaction_types.name', 'data' => 'type'],
-            __('Source Wallet') => ['name' => 'src_wallet.name', 'data' => 'source_wallet_name'],
+            __('Source Wallet') => ['name' => 'src_wallet.name', 'data' => 'wallet_name'],
             __('Destination Wallet') => ['name' => 'dest_wallet.name', 'data' => 'destination_wallet_name'],
             __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date'],
             __('Actions') => ['data' => 'actions'],

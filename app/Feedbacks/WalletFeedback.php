@@ -7,6 +7,8 @@ use Illuminate\Http\RedirectResponse;
 
 class WalletFeedback
 {
+    public const WALLET_VIEW_ALL = 'wallet.view.all';
+
     /**
      * User cannot view the wallet.
      * Type: error
@@ -15,7 +17,7 @@ class WalletFeedback
      */
     public static function viewError(): RedirectResponse
     {
-        return redirect(route('wallet.view.all'))
+        return redirect(route(self::WALLET_VIEW_ALL))
             ->with([
                 'message' => __('Error') . ': ' . __('You cannot view this wallet.'),
                 'status' => 'danger',
@@ -31,7 +33,7 @@ class WalletFeedback
     public static function existError(): RedirectResponse
     {
         return redirect()
-            ->route('wallet.view.all')
+            ->route(self::WALLET_VIEW_ALL)
             ->with([
                 'message' => __('Error') . ': ' . __('Wallet does not exist.'),
                 'status' => 'danger',
@@ -67,7 +69,7 @@ class WalletFeedback
      */
     public static function quickCreateError(): RedirectResponse
     {
-        return redirect(route('wallet.view.all'))
+        return redirect(route(self::WALLET_VIEW_ALL))
             ->with([
                 'status' => 'danger',
                 'message' => __('Error: ') . __('Wallet unavailable for quick transaction creation.'),
@@ -99,7 +101,7 @@ class WalletFeedback
     public static function editError(): RedirectResponse
     {
         return redirect()
-            ->route('wallet.view.all')
+            ->route(self::WALLET_VIEW_ALL)
             ->with([
                 'message' => __('Error') . ': ' . __('You cannot edit this wallet.'),
                 'status' => 'danger',
@@ -116,11 +118,11 @@ class WalletFeedback
      */
     public static function success(string $successMethod = 'created', string $url = null): RedirectResponse
     {
-        return redirect($url ?? route('wallet.view.all'))
+        return redirect($url ?? route(self::WALLET_VIEW_ALL))
             ->with([
                 'message' => __(
                     'Wallet :action successfully.', [
-                        'action' => __($successMethod)
+                        'action' => __($successMethod),
                     ]
                 ),
                 'status' => 'success',
