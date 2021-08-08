@@ -9,14 +9,16 @@
                 @endif
                 @if (!Auth::user()->hasWallet())
                     <div class="alert alert-warning">
-                        {{ __('You don\'t have any wallet connected to you account. Transactions feature is not available.') }}<br/>
+                        {{ __('You don\'t have any wallet connected to you account. Transactions feature is not available.') }}
+                        <br/>
                         <a class="alert-link" href="{{ route('wallet.view.create') }}">
                             {{ __('Create a wallet by clicking here.') }}
                         </a>
                     </div>
                 @elseif(!Auth::user()->hasAnyActiveWallet())
                     <div class="alert alert-warning">
-                        {{ __('You don\'t have any wallet marked as active. Transaction creation is unavailable.') }}<br/>
+                        {{ __('You don\'t have any wallet marked as active. Transaction creation is unavailable.') }}
+                        <br/>
                         <a class="alert-link" href="{{ route('wallet.view.all') }}">
                             {{ __('Activate a wallet by clicking here.') }}
                         </a>
@@ -26,7 +28,7 @@
                     <div class="card-header">{{ __('Transactions') }}</div>
                     <div class="card-body">
                         @if (Auth::user()->hasTransactions())
-                            {{ $dataTable->table(['class' => 'table  table-response table-hover dt-responsive', 'width' => '100%']) }}
+                            {{ $dataTable->table(['class' => 'table table-response table-hover dt-responsive', 'width' => '100%']) }}
                         @else
                             {{ __('You don\'t have any transactions available.') }}
                             @if(Auth::user()->hasAnyActiveWallet())
