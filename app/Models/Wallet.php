@@ -31,6 +31,10 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $deleted_at
  * @property-read Collection|Transaction[] $transactions
  * @property-read int|null $transactions_count
+ * @property-read Collection|Transfer[] $incomingTransfers
+ * @property-read int|null $incoming_transfers_count
+ * @property-read Collection|Transfer[] $outgoingTransfers
+ * @property-read int|null $outgoing_transfers_count
  * @property-read User $user
  * @method static WalletFactory factory(...$parameters)
  * @method static Builder|Wallet newModelQuery()
@@ -93,5 +97,25 @@ class Wallet extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Transfers made to this wallet
+     *
+     * @return HasMany
+     */
+    public function incomingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'to_wallet_id');
+    }
+
+    /**
+     * Transfers made from this wallet
+     *
+     * @return HasMany
+     */
+    public function outgoingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'from_wallet_id');
     }
 }
