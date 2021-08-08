@@ -41,6 +41,10 @@ class Transfer extends Model
 {
     use HasFactory;
 
+    protected $dates = [
+        'transfer_date',
+    ];
+
     /**
      * Destination wallet
      *
