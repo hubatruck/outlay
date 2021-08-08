@@ -86,6 +86,54 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card">
+                        <div class="card-header" id="transfers">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#transferCollapse"
+                                        aria-expanded="false" aria-controls="transferCollapse">
+                                    <h3>Transfers</h3>
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="transferCollapse" class="collapse show" aria-labelledby="transfers"
+                             data-parent="#accordion" aria-expanded="true">
+                            <div class="card-body">
+                                {{ Auth::user()->transfers()->toSql() }}
+                                @forelse(Auth::user()->transfers as $transfer)
+                                    <table class="border-5">
+                                        <tr>
+                                            <th id="key"> Key</th>
+                                            <th id="value">Value</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="border">ID</td>
+                                            <td class="border">{{ $transfer->id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border">SQL</td>
+                                            <td class="border">
+                                            <textarea name="trans_sql" id="trans_sql" cols="100" rows="2">
+                                                {{ $transfer::toSql() }}
+                                            </textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <a
+                                        href="{{ route('transfer.view.debug', ['id' => $transfer->id]) }}"
+                                        class="btn btn-warning"
+                                        target="_blank"
+                                        referrerpolicy="no-referrer"
+                                    >DEBUG Transfer</a>
+                                    <pre>
+                                        {{ print_r($transfer->toArray(), true) }}
+                                    </pre>
+                                @empty
+                                    No wallets -> no transfers
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

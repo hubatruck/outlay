@@ -24,6 +24,26 @@
                             <pre>
                                 {{ print_r($wallet->transactions->toArray(), true) }}
                             </pre>
+
+                            <hr/>
+                            <h3>Incoming transfers:</h3>
+                            SQL:<br>
+                            <textarea name="in_trans_sql" id="in_trans_sql" cols="100" rows="5">
+                                {{ $wallet->incomingTransfers()->toSql() }}
+                            </textarea>
+                            <pre>
+                                {{ print_r($wallet->incomingTransfers->toArray(), true) }}
+                            </pre>
+
+                            <hr/>
+                            <h3>Outgoing transfers:</h3>
+                            SQL:<br>
+                            <textarea name="out_trans_sql" id="out_trans_sql" cols="100" rows="5">
+                                {{ $wallet->outgoingTransfers()->toSql() }}
+                            </textarea>
+                            <pre>
+                                {{ print_r($wallet->outgoingTransfers->toArray(), true) }}
+                            </pre>
                         @else
                             <h1>No wallet provided.</h1>
                         @endif
