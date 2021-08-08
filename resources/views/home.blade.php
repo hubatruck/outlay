@@ -14,6 +14,12 @@
                             </div>
                         @endif
 
+                        @if(config('app.debug'))
+                            <a class="btn btn-lg btn-warning mb-5"
+                               href="{{ route('debug')  }}">
+                                DEBUG User
+                            </a>
+                        @endif
                         <div class="card-group">
                             <div class="card mb-3" style="width: 18rem;">
                                 <div class="card-body">

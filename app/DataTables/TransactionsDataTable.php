@@ -24,7 +24,7 @@ class TransactionsDataTable extends DataTable
             ->eloquent($query)
             ->smart(true)
             ->addColumn('actions', function ($row) {
-                return '<div class="dropdown mx-auto">
+                $actions = '<div class="dropdown mx-auto">
                             <button class="btn dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
                                 ' . __('Actions') . '<span class="caret"></span>
                             </button>
@@ -34,9 +34,14 @@ class TransactionsDataTable extends DataTable
                     . '</a></li>
                                 <li><a class="dropdown-item btn-outline-danger" href="'
                     . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete')
-                    . '</a></li>
-                            </ul>
-                        </div>';
+                    . '</a></li>';
+                if (config('app.debug')) {
+                    $actions .= '<li><a class="dropdown-item btn-outline-primray" href="'
+                        . route('transaction.view.debug', ['id' => $row->id]) . '">' . __('DEBUG')
+                        . '</a></li>';
+                }
+                $actions .= '</ul></div>';
+                return $actions;
             })
             ->rawColumns(['actions'])
             ->blacklist(['actions'])
