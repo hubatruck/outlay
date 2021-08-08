@@ -1,10 +1,12 @@
 <?php
 
 use App\DataTables\TransactionsDataTable;
+use App\DataTables\TransfersDataTable;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Wallet\WalletController;
 use App\Models\Transaction;
+use App\Models\Transfer;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -85,6 +87,26 @@ Route::middleware(['auth'])->group(function () {
                     return view('transaction.debug', ['transaction' => $transaction]);
                 })->name('transaction.view.debug');
             }
+        });
+    });
+
+    Route::prefix('transfers')->group(function () {
+        Route::get('/', function (TransfersDataTable $dataTable) {
+            return $dataTable->render('transfer/list');
+        })->name('transfer.view.all');
+
+        Route::get('create', function () {
+            return null;
+        })->name('transfer.view.create');
+        Route::post('create', function () {
+            return null;
+        })->name('transfer.data.create');
+
+        Route::prefix('{id}')->group(function () {
+            Route::get('debug', function ($id) {
+                $transfer = Transfer::findOrFail($id);
+                return view('transfer.debug', ['transfer' => $transfer]);
+            })->name('transfer.view.debug');
         });
     });
 });
