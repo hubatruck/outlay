@@ -106,6 +106,7 @@ class TransfersDataTable extends DataTable
     {
         return [
             Column::make('description')->title(__('Description')),
+            Column::make('amount')->title(__('Amount')),
             Column::make('from_wallet_name')->title(__('From')),
             Column::make('to_wallet_name')->title(__('To')),
             Column::make('transfer_date')->title(__('Date')),
