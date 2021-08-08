@@ -175,7 +175,7 @@ class User extends Authenticatable
      */
     public function hasTransfers(): bool
     {
-        return self::count($this->transfers);
+        return count($this->transfers);
     }
 
     /**
