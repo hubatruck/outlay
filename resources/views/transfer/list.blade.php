@@ -17,7 +17,7 @@
                     </div>
                 @elseif(!Auth::user()->hasAnyActiveWallet())
                     <div class="alert alert-warning">
-                        {{ __('You don\'t have any wallet marked as active. Transfer of sums is not avaliable.') }}
+                        {{ __('You don\'t have any wallet marked as active. Transfer of sums is not available.') }}
                         <br/>
                         <a class="alert-link" href="{{ route('wallet.view.all') }}">
                             {{ __('Activate a wallet by clicking here.') }}
@@ -30,7 +30,7 @@
                         @if(Auth::user()->hasTransfers())
                             {{ $dataTable->table(['class' => 'table table-response table-hover dt-responsive', 'width' => '100%']) }}
                         @else
-                            {{ __('No transfers here.') }}
+                            {{ __('Nothing here...') }}
                             @if(Auth::user()->hasAnyActiveWallet())
                                 <a href="{{ route('transfer.view.create') }}">{{ __('Create') }}.</a>
                             @endif
