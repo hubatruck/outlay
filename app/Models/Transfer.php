@@ -48,7 +48,8 @@ class Transfer extends Model
      */
     public function toWallet(): HasOne
     {
-        return $this->hasOne(Wallet::class, 'id', 'to_wallet_id');
+        return $this->hasOne(Wallet::class, 'id', 'to_wallet_id')
+            ->withTrashed();
     }
 
     /**
@@ -58,6 +59,7 @@ class Transfer extends Model
      */
     public function fromWallet(): HasOne
     {
-        return $this->hasOne(Wallet::class, 'id', 'from_wallet_id');
+        return $this->hasOne(Wallet::class, 'id', 'from_wallet_id')
+            ->withTrashed();
     }
 }
