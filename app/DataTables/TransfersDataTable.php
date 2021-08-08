@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
@@ -27,11 +28,32 @@ class TransfersDataTable extends DataTable
                 return $row->transfer_date->translatedFormat('Y/m/d, l');
             })
             ->addColumn('from_wallet_name', function ($row) {
-                return $row->fromWallet->name;
+                return $this->getWalletNameFor($row->fromWallet);
             })
             ->addColumn('to_wallet_name', function ($row) {
-                return $row->toWallet->name;
+                return $this->getWalletNameFor($row->toWallet);
             });
+    }
+
+    /**
+     * Get styled name for a wallet.
+     * If the user does not own the wallet, we add the wallet owner's name too.
+     *
+     * @param Wallet|null $wallet
+     * @return string
+     */
+    private function getWalletNameFor(Wallet $wallet = null): string
+    {
+        if ($wallet === null) {
+            return __('[DELETED]');
+        }
+
+        $user = Auth::user();
+        $name = $wallet->name;
+        if ($user !== null && !$user->owns($wallet)) {
+            $name .= ' (' . $wallet->user->name . ')';
+        }
+        return $name;
     }
 
     /**
