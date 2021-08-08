@@ -59,11 +59,11 @@ class Transaction extends Model
     protected $appends = ['wallet_name', 'type'];
 
     protected $casts = [
-        'transaction_date' => 'date'
+        'transaction_date' => 'date',
     ];
 
     protected $dates = [
-        'transaction_date'
+        'transaction_date',
     ];
 
     /**

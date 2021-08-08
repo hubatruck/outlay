@@ -98,7 +98,7 @@ class TransactionsDataTable extends DataTable
             ->parameters([
                 'language' => [
                     'url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json'),
-                ]
+                ],
             ]);
     }
 
