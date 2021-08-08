@@ -2,8 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
@@ -51,20 +50,13 @@ class TransactionsDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param Transaction $model
-     * @return EloquentBuilder
+     * @return HasManyThrough
      */
-    public function query(Transaction $model): EloquentBuilder
+    public function query(): HasManyThrough
     {
-        return $model->newQuery()
+        return Auth::user()->transactions()
             ->with(['transactionType', 'wallet'])
-            ->join('wallets', 'wallet_id', '=', 'wallets.id')
-            ->join('transaction_types', 'transaction_type_id', '=', 'transaction_types.id')
-            ->whereIn('wallet_id', function ($query) {
-                /// https://stackoverflow.com/a/16815955
-                $query->select('id')->from('wallets')->where('user_id', '=', Auth::user()->id ?? '-1');
-            })
-            ->select(['transactions.*', 'transaction_types.name as type', 'wallets.name as wallet_name']); /// to prevent createdAt ambiguity
+            ->select('transactions.*');
     }
 
     /**
