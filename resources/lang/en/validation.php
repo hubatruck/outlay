@@ -154,6 +154,8 @@ return [
     'attributes' => [
         'wallet_id' => 'wallet',
         'transaction_type_id' => 'transaction type',
+        'to_wallet_id' => 'destination wallet',
+        'from_wallet_id' => 'source wallet',
     ],
 
 ];

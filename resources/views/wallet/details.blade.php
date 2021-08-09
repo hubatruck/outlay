@@ -7,10 +7,10 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
-                @if (!count($wallet->transactions->toArray()))
+                @if (!count($wallet->transactions->toArray()) && !count($wallet->transfers->toArray()) )
                     <div class="alert alert-info">
                         <span class="font-weight-bolder">{{ __('Note') }}</span>:
-                        {{ __('No transactions for this wallet. Charts are hidden.') }}
+                        {{ __('No activity for this wallet. Charts are hidden.') }}
                     </div>
                 @endif
                 <a
@@ -29,6 +29,11 @@
                                     {{ __('Manage wallet') }}
                                 </div>
                                 <div class="card-body">
+                                    @if(config('app.debug'))
+                                        <a class="btn btn-lg btn-warning mb-5"
+                                           href="{{ route('wallet.view.debug', ['id' => $wallet->id])  }}"
+                                        > DEBUG Wallet </a><br>
+                                    @endif
                                     @if($wallet->deleted_at)
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
                                               title="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"
@@ -80,10 +85,32 @@
                                         <div class="col-12">
                                             <div class="row">
                                                 <div class=" col-12 pt-3 mb-1 rounded shadow">
-                                                    {!! $dailyChart->container() !!}
+                                                    {!! $transactionDailyChart->container() !!}
                                                 </div>
                                                 <div class="col-md-6 p-3 rounded shadow">
-                                                    {{$typeChart->container() }}
+                                                    {!! $transactionTypeChart->container() !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(count($wallet->transfers))
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>{{  __('Transfer charts for :month', ['month' => __(date('F'))]) }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class=" col-12 pt-3 mb-1 rounded shadow">
+                                                    {!! $transferDailyChart->container() !!}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 p-3 rounded shadow">
+                                                    {!! $transferTypeChart->container() !!}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 p-3 rounded shadow">
+                                                    {!! $transferWalletChart->container() !!}
                                                 </div>
                                             </div>
                                         </div>
@@ -100,8 +127,11 @@
 
 @push('scripts')
     <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-    {{ $dailyChart->script() }}
-    {{ $typeChart->script() }}
+    {{ $transactionDailyChart->script() }}
+    {{ $transactionTypeChart->script() }}
+    {{ $transferDailyChart->script() }}
+    {{ $transferTypeChart->script() }}
+    {{ $transferWalletChart->script() }}
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();

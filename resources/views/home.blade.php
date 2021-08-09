@@ -14,12 +14,26 @@
                             </div>
                         @endif
 
+                        @if(config('app.debug'))
+                            <a class="btn btn-lg btn-warning mb-5"
+                               href="{{ route('debug')  }}">
+                                DEBUG User
+                            </a>
+                        @endif
                         <div class="card-group">
                             <div class="card mb-3" style="width: 18rem;">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ __('Transactions')}}</h5>
                                     <p class="card-text">{{ __('View your transactions.') }}</p>
                                     <a href="{{ route('transaction.view.all')}}"
+                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
+                                </div>
+                            </div>
+                            <div class="card mb-3" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ __('Transfers')}}</h5>
+                                    <p class="card-text">{{ __('View incoming and outgoing transfers.') }}</p>
+                                    <a href="{{ route('transfer.view.all')}}"
                                        class="btn btn-outline-primary">{{ __('Visit') }}</a>
                                 </div>
                             </div>

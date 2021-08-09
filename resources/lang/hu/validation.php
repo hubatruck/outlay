@@ -161,6 +161,9 @@ return [
         'transaction_date' => 'A tranzakció dátum',
         'transaction_type_id' => 'A tranzakció típus',
         'wallet_id' => 'A tárca',
+        'to_wallet_id' => 'A cél tárca',
+        'from_wallet_id' => 'A forrás tárca',
+        'transfer_date' => 'Az átutalás dátuma',
     ],
 
 ];

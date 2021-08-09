@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Wallet;
 
 use App\Charts\MonthlyChartByDay;
 use App\Charts\MonthlyChartByTransactionType;
+use App\Charts\MonthlyTransferByDay;
+use App\Charts\MonthlyTransferByType;
+use App\Charts\MonthlyTransferByWallet;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
@@ -56,15 +59,26 @@ class WalletController extends Controller
      */
     public function detailsView(string $id)
     {
-        $dailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
-        $typeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
         $wallet = Wallet::withTrashed()->findOrFail($id);
+        $transactionDailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
+        $transactionTypeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
+        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart()))->build($id);
+        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart()))->build($id);
+        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart()))->build($wallet);
 
         if (!Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
         }
 
-        return view('wallet.details', compact('dailyChart', 'typeChart', 'wallet'));
+        return view('wallet.details',
+            compact(
+                'transactionDailyChart',
+                'transactionTypeChart',
+                'transferDailyChart',
+                'transferTypeChart',
+                'transferWalletChart',
+                'wallet'
+            ));
     }
 
     /**
