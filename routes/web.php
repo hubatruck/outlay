@@ -4,6 +4,7 @@ use App\DataTables\TransactionsDataTable;
 use App\DataTables\TransfersDataTable;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Transaction\TransactionController;
+use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\Wallet\WalletController;
 use App\Models\Transaction;
 use App\Models\Transfer;
@@ -95,12 +96,8 @@ Route::middleware(['auth'])->group(function () {
             return $dataTable->render('transfer/list');
         })->name('transfer.view.all');
 
-        Route::get('create', function () {
-            return null;
-        })->name('transfer.view.create');
-        Route::post('create', function () {
-            return null;
-        })->name('transfer.data.create');
+        Route::get('create', [TransferController::class, 'createView'])->name('transfer.view.create');
+        Route::post('create', [TransferController::class, 'storeTransfer'])->name('transfer.data.create');
 
         Route::prefix('{id}')->group(function () {
             Route::get('debug', function ($id) {
