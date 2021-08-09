@@ -41,6 +41,14 @@ class Transfer extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'from_wallet_id',
+        'to_wallet_id',
+        'amount',
+        'description',
+        'transfer_date',
+    ];
+
     protected $dates = [
         'transfer_date',
     ];
