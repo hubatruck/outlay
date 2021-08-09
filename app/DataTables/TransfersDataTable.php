@@ -88,7 +88,7 @@ class TransfersDataTable extends DataTable
             ->minifiedAjax()
             ->dom('Bfrtip')
             ->responsive()
-            ->orderBy(3) /// transfer_date
+            ->orderBy(4) /// transfer_date
             ->buttons($buttonArr)
             ->parameters([
                 'language' => [
