@@ -109,6 +109,9 @@
                                                 <div class="col-lg-6 col-md-12 p-3 rounded shadow">
                                                     {!! $transferTypeChart->container() !!}
                                                 </div>
+                                                <div class="col-lg-6 col-md-12 p-3 rounded shadow">
+                                                    {!! $transferWalletChart->container() !!}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -128,6 +131,7 @@
     {{ $transactionTypeChart->script() }}
     {{ $transferDailyChart->script() }}
     {{ $transferTypeChart->script() }}
+    {{ $transferWalletChart->script() }}
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
