@@ -45,6 +45,20 @@ class MonthlyChartBase
         return date('Y-m-d');
     }
 
+    /**
+     * Filter transfers, by selecting just current month's
+     *
+     * @param $transfers
+     * @return mixed
+     */
+    protected function filterTransfers($transfers)
+    {
+        return $transfers->whereDate('transfer_date', '>=', date('Y-m-01'))
+            ->whereDate('transfer_date', '<=', $this->lastDate())
+            ->selectRaw('DATE(transfer_date) as day, sum(amount) as daily_amount')
+            ->groupBy('day');
+    }
+
 
     /**
      * Fill data with days that are not present in database
