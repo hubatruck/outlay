@@ -31,6 +31,8 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $deleted_at
  * @property-read Collection|Transaction[] $transactions
  * @property-read int|null $transactions_count
+ * @property-read Collection|Transfer[] $transfers
+ * @property-read int|null $transfers_count
  * @property-read Collection|Transfer[] $incomingTransfers
  * @property-read int|null $incoming_transfers_count
  * @property-read Collection|Transfer[] $outgoingTransfers
@@ -100,13 +102,13 @@ class Wallet extends Model
     }
 
     /**
-     * Transfers made to this wallet
+     * All transfers related to a wallet
      *
      * @return HasMany
      */
-    public function incomingTransfers(): HasMany
+    public function transfers(): HasMany
     {
-        return $this->hasMany(Transfer::class, 'to_wallet_id');
+        return $this->outgoingTransfers()->orWhere('to_wallet_id', '=', $this->id);
     }
 
     /**
@@ -117,5 +119,15 @@ class Wallet extends Model
     public function outgoingTransfers(): HasMany
     {
         return $this->hasMany(Transfer::class, 'from_wallet_id');
+    }
+
+    /**
+     * Transfers made to this wallet
+     *
+     * @return HasMany
+     */
+    public function incomingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'to_wallet_id');
     }
 }
