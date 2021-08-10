@@ -2,14 +2,12 @@
 
 namespace App\DataTables;
 
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
-use Yajra\DataTables\Html\Button;
-use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Column;
 
-class TransactionsDataTable extends DataTable
+class TransactionsDataTable extends DataTableBase
 {
     /**
      * Build DataTable class.
@@ -21,7 +19,7 @@ class TransactionsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->smart(true)
+            ->smart()
             ->addColumn('actions', function ($row) {
                 $actions = '<div class="dropdown mx-auto">
                             <button class="btn dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
@@ -71,27 +69,10 @@ class TransactionsDataTable extends DataTable
      */
     public function html(): Builder
     {
-        $buttonArr = [];
-        if (Auth::user()->hasAnyActiveWallet()) {
-            $buttonArr[] = Button::make('create');
-        }
-        $buttonArr[] = Button::make('export');
-        $buttonArr[] = Button::make('print');
-        $buttonArr[] = Button::make('reset');
+        $buttons = $this->getButtons(Auth::user()->hasAnyActiveWallet());
 
-        return $this->builder()
-            ->setTableId('transactions-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
-            ->responsive()
-            ->buttons($buttonArr)
-            ->parameters([
-                'language' => [
-                    'url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json'),
-                ],
-            ]);
+        return $this->sharedHtmlBuild($buttons)
+            ->setTableId('transactions-table');
     }
 
     /**
@@ -102,12 +83,12 @@ class TransactionsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            __('Scope') => ['name' => 'transactions.scope', 'data' => 'scope'],
-            __('Amount') => ['name' => 'transactions.amount', 'data' => 'amount'],
-            __('Type') => ['name' => 'transaction_types.name', 'data' => 'type'],
-            __('Wallet') => ['name' => 'wallet.name', 'data' => 'wallet_name'],
-            __('Date') => ['name' => 'transaction_date', 'data' => 'transaction_date'],
-            __('Actions') => ['data' => 'actions'],
+            Column::make('scope')->title('Scope')->name('transactions.scope'),
+            Column::make('amount')->title(__('Amount'))->name('transactions.amount'),
+            Column::make('type')->title(__('Type'))->name('transaction_types.name'),
+            Column::make('wallet_name')->title(__('Wallet'))->name('wallets.name'),
+            Column::make('transaction_date')->title(__('Date')),
+            Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false),
         ];
     }
 
