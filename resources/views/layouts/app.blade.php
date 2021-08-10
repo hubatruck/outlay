@@ -80,6 +80,7 @@
 <script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 <script src="{{asset('vendor/datatables/datatables.bootstrap5.min.js')}}"></script>
+<script src="{{ asset('vendor/datatables/colReorder.min.js') }}"></script>
 @stack('scripts')
 
 </body>
