@@ -74,4 +74,14 @@ class Transfer extends Model
         return $this->hasOne(Wallet::class, 'id', 'from_wallet_id')
             ->withTrashed();
     }
+
+    /**
+     * Set transfer date from DATE format to DATETIME format
+     *
+     * @param \Carbon\Carbon|string $value
+     */
+    public function setTransferDateAttribute($value): void
+    {
+        $this->attributes['transfer_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
+    }
 }
