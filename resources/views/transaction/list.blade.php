@@ -30,7 +30,7 @@
                         @if (Auth::user()->hasTransactions())
                             {{ $dataTable->table(['class' => 'table table-response table-hover dt-responsive', 'width' => '100%']) }}
                         @else
-                            {{ __('You don\'t have any transactions available.') }}
+                            {{ __('Nothing here...') }}
                             @if(Auth::user()->hasAnyActiveWallet())
                                 <a href="{{ route('transaction.view.create') }}">{{ __('Create') }}.</a>
                             @endif

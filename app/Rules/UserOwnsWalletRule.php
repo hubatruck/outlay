@@ -38,6 +38,6 @@ class UserOwnsWalletRule implements Rule
      */
     public function message(): string
     {
-        return __('You don\'t own the selected wallet');
+        return __('You don\'t own the selected wallet.');
     }
 }
