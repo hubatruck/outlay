@@ -15,9 +15,8 @@ class MonthlyTransferByDay extends MonthlyChartBase
         $this->chart = $chart;
     }
 
-    public function build(string $walletID): BarChart
+    public function build(Wallet $wallet): BarChart
     {
-        $wallet = Wallet::find($walletID);
         $transferIn = $this->filterTransfers($wallet->incomingTransfers())->get();
         $transferOut = $this->filterTransfers($wallet->outgoingTransfers())->get();
 

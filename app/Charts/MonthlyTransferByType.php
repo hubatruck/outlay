@@ -15,9 +15,8 @@ class MonthlyTransferByType extends MonthlyChartBase
         $this->chart = $chart;
     }
 
-    public function build(string $walletID): PieChart
+    public function build(Wallet $wallet): PieChart
     {
-        $wallet = Wallet::find($walletID);
         $transferIn = $this->filterTransfers($wallet->incomingTransfers())
             ->pluck('daily_amount')->sum();
         $transferOut = $this->filterTransfers($wallet->outgoingTransfers())

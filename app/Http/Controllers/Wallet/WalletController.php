@@ -60,15 +60,15 @@ class WalletController extends Controller
     public function detailsView(string $id)
     {
         $wallet = Wallet::withTrashed()->findOrFail($id);
-        $transactionDailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
-        $transactionTypeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
-        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart()))->build($id);
-        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart()))->build($id);
-        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart()))->build($wallet);
-
         if (!Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
         }
+
+        $transactionDailyChart = (new MonthlyChartByDay(new LarapexChart()))->build($id);
+        $transactionTypeChart = (new MonthlyChartByTransactionType(new LarapexChart()))->build($id);
+        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart()))->build($wallet);
+        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart()))->build($wallet);
+        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart()))->build($wallet);
 
         return view('wallet.details',
             compact(
