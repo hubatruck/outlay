@@ -1,0 +1,24 @@
+.dataTables_length {
+    display: inline-block;
+    margin: 5px;
+}
+
+table.fixedHeader-floating {
+    position: fixed !important;
+    background-color: lightgray;
+
+    .no-footer {
+        border-bottom-width: 0;
+    }
+}
+
+table.fixedHeader-locked {
+    position: absolute !important;
+    background-color: lightgray;
+}
+
+@media print {
+    table.fixedHeader-floating {
+        display: none;
+    }
+}
