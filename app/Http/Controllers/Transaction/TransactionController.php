@@ -56,7 +56,7 @@ class TransactionController extends Controller
      */
     public function editView(string $id)
     {
-        if (!count(Auth::user()->wallets ?? null)) {
+        if (!Auth::user()->hasWallet()) {
             return WalletFeedback::noWalletError();
         }
 
