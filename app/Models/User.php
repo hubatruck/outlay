@@ -168,14 +168,14 @@ class User extends Authenticatable
     /**
      * Transfers made from or to any of the user's wallets
      *
-     * @return Builder
+     * return Builder
      */
-    public function transfers(): Builder
+    public function transfers()
     {
-        return Transfer::join('wallets', function ($join) {
-            $join->on('wallets.id', '=', 'transfers.to_wallet_id');
-            $join->orOn('wallets.id', '=', 'transfers.from_wallet_id');
-        })->where('wallets.user_id', '=', $this->id);
+        return Transfer::select(['transfers.*', 'wallets_to.name as to_wallet_name', 'wallets_from.name as from_wallet_name'])
+            ->join('wallets as wallets_from', 'wallets_from.id', '=', 'from_wallet_id')
+            ->leftJoin('wallets as wallets_to', 'wallets_to.id', '=', 'to_wallet_id')
+            ->whereRaw('(wallets_to.user_id = ? or wallets_from.user_id = ?)', [$this->id, $this->id]);
     }
 
     /**
