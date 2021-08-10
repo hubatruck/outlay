@@ -7,7 +7,7 @@
                 @if (session('message'))
                     <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
                 @endif
-                @if (!count($wallet->transactions->toArray()) && !count($wallet->transfers->toArray()) )
+                @if (!$wallet->hasTransactions() && !$wallet->hasTransfers())
                     <div class="alert alert-info">
                         <span class="font-weight-bolder">{{ __('Note') }}</span>:
                         {{ __('No activity for this wallet. Charts are hidden.') }}
@@ -60,23 +60,23 @@
                                     >
                                         {{ $wallet->deleted_at ? __('Reactivate') : __('Hide') }}
                                     </a>
-                                    @if(count($wallet->transactions))
+                                    @if($wallet->hasTransactions())
                                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
                                               title="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
                                         >
                                     @endif
                                             <a
-                                                class="btn btn-danger @if(count($wallet->transactions))disabled @endif"
+                                                class="btn btn-danger @if($wallet->hasTransactions())disabled @endif"
                                                 href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
                                             >
                                                 {{ __('Delete') }}
                                             </a>
-                                    @if(count($wallet->transactions))
+                                    @if($wallet->hasTransactions())
                                         </span>
                                     @endif
                                 </div>
                             </div>
-                            @if (count($wallet->transactions))
+                            @if ($wallet->hasTransactions())
                                 <div class="card">
                                     <div class="card-header">
                                         <h5>{{  __('Transaction charts for :month', ['month' => __(date('F'))]) }}</h5>

@@ -28,7 +28,7 @@ class UserOwnsWalletRule implements Rule
     public function passes($attribute, $value): bool
     {
         $wallets = Wallet::withTrashed()->find($value);
-        return $wallets !== null && Auth::user()->owns($wallets::first());
+        return $wallets !== null && Auth::user()->owns($wallets);
     }
 
     /**

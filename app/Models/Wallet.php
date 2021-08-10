@@ -101,6 +101,11 @@ class Wallet extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function hasTransactions(): bool
+    {
+        return $this->transactions->first() === null;
+    }
+
     /**
      * All transfers related to a wallet
      *
@@ -129,5 +134,15 @@ class Wallet extends Model
     public function incomingTransfers(): HasMany
     {
         return $this->hasMany(Transfer::class, 'to_wallet_id');
+    }
+
+    /**
+     * Check if the wallet has any related transfer
+     *
+     * @return bool
+     */
+    public function hasTransfers(): bool
+    {
+        return $this->transfers->first() !== null;
     }
 }

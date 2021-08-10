@@ -113,7 +113,7 @@ class User extends Authenticatable
      */
     public function hasTransactions(): bool
     {
-        return count($this->transactions);
+        return $this->transactions->first() !== null;
     }
 
     /**
@@ -123,7 +123,7 @@ class User extends Authenticatable
      */
     public function hasAnyActiveWallet(): bool
     {
-        return count($this->activeWallets());
+        return $this->activeWallets()->first() !== null;
     }
 
     /**
@@ -152,20 +152,7 @@ class User extends Authenticatable
      */
     public function hasWallet(): bool
     {
-        return count($this->wallets);
-    }
-
-    /**
-     * Transfers made from or to any of the user's wallets
-     *
-     * @return HasManyThrough
-     */
-    public function transfers(): HasManyThrough
-    {
-        return $this->hasManyThrough(Transfer::class, Wallet::class, 'user_id', 'to_wallet_id')
-            ->join('wallets as from_wallet_join', 'from_wallet_join.id', '=', 'from_wallet_id')
-            ->orWhere('from_wallet_join.user_id', '=', $this->id)
-            ->withTrashedParents();
+        return $this->wallets->first() !== null;
     }
 
     /**
@@ -175,7 +162,7 @@ class User extends Authenticatable
      */
     public function hasTransfers(): bool
     {
-        return count($this->transfers);
+        return $this->transfers()->first() !== null;
     }
 
     /**
