@@ -74,7 +74,7 @@ class MonthlyTransferByWallet extends MonthlyChartBase
             if (array_key_exists($key['name'], $data)) {
                 $data[$key['name']]['out'] = $out->amount;
             } else {
-                $data[$key] = [
+                $data[$key['name']] = [
                     'out' => $out->amount,
                     'in' => 0.00,
                 ];
