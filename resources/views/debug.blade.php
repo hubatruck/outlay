@@ -8,10 +8,10 @@
                     <div class="card">
                         <div class="card-header" id="wallets">
                             <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse"
+                                <button class="btn btn-link btn-lg" data-toggle="collapse"
                                         data-target="#walletCollapse"
                                         aria-expanded="true" aria-controls="walletCollapse">
-                                    <h3>Wallets</h3>
+                                    Wallets
                                 </button>
                             </h5>
                         </div>
@@ -37,10 +37,10 @@
                     <div class="card">
                         <div class="card-header" id="transactions">
                             <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse"
+                                <button class="btn btn-link btn-lg" data-toggle="collapse"
                                         data-target="#transactionCollapse"
                                         aria-expanded="false" aria-controls="transactionCollapse">
-                                    <h3>Transactions</h3>
+                                    Transactions
                                 </button>
                             </h5>
                         </div>
@@ -49,6 +49,11 @@
                             <div class="card-body">
                                 @forelse(Auth::user()->wallets as $wallet)
                                     <table class="border-5">
+                                        <caption>User's wallets</caption>
+                                        <tr>
+                                            <th id="name">Name</th>
+                                            <th id="value">Value</th>
+                                        </tr>
                                         <tr>
                                             <td class="border">Wallet Name</td>
                                             <td class="border">{{ $wallet->name }}</td>
@@ -89,10 +94,10 @@
                     <div class="card">
                         <div class="card-header" id="transfers">
                             <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse"
+                                <button class="btn btn-link btn-lg" data-toggle="collapse"
                                         data-target="#transferCollapse"
                                         aria-expanded="false" aria-controls="transferCollapse">
-                                    <h3>Transfers</h3>
+                                    Transfers
                                 </button>
                             </h5>
                         </div>
@@ -100,8 +105,9 @@
                              data-parent="#accordion" aria-expanded="true">
                             <div class="card-body">
                                 {{ Auth::user()->transfers()->toSql() }}
-                                @forelse(Auth::user()->transfers as $transfer)
+                                @forelse(Auth::user()->transfers()->get() as $transfer)
                                     <table class="border-5">
+                                        <caption>User's transfers</caption>
                                         <tr>
                                             <th id="key"> Key</th>
                                             <th id="value">Value</th>
@@ -114,7 +120,7 @@
                                             <td class="border">SQL</td>
                                             <td class="border">
                                             <textarea name="trans_sql" id="trans_sql" cols="100" rows="2">
-                                                {{ $transfer::toSql() }}
+                                                {{ $transfer->toSql() }}
                                             </textarea>
                                             </td>
                                         </tr>
