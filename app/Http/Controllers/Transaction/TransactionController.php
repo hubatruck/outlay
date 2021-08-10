@@ -102,7 +102,7 @@ class TransactionController extends Controller
         return $request->validate([
             'wallet_id' => $walletRules,
             'scope' => 'required|max:255',
-            'amount' => 'numeric|max:999999.99',
+            'amount' => 'numeric|min:0.01|max:999999.99',
             'transaction_type_id' => [
                 'required',
                 Rule::in(TransactionType::all()->pluck('id')->toArray()),
