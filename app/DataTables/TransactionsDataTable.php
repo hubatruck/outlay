@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
@@ -57,9 +58,9 @@ class TransactionsDataTable extends DataTableBase
      */
     public function query(): HasManyThrough
     {
+        /// https://stackoverflow.com/a/63285943
         return Auth::user()->transactions()
-            ->with(['transactionType', 'wallet'])
-            ->select('transactions.*');
+            ->with(['transactionType:id,name', 'wallet:id,name']);
     }
 
     /**
@@ -85,8 +86,8 @@ class TransactionsDataTable extends DataTableBase
         return [
             Column::make('scope')->title('Scope')->name('transactions.scope'),
             Column::make('amount')->title(__('Amount'))->name('transactions.amount'),
-            Column::make('type')->title(__('Type'))->name('transaction_types.name'),
-            Column::make('wallet_name')->title(__('Wallet'))->name('wallets.name'),
+            Column::make('type')->title(__('Type'))->name('transactionType.name'),
+            Column::make('wallet_name')->title(__('Wallet'))->name('wallet.name'),
             Column::make('transaction_date')->title(__('Date')),
             Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false),
         ];
