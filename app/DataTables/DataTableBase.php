@@ -6,41 +6,13 @@ use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use ErrorException;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\View;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
 
 abstract class DataTableBase extends DataTable
 {
-/// FIXME: AFTER RESIZING AND HOLDING THE TABLE, IT GETS SORTED
-    /**
-     * Script needed for the table to work correctly
-     */
-    protected const INIT_FUNCTION = "function(){
-        var api = this.api();
-        var resizing = false;
-        /// column footer search boxes
-        api.columns().every(function (colIdx) {
-            var column = this;
-            var input = document.createElement(\"input\");
-            input.classList = 'form-control form-control-sm';
-            input.placeholder = column.header().title;
-            $(input).appendTo($(column.footer()).empty())
-            .on('change', function () {
-               column.search($(this).val(), false, false, true).draw();
-            });
-        });
-
-        /// reset footer search boxes on 'reset' button
-//        api.on('stateLoaded.dt', (e, settings,data)=>{
-//            api.columns().every(function (colIdx) {
-//                  input.value = this.state().columns[column.index()].search.search;
-//                var colSearch = this.state().columns[colIdx].search;
-//                $('input', this.columns(colIdx).footer()).val(colSearch.search);
-//            });
-//        });
-    }";
-
     /**
      * Fields that should be handled as dates
      *
@@ -146,7 +118,7 @@ abstract class DataTableBase extends DataTable
             ->orderMulti()
             ->language(['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')])
             ->parameters([
-                'initComplete' => self::INIT_FUNCTION,
+                'initComplete' => $this->getInitCompleteFunction(),
             ]);
     }
 
@@ -176,5 +148,15 @@ abstract class DataTableBase extends DataTable
             $date->startOfDay()->format('Y-m-d H:i:s'),
             $date->endOfDay()->format('Y-m-d H:i:s'),
         ]);
+    }
+
+    /**
+     * initComplete script for DataTable instance
+     *
+     * @return string
+     */
+    protected function getInitCompleteFunction(): string
+    {
+        return View::make('skeletons.datatables-init', [])->render();
     }
 }
