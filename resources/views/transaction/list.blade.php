@@ -28,7 +28,7 @@
                     <div class="card-header">{{ __('Transactions') }}</div>
                     <div class="card-body">
                         @if (Auth::user()->hasTransactions())
-                            {{ $dataTable->table(['class' => 'table table-response table-hover dt-responsive', 'width' => '100%']) }}
+                            {!! $dataTable->table(['class' => 'table table-response table-hover dt-responsive', 'width' => '100%'], true) !!}
                         @else
                             {{ __('You don\'t have any transactions available.') }}
                             @if(Auth::user()->hasAnyActiveWallet())
