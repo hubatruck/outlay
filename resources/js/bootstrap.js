@@ -13,6 +13,7 @@ try {
     require('bootstrap');
     require('datatables.net-bs5');
     require('datatables.net-buttons-bs5');
+    require('flatpickr');
 } catch (e) {
 }
 
