@@ -99,7 +99,6 @@ abstract class DataTableBase extends DataTable
             Button::make(['extend' => 'export']),
             Button::make('print'),
             Button::make(['extend' => 'colvis', 'postfixButtons' => ['colvisRestore']]),
-            Button::make('reset'),
         ];
 
         if ($addCreateButton) {
@@ -113,13 +112,13 @@ abstract class DataTableBase extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax('', null, $this->dateRangeHandler())
-            ->dom('Bl<"#dtc-filters.dtc-reset m-2 d-flex"f>rtip')
+            ->dom('<"controls row"<"col-md-12"B>><"#dtc-filters.dtc-reset m-2 d-flex"f>rt<"d-flex justify-content-between mb-2"<"align-self-middle"i>l><"d-flex justify-content-center dtc-reset"p>')
             ->responsive()
             ->buttons($buttons)
             ->autoWidth()
             ->colReorder()
             ->fixedHeader()
-            ->scrollX(1000)
+            ->scrollX()
             ->orderMulti()
             ->language(['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')])
             ->parameters([

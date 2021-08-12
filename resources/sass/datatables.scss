@@ -4,13 +4,15 @@
     }
 }
 
-table.fixedHeader-locked {
-    position: absolute !important;
-    background-color: lightgray;
+div.dataTables_wrapper div.dataTables_info {
+    padding: 0 !important;
+
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-@media print {
-    table.fixedHeader-floating {
-        display: none;
-    }
+.dataTables_scrollBody {
+    max-height: 500px;
+    height: 100%;
 }
