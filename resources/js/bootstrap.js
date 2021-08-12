@@ -14,6 +14,7 @@ try {
     require('datatables.net-bs5');
     require('datatables.net-buttons-bs5');
     require('flatpickr');
+    require('flatpickr/dist/l10n/hu');
 } catch (e) {
 }
 

@@ -36,5 +36,6 @@ function () {
         onChange: function () {
             api.draw();
         },
+        locale: "{{ config('app.locale') }}"
     });
 }
