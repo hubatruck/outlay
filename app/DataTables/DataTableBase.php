@@ -14,6 +14,11 @@ use Yajra\DataTables\Services\DataTable;
 abstract class DataTableBase extends DataTable
 {
     /**
+     * ID of the date-picker element
+     */
+    public const DATE_RANGE_ID = 'date-range-input';
+
+    /**
      * Fields that should be handled as dates
      *
      * @var array
@@ -107,8 +112,8 @@ abstract class DataTableBase extends DataTable
     {
         return $this->builder()
             ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Blfrtip')
+            ->minifiedAjax('', null, $this->dateRangeHandler())
+            ->dom('Bl<"#dtc-filters.dtc-reset m-2 d-flex"f>rtip')
             ->responsive()
             ->buttons($buttons)
             ->autoWidth()
@@ -130,24 +135,13 @@ abstract class DataTableBase extends DataTable
     abstract protected function getColumns(): array;
 
     /**
-     * Filter a date field
+     * Add date picker's value to the request
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $keyword
-     * @param string $column
+     * @return string[]
      */
-    protected function dateFilter(\Illuminate\Database\Eloquent\Builder $query, string $keyword, string $column): void
+    protected function dateRangeHandler(): array
     {
-        $keyword = preg_replace('/,./', '-', $keyword);
-        try {
-            $date = Carbon::parse($keyword);
-        } catch (InvalidFormatException $e) {
-            $date = Carbon::parse('0000-00-00');
-        }
-        $query->whereBetween($column, [
-            $date->startOfDay()->format('Y-m-d H:i:s'),
-            $date->endOfDay()->format('Y-m-d H:i:s'),
-        ]);
+        return ['date_range' => '$("#' . self::DATE_RANGE_ID . '").val()'];
     }
 
     /**
@@ -157,6 +151,6 @@ abstract class DataTableBase extends DataTable
      */
     protected function getInitCompleteFunction(): string
     {
-        return View::make('skeletons.datatables-init', [])->render();
+        return View::make('skeletons.datatables-init', ['dateRangeID' => self::DATE_RANGE_ID])->render();
     }
 }

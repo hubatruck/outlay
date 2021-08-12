@@ -1,14 +1,6 @@
-.dataTables_length {
-    display: inline-block;
-    margin: 5px;
-}
-
-table.fixedHeader-floating {
-    position: fixed !important;
-    background-color: lightgray;
-
-    .no-footer {
-        border-bottom-width: 0;
+.dtc-reset {
+    div {
+        display: inline;
     }
 }
 
