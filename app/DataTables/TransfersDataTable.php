@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Column;
 
 class TransfersDataTable extends DataTableBase
 {
+    protected $dateColumns = ['transfer_date'];
+
     /**
      * Build DataTable class.
      *
@@ -62,7 +64,7 @@ class TransfersDataTable extends DataTableBase
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(): \Illuminate\Database\Eloquent\Builder
+    public function queryBase(): \Illuminate\Database\Eloquent\Builder
     {
         return Auth::user()->transfers()
             ->with(['toWallet', 'fromWallet', 'toWallet.user', 'fromWallet.user']);

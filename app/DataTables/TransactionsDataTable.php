@@ -10,6 +10,9 @@ use Yajra\DataTables\Html\Column;
 
 class TransactionsDataTable extends DataTableBase
 {
+
+    protected $dateColumns = ['transaction_date'];
+
     /**
      * Build DataTable class.
      *
@@ -52,18 +55,6 @@ class TransactionsDataTable extends DataTableBase
     }
 
     /**
-     * Get query source of dataTable.
-     *
-     * @return HasManyThrough
-     */
-    public function query(): HasManyThrough
-    {
-        /// https://stackoverflow.com/a/63285943
-        return Auth::user()->transactions()
-            ->with(['transactionType:id,name', 'wallet:id,name']);
-    }
-
-    /**
      * Optional method if you want to use html builder.
      *
      * @return Builder
@@ -77,6 +68,18 @@ class TransactionsDataTable extends DataTableBase
     }
 
     /**
+     * Get query source of dataTable.
+     *
+     * @return HasManyThrough
+     */
+    protected function queryBase(): HasManyThrough
+    {
+        /// https://stackoverflow.com/a/63285943
+        return Auth::user()->transactions()
+            ->with(['transactionType:id,name', 'wallet:id,name']);
+    }
+
+    /**
      * Get columns.
      *
      * @return array
@@ -84,7 +87,7 @@ class TransactionsDataTable extends DataTableBase
     protected function getColumns(): array
     {
         return [
-            Column::make('scope')->title('Scope')->name('transactions.scope'),
+            Column::make('scope')->title(__('Scope'))->name('transactions.scope'),
             Column::make('amount')->title(__('Amount'))->name('transactions.amount'),
             Column::make('type')->title(__('Type'))->name('transactionType.name'),
             Column::make('wallet_name')->title(__('Wallet'))->name('wallet.name'),
