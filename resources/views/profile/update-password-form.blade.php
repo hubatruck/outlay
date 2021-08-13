@@ -65,5 +65,3 @@
     </div>
   </div>
 </section>
-
-<hr class="uk-margin-medium">

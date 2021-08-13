@@ -12,6 +12,7 @@
       @endif
 
       @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::twoFactorAuthentication()))
+        <hr class="uk-margin-medium">
         @include('profile.two-factor-authentication-form')
       @endif
     </div>
