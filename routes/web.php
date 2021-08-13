@@ -107,3 +107,11 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
+
+Route::view('dashboard', 'dashboard')
+    ->name('dashboard')
+    ->middleware(['auth', 'verified']);
+
+Route::prefix('user')->middleware(['auth', 'verified'])->group(function () {
+    Route::view('profile', 'profile.show');
+});

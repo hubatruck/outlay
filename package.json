@@ -1,34 +1,26 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
         "development": "mix",
+        "dev": "npm run development",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "prod": "npm run production"
     },
     "devDependencies": {
-        "axios": "^0.21",
-        "bootstrap": "^5.0.2",
-        "jquery": "^3.6",
+        "browser-sync": "^2.26.13",
+        "browser-sync-webpack-plugin": "^2.2.2",
         "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.19",
-        "popper.js": "^1.16.1",
-        "postcss": "^8.1.14",
-        "resolve-url-loader": "^3.1.2",
-        "sass": "^1.32.11",
-        "sass-loader": "^11.0.1",
-        "vue": "^2.6.12",
-        "vue-loader": "^15.9.7",
-        "vue-template-compiler": "^2.6.12"
+        "postcss": "^8.2.4",
+        "resolve-url-loader": "^3.1.0",
+        "sass": "^1.32.2",
+        "sass-loader": "^8.0.2"
     },
     "dependencies": {
-        "@fontsource/nunito": "^4.5.0",
-        "datatables.net-bs5": "^1.10.25",
-        "datatables.net-buttons": "^1.7.1",
-        "datatables.net-buttons-bs5": "^1.7.1",
-        "flatpickr": "^4.6.9"
+        "jquery": "^3.5.0",
+        "js-dom-router": "^1.0.0",
+        "uikit": "^3.5.0"
     }
 }

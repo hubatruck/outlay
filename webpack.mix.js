@@ -11,6 +11,48 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .vue()
-    .sass('resources/sass/app.scss', 'public/css');
+// Set project paths
+// const localDomain = 'https://outlay.lan';
+
+mix
+    // Utilities
+    .sourceMaps()
+    .options({
+        processCssUrls: false
+    })
+
+    // Add global libraries
+    .autoload({
+        jquery: ['$', 'jQuery'],
+        uikit: 'UIkit'
+    })
+
+    // Suppress success messages
+    .disableSuccessNotifications()
+
+    // Compile Javascript (ES6)
+    .js('resources/js/app.js', 'public/js').extract()
+
+    // Compile Sass
+    .sass('resources/scss/app.scss', 'public/css')
+
+// .copy('resources/img', 'public/img')
+// .copy('resources/fonts', 'public/fonts')
+
+// Setup BrowserSync
+// .browserSync({
+//   proxy: localDomain,
+//   host: localDomain.replace(/^https?:\/\//, ''),
+//   notify: false,
+//   open: false,
+//   injectChanges: true,
+//   // https: {
+//   //   key: '/Users/YOUR_COMPUTER/.config/valet/Certificates/YOUR_SITE.test.key',
+//   //   cert: '/Users/YOUR_COMPUTER/.config/valet/Certificates/YOUR_SITE.test.crt'
+//   // }
+// })
+
+// Setup versioning (cache-busting)
+if (mix.inProduction()) {
+    mix.version()
+}

@@ -9,23 +9,16 @@
 
           <div class="uk-card uk-box-shadow-small">
             <div class="uk-card-header">
-              <h2 class="uk-text-center">{{ __('Login') }}</h2>
+              <h2 class="uk-text-center">{{ __('Password') }}</h2>
+
+              <p>{{ __('For your security, please confirm your password to continue.') }}</p>
 
               <hr>
             </div>
 
             <div class="uk-card-body uk-padding-remove-top">
-              <form method="POST" action="{{ route('login') }}">
+              <form method="POST" action="{{ route('password.confirm') }}">
                 @csrf
-
-                <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Email') }}</label>
-
-                  <div class="uk-inline uk-width-1-1">
-                    <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                    <input type="email" name="email" value="{{ old('email') }}" required autofocus/>
-                  </div>
-                </div>
 
                 <div class="uk-margin">
                   <label class="uk-form-label">{{ __('Password') }}</label>
@@ -37,27 +30,15 @@
                 </div>
 
                 <div class="uk-margin">
-                  <label>
-                    <input class="uk-checkbox" type="checkbox" name="remember" id="remember"
-                      {{ old('remember') ? 'checked' : '' }}>
-                    {{ __('Remember Me') }}
-                  </label>
-                </div>
-
-                <div class="uk-margin">
                   <button class="uk-button uk-button-primary uk-width-1-1" type="submit">
-                    {{ __('Login') }}
+                    {{ __('Confirm Password') }}
                   </button>
                 </div>
 
                 @if (Route::has('password.request'))
-                  <div class="uk-flex uk-flex-center">
+                  <div class="uk-text-center">
                     <a href="{{ route('password.request') }}">
-                      <small>{{ __('Forgot your password?') }}</small>
-                    </a>
-                    <span class="uk-margin-small-left uk-margin-small-right">|</span>
-                    <a href="{{ route('register') }}">
-                      <small>{{ __('Sign up') }}</small>
+                      <small>{{ __('Forgot Your Password?') }}</small>
                     </a>
                   </div>
                 @endif

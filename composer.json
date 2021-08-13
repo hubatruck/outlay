@@ -13,10 +13,12 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.40",
+        "laravel/framework": "^8.54",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables": "^1.5",
+        "zacksmash/fortify-ui": "^1.4",
+        "zacksmash/fortify-uikit": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",

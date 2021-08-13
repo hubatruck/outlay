@@ -9,21 +9,23 @@
 
           <div class="uk-card uk-box-shadow-small">
             <div class="uk-card-header">
-              <h2 class="uk-text-center">{{ __('Login') }}</h2>
+              <h2 class="uk-text-center">{{ __('Reset Password') }}</h2>
 
               <hr>
             </div>
 
             <div class="uk-card-body uk-padding-remove-top">
-              <form method="POST" action="{{ route('login') }}">
+              <form method="POST" action="{{ route('password.update') }}">
                 @csrf
+
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
                 <div class="uk-margin">
                   <label class="uk-form-label">{{ __('Email') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                    <input type="email" name="email" value="{{ old('email') }}" required autofocus/>
+                    <input type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus/>
                   </div>
                 </div>
 
@@ -32,35 +34,24 @@
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                    <input type="password" name="password" required autocomplete="current-password"/>
+                    <input type="password" name="password" required autocomplete="new-password"/>
                   </div>
                 </div>
 
                 <div class="uk-margin">
-                  <label>
-                    <input class="uk-checkbox" type="checkbox" name="remember" id="remember"
-                      {{ old('remember') ? 'checked' : '' }}>
-                    {{ __('Remember Me') }}
-                  </label>
+                  <label class="uk-form-label">{{ __('Confirm Password') }}</label>
+
+                  <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: check"></span>
+                    <input type="password" name="password_confirmation" required autocomplete="new-password"/>
+                  </div>
                 </div>
 
                 <div class="uk-margin">
                   <button class="uk-button uk-button-primary uk-width-1-1" type="submit">
-                    {{ __('Login') }}
+                    {{ __('Reset Password') }}
                   </button>
                 </div>
-
-                @if (Route::has('password.request'))
-                  <div class="uk-flex uk-flex-center">
-                    <a href="{{ route('password.request') }}">
-                      <small>{{ __('Forgot your password?') }}</small>
-                    </a>
-                    <span class="uk-margin-small-left uk-margin-small-right">|</span>
-                    <a href="{{ route('register') }}">
-                      <small>{{ __('Sign up') }}</small>
-                    </a>
-                  </div>
-                @endif
               </form>
             </div>
           </div>
