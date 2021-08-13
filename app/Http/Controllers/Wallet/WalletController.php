@@ -154,7 +154,7 @@ class WalletController extends Controller
             return $permissionCheck;
         }
 
-        if (!$wallet->hasTransactions()) {
+        if ($wallet->hasTransactions()) {
             return WalletFeedback::hasTransactionsError($wallet);
         }
 

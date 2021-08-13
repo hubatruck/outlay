@@ -103,7 +103,7 @@ class Wallet extends Model
 
     public function hasTransactions(): bool
     {
-        return $this->transactions->first() === null;
+        return $this->transactions->first() !== null;
     }
 
     /**
