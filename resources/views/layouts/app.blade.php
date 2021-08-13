@@ -26,7 +26,7 @@
   <main>
     <section class="uk-section">
       <div class="uk-container">
-        <div class="uk-flex-center uk-child-width-expand@l" uk-grid>
+        <div class="uk-flex-center uk-child-width-expand@l">
           <div class="uk-card uk-card-default">
             @yield('content')
           </div>

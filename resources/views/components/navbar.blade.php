@@ -1,4 +1,4 @@
-<nav class="uk-navbar-container" uk-navbar>
+<nav class="uk-navbar-container" uk-navbar="mode: click">
   <div class="uk-navbar-left">
     <a class="uk-navbar-item uk-logo" href="{{ route('home') }}">
       {{ config('app.name', 'Laravel') }}
