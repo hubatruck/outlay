@@ -1,140 +1,104 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                @if (session('message'))
-                    <div class="alert alert-{{ session('status') }}">{{ session('message') }}</div>
-                @endif
-                @if (!$wallet->hasTransactions() && !$wallet->hasTransfers())
-                    <div class="alert alert-info">
-                        <span class="font-weight-bolder">{{ __('Note') }}</span>:
-                        {{ __('No activity for this wallet. Charts are hidden.') }}
-                    </div>
-                @endif
-                <a
-                    class="btn btn-lg btn-outline-info mb-3"
-                    href="{{ route('wallet.view.all') }}"
-                >
-                    {{ __('< Wallet list') }}
-                </a>
+  <x-page-title>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</x-page-title>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h4>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</h4>
-                        <div class="card-body">
-                            <div class="card mb-2">
-                                <div class="card-header">
-                                    {{ __('Manage wallet') }}
-                                </div>
-                                <div class="card-body">
-                                    @if(config('app.debug'))
-                                        <a class="btn btn-lg btn-warning mb-5"
-                                           href="{{ route('wallet.view.debug', ['id' => $wallet->id])  }}"
-                                        > DEBUG Wallet </a><br>
-                                    @endif
-                                    @if($wallet->deleted_at)
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                              title="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"
-                                        >
-                                        @endif
-                                        <a
-                                            class="btn btn-success @if($wallet->deleted_at)disabled @endif"
-                                            href="{{ route('transaction.view.create', ['wallet_id' => $wallet->id]) }}"
-                                        >
-                                            {{ __('Add transaction') }}
-                                        </a>
-                                        @if($wallet->deleted_at)
-                                        </span>
-                                    @endif
-                                    <a
-                                        class="btn btn-outline-success"
-                                        href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
-                                    >
-                                        {{ __('Edit') }}
-                                    </a>
-                                    <a
-                                        class="btn btn-outline-danger"
-                                        href="{{ route('wallet.manage.toggle_hidden', ['id' => $wallet->id]) }}"
-                                    >
-                                        {{ $wallet->deleted_at ? __('Reactivate') : __('Hide') }}
-                                    </a>
-                                    @if($wallet->hasTransactions())
-                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                              title="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
-                                        >
-                                    @endif
-                                            <a
-                                                class="btn btn-danger @if($wallet->hasTransactions())disabled @endif"
-                                                href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
-                                            >
-                                                {{ __('Delete') }}
-                                            </a>
-                                    @if($wallet->hasTransactions())
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            @if ($wallet->hasTransactions())
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>{{  __('Transaction charts for :month', ['month' => __(date('F'))]) }}</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class=" col-12 pt-3 mb-1 rounded shadow">
-                                                    {!! $transactionDailyChart->container() !!}
-                                                </div>
-                                                <div class="col-md-6 p-3 rounded shadow">
-                                                    {!! $transactionTypeChart->container() !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            @if(count($wallet->transfers))
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>{{  __('Transfer charts for :month', ['month' => __(date('F'))]) }}</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class=" col-12 pt-3 mb-1 rounded shadow">
-                                                    {!! $transferDailyChart->container() !!}
-                                                </div>
-                                                <div class="col-lg-6 col-md-12 p-3 rounded shadow">
-                                                    {!! $transferTypeChart->container() !!}
-                                                </div>
-                                                <div class="col-lg-6 col-md-12 p-3 rounded shadow">
-                                                    {!! $transferWalletChart->container() !!}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="uk-card-body uk-padding-remove">
+    <div class="uk-card uk-card-default uk-margin-medium-bottom">
+      <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
+      <div class="uk-card-body uk-button-group">
+        @if(config('app.debug'))
+          <a class="uk-button uk-button-danger uk-button-large uk-margin-medium"
+             href="{{ route('wallet.view.debug', ['id' => $wallet->id])  }}"
+          > DEBUG Wallet </a><br>
+        @endif
+        <a
+          class="uk-button uk-button-primary @if($wallet->deleted_at)uk-link-muted @endif"
+          href="{{ route('transaction.view.create', ['wallet_id' => $wallet->id]) }}"
+          @if($wallet->deleted_at)
+          uk-tooltip="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"
+          @endif
+        >
+          <span class="uk-margin-small" uk-icon="plus"></span>
+          {{ __('Add transaction') }}
+        </a>
+        <a
+          class="uk-button uk-button-secondary"
+          href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
+        >
+          <span class="uk-margin-small" uk-icon="pencil"></span>
+          {{ __('Edit') }}
+        </a>
+        <a
+          class="uk-button uk-button-default"
+          href="{{ route('wallet.manage.toggle_hidden', ['id' => $wallet->id]) }}"
+        >
+          @if ($wallet->deleted_at)
+            <span class="uk-margin-small" uk-icon="play"></span>
+            {{ __('Reactivate') }}
+          @else
+            <span class="uk-margin-small" uk-icon="ban"></span>
+            {{ __('Hide') }}
+          @endif
+        </a>
+        <a
+          class="uk-button uk-button-danger @if($wallet->hasTransactions())uk-link-muted @endif"
+          href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+          @if($wallet->hasTransactions())
+          uk-tooltip="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
+          @endif
+        >
+          <span class="uk-margin-small" uk-icon="trash"></span>
+          {{ __('Delete') }}
+        </a>
+      </div>
     </div>
+
+    @if ($wallet->hasTransactions())
+      <div class="uk-card uk-card-default uk-child-width-1-1">
+        <div class="uk-card-header">
+          <h4 class="uk-h4">{{  __('Transaction charts for :month', ['month' => __(date('F'))]) }}</h4>
+        </div>
+        <div class="uk-card-body uk-child-width-1-2@l">
+          <div class="uk-width-1-1@l">
+            {!! $transactionDailyChart->container() !!}
+          </div>
+          <div>
+            {!! $transactionTypeChart->container() !!}
+          </div>
+        </div>
+      </div>
+    @endif
+
+    @if(count($wallet->transfers))
+
+      <div class="uk-card uk-card-default uk-child-width-1-1">
+        <div class="uk-card-header">
+          <h4 class="uk-h4">{{  __('Transfer charts for :month', ['month' => __(date('F'))]) }}</h4>
+        </div>
+        <div class="uk-card-body uk-child-width-1-2@l">
+          <div class="uk-width-1-1">
+            {!! $transferDailyChart->container() !!}
+          </div>
+          <div class="uk-width-1-1 uk-child-width-1-2@l" uk-grid>
+            <div>
+              {!! $transferTypeChart->container() !!}
+            </div>
+            <div>
+              {!! $transferWalletChart->container() !!}
+            </div>
+          </div>
+        </div>
+      </div>
+    @endif
+  </div>
 @endsection
 
 @push('scripts')
-    <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-    {{ $transactionDailyChart->script() }}
-    {{ $transactionTypeChart->script() }}
-    {{ $transferDailyChart->script() }}
-    {{ $transferTypeChart->script() }}
-    {{ $transferWalletChart->script() }}
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+  <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
+  {{ $transactionDailyChart->script() }}
+  {{ $transactionTypeChart->script() }}
+  {{ $transferDailyChart->script() }}
+  {{ $transferTypeChart->script() }}
+  {{ $transferWalletChart->script() }}
 @endpush
