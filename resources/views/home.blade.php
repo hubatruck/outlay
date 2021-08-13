@@ -1,55 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        @if(config('app.debug'))
-                            <a class="btn btn-lg btn-warning mb-5"
-                               href="{{ route('debug')  }}">
-                                DEBUG User
-                            </a>
-                        @endif
-                        <div class="card-group">
-                            <div class="card mb-3" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Transactions')}}</h5>
-                                    <p class="card-text">{{ __('View your transactions.') }}</p>
-                                    <a href="{{ route('transaction.view.all')}}"
-                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
-                                </div>
-                            </div>
-                            <div class="card mb-3" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Transfers')}}</h5>
-                                    <p class="card-text">{{ __('View incoming and outgoing transfers.') }}</p>
-                                    <a href="{{ route('transfer.view.all')}}"
-                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
-                                </div>
-                            </div>
-
-                            <div class="card mb-3" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ __('Wallets')}}</h5>
-                                    <p class="card-text">{{ __('View wallets linked to your account.') }}</p>
-                                    <a href="{{ route('wallet.view.all')}}"
-                                       class="btn btn-outline-primary">{{ __('Visit') }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  @if (session('status'))
+    <div class="alert alert-success" role="alert">
+      {{ session('status') }}
     </div>
+  @endif
+  <div class="uk-card-header">
+    <h3 class="uk-card-title">{{ __('Dashboard') }}</h3>
+  </div>
+  <div class="uk-card-body">
+    @if(config('app.debug'))
+      <a
+        class="uk-button uk-button-large uk-button-danger uk-margin-medium"
+        href="{{ route('debug')  }}"
+      > DEBUG User </a>
+    @endif
+    <div class="uk-grid-match uk-child-width-1-2@s" uk-grid>
+      <div>
+        <div class="uk-card uk-card-body uk-card-default uk-card-hover">
+          <h3 class="uk-card-title">{{ __('Transactions') }}</h3>
+          <p>{{ __('View your transactions.') }}</p>
+          <a
+            href="{{ route('transaction.view.all')}}"
+            class="uk-button uk-button-primary"
+          > {{ __('Visit') }} </a>
+        </div>
+      </div>
+      <div>
+        <div class="uk-card uk-card-body uk-card-default uk-card-hover">
+          <h3 class="uk-card-title">{{ __('Transfers') }}</h3>
+          <p>{{ __('View incoming and outgoing transfers.') }}</p>
+          <a
+            href="{{ route('transfer.view.all')}}"
+            class="uk-button uk-button-primary"
+          > {{ __('Visit') }} </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="uk-card uk-card-body uk-card-default uk-card-hover">
+          <h3 class="uk-card-title">{{ __('Wallets') }}</h3>
+          <p>{{ __('View wallets linked to your account.') }}</p>
+          <a
+            href="{{ route('transaction.view.all')}}"
+            class="uk-button uk-button-primary"
+          > {{ __('Visit') }} </a>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
