@@ -1,0 +1,18 @@
+.dtc-reset {
+    div {
+        display: inline;
+    }
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding: 0 !important;
+
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dataTables_scrollBody {
+    max-height: 500px;
+    height: 100%;
+}

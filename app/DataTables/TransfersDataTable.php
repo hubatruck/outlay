@@ -2,17 +2,17 @@
 
 namespace App\DataTables;
 
+use App\Models\Transfer;
 use App\Models\Wallet;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
 
-class TransfersDataTable extends DataTable
+class TransfersDataTable extends DataTableBase
 {
+    protected $dateColumns = ['transfer_date'];
+
     /**
      * Build DataTable class.
      *
@@ -27,10 +27,13 @@ class TransfersDataTable extends DataTable
             ->editColumn('transfer_date', function ($row) {
                 return $row->transfer_date->translatedFormat('Y/m/d, l');
             })
-            ->addColumn('from_wallet_name', function ($row) {
+            ->filterColumn('transfer_date', function ($query, $keyword) {
+                $this->dateFilter($query, $keyword, 'transfer_date');
+            })
+            ->editColumn('from_wallet_name', function (Transfer $row) {
                 return $this->getWalletNameFor($row->fromWallet);
             })
-            ->addColumn('to_wallet_name', function ($row) {
+            ->editColumn('to_wallet_name', function (Transfer $row) {
                 return $this->getWalletNameFor($row->toWallet);
             });
     }
@@ -57,14 +60,14 @@ class TransfersDataTable extends DataTable
     }
 
     /**
-     * Get query source of dataTable.
+     * Get query source of dataTable
      *
-     * @return HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(): HasManyThrough
+    public function queryBase(): \Illuminate\Database\Eloquent\Builder
     {
         return Auth::user()->transfers()
-            ->with(['toWallet', 'fromWallet']);
+            ->with(['toWallet', 'fromWallet', 'toWallet.user', 'fromWallet.user']);
     }
 
     /**
@@ -74,27 +77,10 @@ class TransfersDataTable extends DataTable
      */
     public function html(): Builder
     {
-        $buttonArr = [];
-        if (Auth::user()->hasAnyActiveWallet()) {
-            $buttonArr[] = Button::make('create');
-        }
-        $buttonArr[] = Button::make('export');
-        $buttonArr[] = Button::make('print');
-        $buttonArr[] = Button::make('reset');
+        $buttons = $this->getButtons(Auth::user()->hasAnyActiveWallet());
 
-        return $this->builder()
-            ->setTableId('transfers-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->responsive()
-            ->orderBy(4) /// transfer_date
-            ->buttons($buttonArr)
-            ->parameters([
-                'language' => [
-                    'url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json'),
-                ],
-            ]);
+        return $this->sharedHtmlBuild($buttons)
+            ->setTableId('transfers-table');
     }
 
     /**
@@ -107,8 +93,8 @@ class TransfersDataTable extends DataTable
         return [
             Column::make('description')->title(__('Description')),
             Column::make('amount')->title(__('Amount')),
-            Column::make('from_wallet_name')->title(__('From')),
-            Column::make('to_wallet_name')->title(__('To')),
+            Column::make('from_wallet_name')->title(__('From'))->name('wallets_from.name'),
+            Column::make('to_wallet_name')->title(__('To'))->name('wallets_to.name'),
             Column::make('transfer_date')->title(__('Date')),
         ];
     }
