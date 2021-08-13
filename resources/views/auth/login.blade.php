@@ -19,11 +19,11 @@
                 @csrf
 
                 <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Email') }}</label>
+                  <label class="uk-form-label">{{ __('Username') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                    <input type="email" name="email" value="{{ old('email') }}" required autofocus/>
+                    <input type="name" name="name" value="{{ old('name') }}" required autofocus/>
                   </div>
                 </div>
 
