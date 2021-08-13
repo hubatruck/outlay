@@ -30,7 +30,7 @@
               @endif
             @else
               <li class="uk-nav-header">
-                Hi, {{ Auth::user()->name }}
+                {{ __('Hi') }}, {{ Auth::user()->name }}
               </li>
 
               <li class="uk-nav-divider"></li>
@@ -38,7 +38,7 @@
               <li>
                 <a href="/user/profile">
                   <span uk-icon="user" class="uk-margin-small-right"></span>
-                  Profile
+                  {{ __('Profile') }}
                 </a>
               </li>
 
@@ -46,7 +46,7 @@
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <span uk-icon="sign-out" class="uk-margin-small-right"></span>
-                  Logout
+                  {{ __('Logout') }}
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" uk-hidden>

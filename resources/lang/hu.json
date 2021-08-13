@@ -113,5 +113,12 @@
     "September": "szemptemberre",
     "October": "októberre",
     "November": "novemberre",
-    "December": "decemberre"
+    "December": "decemberre",
+    "Hi": "Hello",
+    "Profile": "Profil",
+    "Update Password": "Jelszó csere",
+    "Current Password": "Jelenlegi jelszó",
+    "Confirm Password": "Jelszó megerősítése",
+    "Ensure your account is using a long, random password to stay secure.": "Bizonyosodj meg, hogy a fiókod egy hosszú, véletleneszerő jelszót használt ahhoz, hogy biztonságban légy.",
+    "Whoops! Something went wrong.": "Hoppá! Valami rosszul sikerült."
 }
