@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
+use View;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Column;
@@ -25,24 +26,10 @@ class TransactionsDataTable extends DataTableBase
             ->eloquent($query)
             ->smart()
             ->addColumn('actions', function ($row) {
-                $actions = '<div class="dropdown mx-auto">
-                            <button class="btn dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
-                                ' . __('Actions') . '<span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item btn-outline-primray" href="'
-                    . route('transaction.view.update', ['id' => $row->id]) . '">' . __('Edit')
-                    . '</a></li>
-                                <li><a class="dropdown-item btn-outline-danger" href="'
-                    . route('transaction.data.delete', ['id' => $row->id]) . '">' . __('Delete')
-                    . '</a></li>';
-                if (config('app.debug')) {
-                    $actions .= '<li><a class="dropdown-item btn-outline-primray" href="'
-                        . route('transaction.view.debug', ['id' => $row->id]) . '">' . __('DEBUG')
-                        . '</a></li>';
-                }
-                $actions .= '</ul></div>';
-                return $actions;
+                return View::make('components.transaction-dt-actions')->with([
+                    'editURL' => route('transaction.view.update', ['id' => $row->id]),
+                    'deleteURL' => route('transaction.data.delete', ['id' => $row->id]),
+                ]);
             })
             ->rawColumns(['actions'])
             ->blacklist(['actions'])
