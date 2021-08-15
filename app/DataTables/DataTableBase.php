@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\View;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
 abstract class DataTableBase extends DataTable
@@ -154,5 +155,15 @@ abstract class DataTableBase extends DataTable
     protected function getInitCompleteFunction(): string
     {
         return View::make('skeletons.datatables-init', ['dateRangeID' => self::DATE_RANGE_ID])->render();
+    }
+
+    /**
+     * Function to create actions column
+     *
+     * @return Column
+     */
+    protected function actionsColumn(): Column
+    {
+        return Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false)->printable(false)->exportable(false);
     }
 }

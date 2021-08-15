@@ -80,7 +80,7 @@ class TransactionsDataTable extends DataTableBase
             Column::make('type')->title(__('Type'))->name('transactionType.name'),
             Column::make('wallet_name')->title(__('Wallet'))->name('wallet.name'),
             Column::make('transaction_date')->title(__('Date')),
-            Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false),
+            $this->actionsColumn(),
         ];
     }
 
