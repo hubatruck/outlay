@@ -16,3 +16,10 @@
 @import 'global/styles';
 @import 'global/imports/components';
 @import 'global/imports/views';
+
+/** 6. Custom Styles */
+@import '~@fontsource/nunito';
+
+@import '~flatpickr/dist/flatpickr.css';
+
+@import 'datatables.scss';

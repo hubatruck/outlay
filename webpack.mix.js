@@ -24,7 +24,8 @@ mix
     // Add global libraries
     .autoload({
         jquery: ['$', 'jQuery'],
-        uikit: 'UIkit'
+        uikit: 'UIkit',
+        flatpickr: 'flatpickr',
     })
 
     // Suppress success messages

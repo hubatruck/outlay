@@ -1,15 +1,13 @@
+/// DO NOT USE THIS FILE
+/// USE ../sCss/app.scss
+
 // Fonts
-@import '~@fontsource/nunito';
 
 // Variables
-@import 'variables';
+//@import '_variables.scss';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+
 
 // DataTables
-@import "~datatables.net-bs5/css/dataTables.bootstrap5.css";
-@import "~datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
-@import 'datatables';
-
-@import '~flatpickr/dist/flatpickr.min.css';
+//@import '~datatables.net-dt/css/jquery.dataTables.min.css';
