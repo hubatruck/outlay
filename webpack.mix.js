@@ -33,6 +33,10 @@ mix
     // Compile Javascript (ES6)
     .js('resources/js/app.js', 'public/js').extract()
 
+    /// Combine and minify DataTables scripts
+    .combine('resources/js/datatables/*.js', 'public/js/datatables.bundle.js')
+    .minify('public/js/datatables.bundle.js', 'public/js')
+
     // Compile Sass
     .sass('resources/scss/app.scss', 'public/css')
 

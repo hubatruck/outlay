@@ -38,9 +38,7 @@
 
 <!-- App -->
 <script src="{{ mix('js/app.js') }}"></script>
-<script src="{{ asset('vendor/datatables/datatables.bootstrap5.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables/buttons.server-side.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables/extensions.min.js') }}"></script>
+<script src="{{ mix('js/datatables.bundle.min.js') }}"></script>
 @stack('scripts')
 
 </body>
