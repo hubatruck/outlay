@@ -8,6 +8,7 @@ use Illuminate\Routing\Redirector;
 
 class TransactionFeedback
 {
+    public const TRANSACTION_VIEW_ALL = 'transaction.view.all';
 
     /**
      * Redirect user with success message
@@ -17,7 +18,7 @@ class TransactionFeedback
      */
     public static function success(string $performedAction = 'created'): RedirectResponse
     {
-        return redirect(route('transaction.view.all'))
+        return redirect(route(self::TRANSACTION_VIEW_ALL))
             ->with([
                 'status' => __(
                     'Transaction :action successfully.', [
@@ -35,7 +36,7 @@ class TransactionFeedback
      */
     public static function existError(): RedirectResponse
     {
-        return redirect(route('transaction.view.all'))
+        return redirect(route(self::TRANSACTION_VIEW_ALL))
             ->with([
                 'status' => __('Error') . ': ' . __('Transaction does not exist.'),
                 'status_type' => 'danger',
@@ -49,7 +50,7 @@ class TransactionFeedback
      */
     public static function editError()
     {
-        return redirect(route('transaction.view.all'))
+        return redirect(route(self::TRANSACTION_VIEW_ALL))
             ->with([
                 'status' => __('Error') . ': ' . __('You cannot edit this transaction.'),
                 'status_type' => 'danger',
