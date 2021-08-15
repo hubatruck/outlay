@@ -1,6 +1,11 @@
 @if (session('status'))
   @php
     $status = session('status');
+    if(!is_array($status)) {
+        $rawMessages = [0 => ['status' => $status]];
+    } else {
+        $rawMessages = $status;
+    }
 
     $statuses = [
       'profile-information-updated'        => __('Your profile information has been updated'),
@@ -11,11 +16,23 @@
       'verification-link-sent'             => __('A new verification link has been sent to the email address you provided during registration.')
     ];
 
-    $message = array_key_exists($status, $statuses) ? $statuses[$status]: $status
+    $messages = [];
+    foreach ($rawMessages as $msg){
+        $content = array_key_exists($msg['status'], $statuses) ? $statuses[$msg['status']]: $msg['status'];
+        $messages[] = [
+            'type'=>$msg['status_type']??'success',
+            'content'=>$content,
+        ];
+    }
   @endphp
 
-  <div class="uk-alert-success uk-margin-remove" uk-alert>
-    <a class="uk-alert-close" uk-close></a>
-    {{ $message }}
-  </div>
+  @foreach($messages as $msg)
+    <div class="uk-alert-{{ $msg['type'] }} uk-margin-remove-top uk-margin-small-bottom" uk-alert>
+      <a class="uk-alert-close" uk-close></a>
+      {!!  $msg['content'] !!}
+    </div>
+  @endforeach
+  @php
+    session()->remove('status')
+  @endphp
 @endif
