@@ -61,11 +61,13 @@ class TransferFeedback
      */
     public static function noActiveWalletMsg(): array
     {
-        return ['status' => self::messageWithLink(
-            __('You don\'t have any wallet marked as active. Transfer of sums is not available.'),
-            route('wallet.view.all'),
-            __('Activate a wallet by clicking here.')
-        ),
-            'status_type' => 'primary',];
+        return [
+            'status' => self::messageWithLink(
+                __('You don\'t have any wallet marked as active. Transfer of sums is not available.'),
+                route('wallet.view.all'),
+                __('Activate a wallet by clicking here.')
+            ),
+            'status_type' => 'primary',
+        ];
     }
 }

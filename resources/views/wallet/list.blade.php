@@ -35,7 +35,9 @@
         </tbody>
       </table>
     @else
-      {{ __('You don\'t have any wallets available.') }}
+      <div class="uk-margin-small-top">
+        {{ __('You don\'t have any wallets available.') }}
+      </div>
     @endif
   </div>
 @endsection
