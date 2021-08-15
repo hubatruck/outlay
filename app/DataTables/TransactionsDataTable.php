@@ -27,8 +27,8 @@ class TransactionsDataTable extends DataTableBase
             ->smart()
             ->addColumn('actions', function ($row) {
                 return View::make('components.transaction-dt-actions')->with([
-                    'editURL' => route('transaction.view.update', ['id' => $row->id]),
-                    'deleteURL' => route('transaction.data.delete', ['id' => $row->id]),
+                    'editURL' => route('transaction.view.update', ['id' => $row->transaction_id]),
+                    'deleteURL' => route('transaction.data.delete', ['id' => $row->transaction_id]),
                 ]);
             })
             ->rawColumns(['actions'])
@@ -63,7 +63,8 @@ class TransactionsDataTable extends DataTableBase
     {
         /// https://stackoverflow.com/a/63285943
         return Auth::user()->transactions()
-            ->with(['transactionType:id,name', 'wallet:id,name']);
+            ->with(['transactionType:id,name', 'wallet:id,name'])
+            ->select('transactions.id as transaction_id', 'transactions.*');
     }
 
     /**
