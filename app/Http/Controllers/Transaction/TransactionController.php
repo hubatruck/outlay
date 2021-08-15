@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use App\DataTables\TransactionsDataTable;
 use App\Feedbacks\TransactionFeedback;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
@@ -21,6 +22,25 @@ use Illuminate\Validation\Rule;
 class TransactionController extends Controller
 {
     private $viewName = 'transaction/edit';
+
+    /**
+     * Show all transactions for the user
+     *
+     * @param TransactionsDataTable $dataTable
+     * @return mixed
+     */
+    public function index(TransactionsDataTable $dataTable)
+    {
+        $messages = [];
+        if (!Auth::user()->hasWallet()) {
+            $messages[] = TransactionFeedback::noWalletMsg();
+        } else if (!Auth::user()->hasAnyActiveWallet()) {
+            $messages[] = TransactionFeedback::noActiveWalletMsg();
+        }
+
+        session(['status' => $messages]);
+        return $dataTable->render('transaction.list',);
+    }
 
     /**
      * Show the view for creating a transaction
