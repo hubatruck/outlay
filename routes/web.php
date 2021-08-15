@@ -1,7 +1,6 @@
 <?php
 
 use App\DataTables\TransactionsDataTable;
-use App\DataTables\TransfersDataTable;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Transfer\TransferController;
@@ -92,9 +91,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('transfers')->group(function () {
-        Route::get('/', function (TransfersDataTable $dataTable) {
-            return $dataTable->render('transfer/list');
-        })->name('transfer.view.all');
+        Route::get('/', [TransferController::class, 'index'])->name('transfer.view.all');
 
         Route::get('create', [TransferController::class, 'createView'])->name('transfer.view.create');
         Route::post('create', [TransferController::class, 'storeTransfer'])->name('transfer.data.create');

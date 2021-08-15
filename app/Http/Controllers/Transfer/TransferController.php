@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Transfer;
 
+use App\DataTables\TransfersDataTable;
 use App\Feedbacks\TransferFeedback;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,25 @@ use Illuminate\Support\Facades\Auth;
 
 class TransferController extends Controller
 {
+    /**
+     * Show all transfers for the user
+     *
+     * @param TransfersDataTable $dataTable
+     * @return mixed
+     */
+    public function index(TransfersDataTable $dataTable)
+    {
+        $messages = [];
+        if (!Auth::user()->hasWallet()) {
+            $messages[] = TransferFeedback::noWalletMsg();
+        } else if (!Auth::user()->hasAnyActiveWallet()) {
+            $messages[] = TransferFeedback::noActiveWalletMsg();
+        }
+
+        session(['status' => $messages]);
+        return $dataTable->render('transfer/list',);
+    }
+
     /**
      * Show the create a transfer view
      *
