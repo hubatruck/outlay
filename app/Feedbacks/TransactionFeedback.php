@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Feedbacks;
-
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -21,12 +19,12 @@ class TransactionFeedback
     {
         return redirect(route('transaction.view.all'))
             ->with([
-                'message' => __(
+                'status' => __(
                     'Transaction :action successfully.', [
-                        'action' => __($performedAction)
+                        'action' => __($performedAction),
                     ]
                 ),
-                'status' => 'success',
+                'status_type' => 'success',
             ]);
     }
 
@@ -39,8 +37,8 @@ class TransactionFeedback
     {
         return redirect(route('transaction.view.all'))
             ->with([
-                'message' => __('Error: ') . __('Transaction does not exist.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('Transaction does not exist.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -53,8 +51,8 @@ class TransactionFeedback
     {
         return redirect(route('transaction.view.all'))
             ->with([
-                'message' => __('Error: ') . __('You cannot edit this transaction.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('You cannot edit this transaction.'),
+                'status_type' => 'danger',
             ]);
     }
 }

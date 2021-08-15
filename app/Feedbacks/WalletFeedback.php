@@ -17,8 +17,8 @@ class WalletFeedback
     {
         return redirect(route('wallet.view.all'))
             ->with([
-                'message' => __('Error') . ': ' . __('You cannot view this wallet.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('You cannot view this wallet.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -33,8 +33,8 @@ class WalletFeedback
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => __('Error') . ': ' . __('Wallet does not exist.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('Wallet does not exist.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -51,12 +51,12 @@ class WalletFeedback
         $url = $url ?? previousUrlOr(route('transaction.view.all'));
         return redirect($url)
             ->with([
-                'message' => __('Error: ') . __(
+                'status' => __('Error') . ': ' . __(
                         'No :type wallet linked to your account found.', [
                             'type' => __($type),
                         ]
                     ),
-                'status' => 'danger',
+                'status_type' => 'danger',
             ]);
     }
 
@@ -69,8 +69,8 @@ class WalletFeedback
     {
         return redirect(route('wallet.view.all'))
             ->with([
-                'status' => 'danger',
-                'message' => __('Error: ') . __('Wallet unavailable for quick transaction creation.'),
+                'status' => __('Error') . ': ' . __('Wallet unavailable for quick transaction creation.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -85,8 +85,8 @@ class WalletFeedback
     {
         return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
             ->with([
-                'message' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -101,8 +101,8 @@ class WalletFeedback
         return redirect()
             ->route('wallet.view.all')
             ->with([
-                'message' => __('Error') . ': ' . __('You cannot edit this wallet.'),
-                'status' => 'danger',
+                'status' => __('Error') . ': ' . __('You cannot edit this wallet.'),
+                'status_type' => 'danger',
             ]);
     }
 
@@ -118,12 +118,12 @@ class WalletFeedback
     {
         return redirect($url ?? route('wallet.view.all'))
             ->with([
-                'message' => __(
+                'status' => __(
                     'Wallet :action successfully.', [
-                        'action' => __($successMethod)
+                        'action' => __($successMethod),
                     ]
                 ),
-                'status' => 'success',
+                'status_type' => 'success',
             ]);
     }
 }
