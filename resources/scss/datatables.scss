@@ -1,20 +1,79 @@
+@import 'global/settings';
+@import '~uikit/src/scss/variables';
+
 .dataTables_processing {
     z-index: 1000;
 }
 
-div.dataTables_wrapper div.dataTables_info {
-    padding: 0 !important;
-
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+/**
+Footer styling
+ */
+@media (max-width: $breakpoint-xsmall-max) {
+    .dataTables_info, .dataTables_length {
+        text-align: center;
+        margin-bottom: $margin-small-margin !important;
+    }
 }
 
+@media (min-width: $breakpoint-xsmall-max) {
+    .dataTables_info {
+        float: right;
+    }
+}
+
+/**
+Limit table height
+ */
 .dataTables_scrollBody {
     max-height: 500px;
     height: 100%;
 }
 
+/**
+Make collection buttons full width
+ */
 .dt-uk-collection .dt-button-wrapper button {
     width: 100%;
+}
+
+/**
+ColReorder styles
+ */
+table.DTCR_clonedTable.dataTable {
+    position: absolute !important;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 202;
+}
+
+div.DTCR_pointer {
+    width: 1px;
+    background-color: #0259C4;
+    z-index: 201;
+}
+
+.DTCR_clonedTable {
+    tr, th {
+        cursor: pointer;
+    }
+}
+
+
+table.fixedHeader-floating {
+    position: fixed !important;
+    background-color: white;
+}
+
+table.fixedHeader-floating.no-footer {
+    border-bottom-width: 0;
+}
+
+table.fixedHeader-locked {
+    position: absolute !important;
+    background-color: white;
+}
+
+@media print {
+    table.fixedHeader-floating {
+        display: none;
+    }
 }

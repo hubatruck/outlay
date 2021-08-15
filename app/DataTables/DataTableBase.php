@@ -116,7 +116,7 @@ abstract class DataTableBase extends DataTable
             ->dom(
                 "<'row uk-grid'<'uk-width-1-1 uk-margin-small-bottom'B><'uk-width-1-2@s'f><'#dtc-filters.uk-width-1-2@s'>>" .
                 "<'row uk-grid dt-merge-grid'<'uk-width-1-1'rt>>" .
-                "<'row uk-grid dt-merge-grid uk-grid-collapse'<'uk-width-1-2@s'l><'uk-width-1-2@s'<'uk-float-right'i>><'uk-width-1-1'p>>"
+                "<'row uk-grid dt-merge-grid uk-grid-collapse'<'uk-width-1-2@s'l><'uk-width-1-2@s'i><'uk-width-1-1'p>>"
             )
             ->responsive()
             ->buttons($buttons)
