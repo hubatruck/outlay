@@ -112,12 +112,15 @@ abstract class DataTableBase extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax('', null, $this->dateRangeHandler())
-            ->dom('<"controls row"<"col-md-12"B>><"#dtc-filters.dtc-reset m-2 d-flex"f>rt<"d-flex justify-content-between mb-2"<"align-self-middle"i>l><"d-flex justify-content-center dtc-reset"p>')
+            ->dom(
+                "<'row uk-grid'<'uk-width-1-1 uk-margin-small-bottom'B><'uk-width-1-2@s'f><'#dtc-filters.uk-width-1-2@s'>>" .
+                "<'row uk-grid dt-merge-grid'<'uk-width-1-1'rt>>" .
+                "<'row uk-grid dt-merge-grid uk-grid-collapse'<'uk-width-1-2@s'l><'uk-width-1-2@s'<'uk-float-right'i>><'uk-width-1-1'p>>"
+            )
             ->responsive()
             ->buttons($buttons)
             ->autoWidth()
             ->colReorder()
-            ->fixedHeader()
             ->scrollX()
             ->orderMulti()
             ->language(['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')])
