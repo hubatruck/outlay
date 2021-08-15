@@ -24,7 +24,7 @@ function () {
     //            });
     //        });
 
-    $('#dtc-filters').append('{{ __('Filter dates') }}:< div id = "dtc-date-range" > <input type="text" placeholder="{{ __('Select the date range to be shown') }}" data-input id="{{ $dateRangeID }}"></div>');
+    $('#dtc-filters').append('{{ __('Filter dates') }}:<div id="dtc-date-range"> <input type="text" placeholder="{{ __('Select the date range to be shown') }}" data-input id="{{ $dateRangeID }}"></div>');
     flatpickr.localize(flatpickr.l10ns.hu);
     $('#dtc-date-range').flatpickr({
         mode: 'range',
