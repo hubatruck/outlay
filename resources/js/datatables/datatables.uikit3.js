@@ -88,12 +88,12 @@
 
                     switch (button) {
                         case 'ellipsis':
-                            btnDisplay = '<span uk-icon="chevron-double-left"></span> ' + lang.sFirst;
+                            btnDisplay = '<span uk-icon="more"></span>';
                             btnClass = 'uk-disabled disabled';
                             break;
 
                         case 'first':
-                            btnDisplay = '<span uk-icon="chevron-left"></span> ' + lang.sPrevious;
+                            btnDisplay = '<span uk-icon="chevron-double-left"></span> ' + lang.sFirst;
                             btnClass = (page > 0 ?
                                 '' : ' uk-disabled disabled');
                             break;
