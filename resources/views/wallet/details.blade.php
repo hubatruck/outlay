@@ -14,7 +14,7 @@
         @endif
         <a
           class="uk-button uk-button-primary @if($wallet->deleted_at)uk-link-muted @endif"
-          href="{{ route('transaction.view.create', ['wallet_id' => $wallet->id]) }}"
+          href="{{ $wallet->deleted_at ? '#' : route('transaction.view.create', ['wallet_id' => $wallet->id]) }}"
           @if($wallet->deleted_at)
           uk-tooltip="{{ __('This wallet cannot be used for new transactions until reactivated.') }}"
           @endif
@@ -43,7 +43,7 @@
         </a>
         <a
           class="uk-button uk-button-danger @if($wallet->hasTransactions())uk-link-muted @endif"
-          href="{{ route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+          href="{{ $wallet->hasTransactions() ? '#' : route('wallet.manage.delete', ['id' => $wallet->id]) }}"
           @if($wallet->hasTransactions())
           uk-tooltip="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
           @endif
