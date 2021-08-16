@@ -63,6 +63,9 @@ class WalletController extends Controller
         if (!Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
         }
+        if (!$wallet->hasTransactions() || !$wallet->hasTransfers()) {
+            addSessionMsg(WalletFeedback::noActivity(), true);
+        }
 
         $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart()))->build($id);
         $transactionTypeChart = (new MonthlyTransactionByType(new LarapexChart()))->build($id);

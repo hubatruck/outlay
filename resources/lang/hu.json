@@ -40,7 +40,7 @@
     "no": "nem",
     "No :type wallet linked to your account found.": "Nem található :type tárca ehhez a felhasználóhoz csatlakoztatva.",
     "No active wallets; this field cannot be changed.": "Nincs aktív tárca; a mező nem változtatható.",
-    "No transactions for this wallet. Charts are hidden.": "Nincsenek ehhez a tárcához tartozó tranzakciók. Grafikonok elrejtve.",
+    "No transactions or transfers for this wallet. Some charts are hidden.": "Nincsenek ehhez a tárcához tartozó tranzakciók vagy átutalások. Néhány grafikon nem fog megjelenni.",
     "Notes": "Jegyzetek",
     "Nothing here...": "Itt nincs semmi...",
     "Outgoing transfer": "Kimentő utalás",

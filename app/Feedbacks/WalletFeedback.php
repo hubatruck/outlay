@@ -126,4 +126,18 @@ class WalletFeedback
         ]);
         return redirect($url ?? route(self::WALLET_VIEW_ALL));
     }
+
+    /**
+     * The specified wallet does not have transactions or transfers, so
+     * some chats are hidden.
+     *
+     * @return string[]
+     */
+    public static function noActivity(): array
+    {
+        return [
+            'content' => __('Note') . ': ' . __('No transactions or transfers for this wallet. Some charts are hidden.'),
+            'type' => 'primary',
+        ];
+    }
 }
