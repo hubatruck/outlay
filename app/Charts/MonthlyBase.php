@@ -52,8 +52,7 @@ class MonthlyBase
      */
     protected function filterTransfers($transfers)
     {
-        return $transfers->whereDate('transfer_date', '>=', date('Y-m-01'))
-            ->whereDate('transfer_date', '<=', $this->lastDate())
+        return $transfers->thisMonth($this->lastDate())
             ->selectRaw('DATE(transfer_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
     }

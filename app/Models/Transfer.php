@@ -84,4 +84,18 @@ class Transfer extends Model
     {
         $this->attributes['transfer_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
     }
+
+    /**
+     * Only get transfers occurred this month
+     *
+     * @param $query
+     * @param null $lastDay
+     * @return mixed
+     */
+    public function scopeThisMonth($query, $lastDay = null)
+    {
+        $lastDay = $lastDay ?? date('Y-m-t');
+        return $query->whereDate('transfer_date', '>=', date('Y-m-01'))
+            ->whereDate('transfer_date', '<=', $lastDay);
+    }
 }
