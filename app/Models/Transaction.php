@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Auth;
 /**
  * App\Models\Transaction
  *
- * @property string|int $id
- * @property string|int $wallet_id
+ * @property int $id
+ * @property int $wallet_id
  * @property float $amount
  * @property string|null $scope
  * @property int $transaction_type_id
@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Transaction newModelQuery()
  * @method static Builder|Transaction newQuery()
  * @method static Builder|Transaction query()
+ * @method static Builder|Transaction thisMonth($lastDay = null)
  * @method static Builder|Transaction whereAmount($value)
  * @method static Builder|Transaction whereCreatedAt($value)
  * @method static Builder|Transaction whereDeletedAt($value)
