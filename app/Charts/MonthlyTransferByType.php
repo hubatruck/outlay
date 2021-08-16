@@ -5,6 +5,7 @@ namespace App\Charts;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PieChart;
+use Arr;
 
 class MonthlyTransferByType extends MonthlyBase
 {
@@ -25,6 +26,7 @@ class MonthlyTransferByType extends MonthlyBase
             ->setTitle(__('Transferred amounts by type'))
             ->addData($this->reduceDataPrecision([$transferIn, $transferOut]))
             ->setLabels($this->translateLabels(['Incoming transfer', 'Outgoing transfer']))
-            ->setDataLabels();
+            ->setDataLabels()
+            ->setColors(Arr::shuffle(self::$colors));
     }
 }

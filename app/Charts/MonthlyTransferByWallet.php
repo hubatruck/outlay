@@ -48,7 +48,8 @@ class MonthlyTransferByWallet extends MonthlyBase
                 __('Sent'),
                 $this->reduceDataPrecision(Arr::pluck($data, 'out'))
             )
-            ->setXAxis(array_keys($data));
+            ->setXAxis(array_keys($data))
+            ->setColors(Arr::shuffle(self::$colors));
     }
 
     /**

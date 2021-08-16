@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -36,7 +37,8 @@ class MonthlyTransactionByDay extends MonthlyBase
                 $this->addEmptyDays($expense->pluck('daily_amount', 'day')->toArray())
             )
             ->setXAxis($this->createAxisData())
-            ->setGrid(false);
+            ->setGrid(false)
+            ->setColors(Arr::shuffle(self::$colors));
     }
 
     /**

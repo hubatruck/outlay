@@ -5,6 +5,7 @@ namespace App\Charts;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Arr;
 
 class MonthlyTransferByDay extends MonthlyBase
 {
@@ -30,6 +31,7 @@ class MonthlyTransferByDay extends MonthlyBase
                 __('Outgoing transfer'),
                 $this->addEmptyDays($transferOut->pluck('daily_amount', 'day')->toArray())
             )
-            ->setXAxis($this->createAxisData());
+            ->setXAxis($this->createAxisData())
+            ->setColors(Arr::shuffle(self::$colors));
     }
 }
