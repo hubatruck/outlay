@@ -18,6 +18,7 @@ class MonthlyBase
     protected function getBaseQuery(string $walletID): Builder
     {
         return Transaction::with(['transactionType', 'wallet'])
+            ->thisMonth($this->lastDate())
             ->join('wallets', 'wallet_id', '=', 'wallets.id')
             ->join(
                 'transaction_types',
@@ -30,9 +31,7 @@ class MonthlyBase
                 $query->select('id')->from('wallets')
                     ->where('user_id', '=', Auth::user()->id ?? '-1');
             })
-            ->where('wallet_id', '=', $walletID)
-            ->whereDate('transaction_date', '>=', date('Y-m-01'))
-            ->whereDate('transaction_date', '<=', $this->lastDate());
+            ->where('wallet_id', '=', $walletID);
     }
 
     /**

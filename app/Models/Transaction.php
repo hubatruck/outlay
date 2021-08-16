@@ -135,4 +135,18 @@ class Transaction extends Model
     {
         $this->attributes['transaction_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
     }
+
+    /**
+     * Only get transactions occurred this month
+     *
+     * @param Builder $query
+     * @param null $lastDay
+     * @return Builder
+     */
+    public function scopeThisMonth(Builder $query, $lastDay = null): Builder
+    {
+        $lastDay = $lastDay ?? date('Y-m-t');
+        return $query->whereDate('transaction_date', '>=', date('Y-m-01'))
+            ->whereDate('transaction_date', '<=', $lastDay);
+    }
 }
