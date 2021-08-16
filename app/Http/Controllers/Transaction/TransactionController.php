@@ -31,14 +31,11 @@ class TransactionController extends Controller
      */
     public function index(TransactionsDataTable $dataTable)
     {
-        $messages = [];
         if (!Auth::user()->hasWallet()) {
-            $messages[] = TransactionFeedback::noWalletMsg();
+            addSessionMsg(TransactionFeedback::noWalletMsg(), true);
         } else if (!Auth::user()->hasAnyActiveWallet()) {
-            $messages[] = TransactionFeedback::noActiveWalletMsg();
+            addSessionMsg(TransactionFeedback::noActiveWalletMsg(), true);
         }
-
-        session(['status' => $messages]);
         return $dataTable->render('transaction.list',);
     }
 

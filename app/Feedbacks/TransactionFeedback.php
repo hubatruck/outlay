@@ -18,15 +18,15 @@ class TransactionFeedback
      */
     public static function success(string $performedAction = 'created'): RedirectResponse
     {
-        return redirect(route(self::TRANSACTION_VIEW_ALL))
-            ->with([
-                'status' => __(
-                    'Transaction :action successfully.', [
-                        'action' => __($performedAction),
-                    ]
-                ),
-                'status_type' => 'success',
-            ]);
+        addSessionMsg([
+            'content' => __(
+                'Transaction :action successfully.', [
+                    'action' => __($performedAction),
+                ]
+            ),
+            'type' => 'success',
+        ]);
+        return redirect(route(self::TRANSACTION_VIEW_ALL));
     }
 
     /**
@@ -36,11 +36,11 @@ class TransactionFeedback
      */
     public static function existError(): RedirectResponse
     {
-        return redirect(route(self::TRANSACTION_VIEW_ALL))
-            ->with([
-                'status' => __('Error') . ': ' . __('Transaction does not exist.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Transaction does not exist.'),
+            'type' => 'danger',
+        ]);
+        return redirect(route(self::TRANSACTION_VIEW_ALL));
     }
 
     /**
@@ -50,11 +50,11 @@ class TransactionFeedback
      */
     public static function editError()
     {
-        return redirect(route(self::TRANSACTION_VIEW_ALL))
-            ->with([
-                'status' => __('Error') . ': ' . __('You cannot edit this transaction.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('You cannot edit this transaction.'),
+            'type' => 'danger',
+        ]);
+        return redirect(route(self::TRANSACTION_VIEW_ALL));
     }
 
     /**
@@ -65,12 +65,15 @@ class TransactionFeedback
     public static function noWalletMsg(): array
     {
         return [
-            'status' => self::messageWithLink(
-                __('You don\'t have any wallet connected to you account. Transactions feature is not available.'),
+            'content' => self::messageWithLink(
+                __(
+                    'You don\'t have any wallet connected to you account. :feature is unavailable.',
+                    ['feature' => __('Transactions feature')],
+                ),
                 route('wallet.view.create'),
                 __('Create a wallet by clicking here.')
             ),
-            'status_type' => 'primary',
+            'type' => 'primary',
         ];
     }
 
@@ -93,12 +96,15 @@ class TransactionFeedback
     public static function noActiveWalletMsg(): array
     {
         return [
-            'status' => self::messageWithLink(
-                __('You don\'t have any wallet marked as active. Transaction creation is unavailable.'),
+            'content' => self::messageWithLink(
+                __(
+                    'You don\'t have any wallet marked as active. :feature is unavailable.',
+                    ['feature' => __('Transaction creation')]
+                ),
                 route('wallet.view.all'),
                 __('Activate a wallet by clicking here.')
             ),
-            'status_type' => 'primary',
+            'type' => 'primary',
         ];
     }
 }

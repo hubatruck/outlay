@@ -27,14 +27,12 @@ class TransferController extends Controller
      */
     public function index(TransfersDataTable $dataTable)
     {
-        $messages = [];
         if (!Auth::user()->hasWallet()) {
-            $messages[] = TransferFeedback::noWalletMsg();
+            addSessionMsg(TransferFeedback::noWalletMsg(), true);
         } else if (!Auth::user()->hasAnyActiveWallet()) {
-            $messages[] = TransferFeedback::noActiveWalletMsg();
+            addSessionMsg(TransferFeedback::noActiveWalletMsg(), true);
         }
 
-        session(['status' => $messages]);
         return $dataTable->render('transfer/list',);
     }
 

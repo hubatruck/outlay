@@ -17,11 +17,11 @@ class WalletFeedback
      */
     public static function viewError(): RedirectResponse
     {
-        return redirect(route(self::WALLET_VIEW_ALL))
-            ->with([
-                'status' => __('Error') . ': ' . __('You cannot view this wallet.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('You cannot view this wallet.'),
+            'type' => 'danger',
+        ]);
+        return redirect(route(self::WALLET_VIEW_ALL));
     }
 
     /**
@@ -32,12 +32,11 @@ class WalletFeedback
      */
     public static function existError(): RedirectResponse
     {
-        return redirect()
-            ->route(self::WALLET_VIEW_ALL)
-            ->with([
-                'status' => __('Error') . ': ' . __('Wallet does not exist.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Wallet does not exist.'),
+            'type' => 'danger',
+        ]);
+        return redirect()->route(self::WALLET_VIEW_ALL);
     }
 
     /**
@@ -51,15 +50,15 @@ class WalletFeedback
     public static function noWalletError(string $type = '', $url = null): RedirectResponse
     {
         $url = $url ?? previousUrlOr(route('transaction.view.all'));
-        return redirect($url)
-            ->with([
-                'status' => __('Error') . ': ' . __(
-                        'No :type wallet linked to your account found.', [
-                            'type' => __($type),
-                        ]
-                    ),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __(
+                    'No :type wallet linked to your account found.', [
+                        'type' => __($type),
+                    ]
+                ),
+            'type' => 'danger',
+        ]);
+        return redirect($url);
     }
 
     /**
@@ -69,11 +68,11 @@ class WalletFeedback
      */
     public static function quickCreateError(): RedirectResponse
     {
-        return redirect(previousUrlOr(route(self::WALLET_VIEW_ALL)))
-            ->with([
-                'status' => __('Error') . ': ' . __('Wallet unavailable for quick transaction creation.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Wallet unavailable for quick transaction creation.'),
+            'type' => 'danger',
+        ]);
+        return redirect(previousUrlOr(route(self::WALLET_VIEW_ALL)));
     }
 
     /**
@@ -85,11 +84,11 @@ class WalletFeedback
      */
     public static function hasTransactionsError(Wallet $wallet): RedirectResponse
     {
-        return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])))
-            ->with([
-                'status' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
+            'type' => 'danger',
+        ]);
+        return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])));
     }
 
     /**
@@ -100,11 +99,11 @@ class WalletFeedback
      */
     public static function editError(): RedirectResponse
     {
-        return redirect(previousUrlOr(route(self::WALLET_VIEW_ALL)))
-            ->with([
-                'status' => __('Error') . ': ' . __('You cannot edit this wallet.'),
-                'status_type' => 'danger',
-            ]);
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('You cannot edit this wallet.'),
+            'type' => 'danger',
+        ]);
+        return redirect(previousUrlOr(route(self::WALLET_VIEW_ALL)));
     }
 
     /**
@@ -117,14 +116,14 @@ class WalletFeedback
      */
     public static function success(string $successMethod = 'created', string $url = null): RedirectResponse
     {
-        return redirect($url ?? route(self::WALLET_VIEW_ALL))
-            ->with([
-                'status' => __(
-                    'Wallet :action successfully.', [
-                        'action' => __($successMethod),
-                    ]
-                ),
-                'status_type' => 'success',
-            ]);
+        addSessionMsg([
+            'content' => __(
+                'Wallet :action successfully.', [
+                    'action' => __($successMethod),
+                ]
+            ),
+            'type' => 'success',
+        ]);
+        return redirect($url ?? route(self::WALLET_VIEW_ALL));
     }
 }

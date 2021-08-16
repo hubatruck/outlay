@@ -34,12 +34,15 @@ class TransferFeedback
     public static function noWalletMsg(): array
     {
         return [
-            'status' => self::messageWithLink(
-                __('You don\'t have any wallet connected to you account. Transfers feature is not available.'),
+            'content' => self::messageWithLink(
+                __(
+                    'You don\'t have any wallet connected to you account. :feature is unavailable.',
+                    ['feature' => __('Transfers feature')]
+                ),
                 route('wallet.view.create'),
                 __('Create a wallet by clicking here.')
             ),
-            'status_type' => 'primary',
+            'type' => 'primary',
         ];
     }
 
@@ -62,12 +65,15 @@ class TransferFeedback
     public static function noActiveWalletMsg(): array
     {
         return [
-            'status' => self::messageWithLink(
-                __('You don\'t have any wallet marked as active. Transfer of sums is not available.'),
+            'content' => self::messageWithLink(
+                __(
+                    'You don\'t have any wallet marked as active. :feature is unavailable.',
+                    ['feature' => __('Transfer of funds')]
+                ),
                 route('wallet.view.all'),
                 __('Activate a wallet by clicking here.')
             ),
-            'status_type' => 'primary',
+            'type' => 'primary',
         ];
     }
 }
