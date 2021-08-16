@@ -9,7 +9,7 @@ use Arr;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
-class MonthlyTransferByWallet extends MonthlyChartBase
+class MonthlyTransferByWallet extends MonthlyBase
 {
     protected $chart;
 

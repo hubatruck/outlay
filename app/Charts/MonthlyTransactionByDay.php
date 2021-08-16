@@ -6,7 +6,7 @@ use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class MonthlyChartByDay extends MonthlyChartBase
+class MonthlyTransactionByDay extends MonthlyBase
 {
     protected $chart;
 

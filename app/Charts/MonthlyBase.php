@@ -7,7 +7,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class MonthlyChartBase
+class MonthlyBase
 {
     /**
      * Generate a base query that can be used for charts

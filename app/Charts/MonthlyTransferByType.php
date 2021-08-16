@@ -6,7 +6,7 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PieChart;
 
-class MonthlyTransferByType extends MonthlyChartBase
+class MonthlyTransferByType extends MonthlyBase
 {
     protected $chart;
 

@@ -6,7 +6,7 @@ use App\Models\TransactionType;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 
-class MonthlyChartByTransactionType extends MonthlyChartBase
+class MonthlyTransactionByType extends MonthlyBase
 {
     protected $chart;
 
