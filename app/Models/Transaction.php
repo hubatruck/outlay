@@ -25,8 +25,6 @@ use Illuminate\Support\Facades\Auth;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read string $type
- * @property-read string $wallet_name
  * @property-read TransactionType $transactionType
  * @property-read Wallet $wallet
  * @method static TransactionFactory factory(...$parameters)
@@ -56,8 +54,6 @@ class Transaction extends Model
         'transaction_type_id',
         'transaction_date',
     ];
-
-    protected $appends = ['wallet_name', 'type'];
 
     protected $casts = [
         'transaction_date' => 'date',
@@ -105,27 +101,6 @@ class Transaction extends Model
     {
         return $this->belongsTo(Wallet::class)
             ->withTrashed();
-    }
-
-    /**
-     * Append the wallet name
-     * @return string
-     */
-    public function getWalletNameAttribute(): string
-    {
-        return Wallet::withTrashed()
-                ->find($this->wallet_id)
-                ->name ?? 'ERR::WALLET_404';
-    }
-
-    /**
-     * Append transaction type
-     * @return string
-     */
-    public function getTypeAttribute(): string
-    {
-        return TransactionType::find($this->transaction_type_id)
-            ->name;
     }
 
     /**

@@ -37,7 +37,7 @@ class TransactionsDataTable extends DataTableBase
                 return $row->transaction_date->translatedFormat('Y/m/d, l');
             })
             ->editColumn('type', function ($row) {
-                return __($row->type);
+                return __($row->transactionType->name);
             });
     }
 
@@ -78,7 +78,7 @@ class TransactionsDataTable extends DataTableBase
             Column::make('scope')->title(__('Scope'))->name('transactions.scope'),
             Column::make('amount')->title(__('Amount'))->name('transactions.amount'),
             Column::make('type')->title(__('Type'))->name('transactionType.name'),
-            Column::make('wallet_name')->title(__('Wallet'))->name('wallet.name'),
+            Column::make('wallet.name')->title(__('Wallet'))->name('wallets.name'),
             Column::make('transaction_date')->title(__('Date')),
             $this->actionsColumn(),
         ];
