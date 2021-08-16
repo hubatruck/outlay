@@ -5,7 +5,7 @@ namespace App\Rules;
 use App\Models\Wallet;
 use Illuminate\Contracts\Validation\Rule;
 
-class WalletAvailable implements Rule
+class WalletIsActiveRule implements Rule
 {
     /**
      * Create a new rule instance.

@@ -10,7 +10,7 @@ use App\Models\Transaction;
 use App\Models\TransactionType;
 use App\Models\Wallet;
 use App\Rules\UserOwnsWalletRule;
-use App\Rules\WalletAvailable;
+use App\Rules\WalletIsActiveRule;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -112,7 +112,7 @@ class TransactionController extends Controller
         $walletRules = ['bail'];
         if ($walletMustBeActive) {
             $walletRules[] = new UserOwnsWalletRule();
-            $walletRules[] = new WalletAvailable();
+            $walletRules[] = new WalletIsActiveRule();
             $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
         }
 
