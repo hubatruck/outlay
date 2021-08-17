@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Transfer newModelQuery()
  * @method static Builder|Transfer newQuery()
  * @method static Builder|Transfer query()
+ * @method static Builder|Transfer sumAmount(string $walletID)
  * @method static Builder|Transfer thisMonth($lastDay = null)
  * @method static Builder|Transfer whereAmount($value)
  * @method static Builder|Transfer whereCreatedAt($value)
@@ -98,5 +99,18 @@ class Transfer extends Model
         $lastDay = $lastDay ?? date('Y-m-t');
         return $query->whereDate('transfer_date', '>=', date('Y-m-01'))
             ->whereDate('transfer_date', '<=', $lastDay);
+    }
+
+    /**
+     * Sum incoming and outgoing transaction amounts
+     *
+     * @param Builder $query
+     * @param string $walletID
+     * @return Builder
+     */
+    public function scopeSumAmount(Builder $query, string $walletID): Builder
+    {
+        return $query->
+        selectRaw('sum(case when from_wallet_id = ? then -amount when to_wallet_id = ? then amount end) as amount', [$walletID, $walletID]);
     }
 }

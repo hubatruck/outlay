@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Transaction newModelQuery()
  * @method static Builder|Transaction newQuery()
  * @method static Builder|Transaction query()
+ * @method static Builder|Transaction sumAmount()
  * @method static Builder|Transaction thisMonth($lastDay = null)
  * @method static Builder|Transaction whereAmount($value)
  * @method static Builder|Transaction whereCreatedAt($value)
@@ -124,5 +125,17 @@ class Transaction extends Model
         $lastDay = $lastDay ?? date('Y-m-t');
         return $query->whereDate('transaction_date', '>=', date('Y-m-01'))
             ->whereDate('transaction_date', '<=', $lastDay);
+    }
+
+    /**
+     * Sum transaction amount by transaction type
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeSumAmount(Builder $query): Builder
+    {
+        return $query
+            ->selectRaw('sum(case when transaction_type_id = 1 then amount when transaction_type_id = 2 then -amount end) as amount');
     }
 }
