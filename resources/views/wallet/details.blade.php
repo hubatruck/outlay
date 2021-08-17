@@ -4,6 +4,12 @@
   <x-page-title>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</x-page-title>
 
   <div class="uk-card-body uk-padding-remove">
+    <div class="uk-card uk-card-body">
+      <div class="uk-text-large">
+        {{ __('Current balance') }}:
+        <div class="uk-text-bolder uk-inline">{{ $wallet->currentBalance }}</div>
+      </div>
+    </div>
     <div class="uk-card uk-card-default uk-margin-medium-bottom">
       <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
       <div class="uk-card-body uk-button-group">
@@ -54,6 +60,19 @@
       </div>
     </div>
 
+    @if ($wallet->hasTransactions() || $wallet->hasTransfers())
+      <div class="uk-card uk-card-default uk-child-width-1-1">
+        <div class="uk-card-header">
+          <h4 class="uk-h4">{{  __('Balance chart for :month', ['month' => __(date('F'))]) }}</h4>
+        </div>
+        <div class="uk-card-body">
+          <div class="uk-width-1-1">
+            {!! $balanceDailyChart->container() !!}
+          </div>
+        </div>
+      </div>
+    @endif
+
     @if ($wallet->hasTransactions())
       <div class="uk-card uk-card-default uk-child-width-1-1">
         <div class="uk-card-header">
@@ -96,6 +115,7 @@
 
 @push('scripts')
   <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
+  {{ $balanceDailyChart->script() }}
   {{ $transactionDailyChart->script() }}
   {{ $transactionTypeChart->script() }}
   {{ $transferDailyChart->script() }}

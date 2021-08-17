@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use App\Charts\MonthlyBalanceByDay;
 use App\Charts\MonthlyTransactionByDay;
 use App\Charts\MonthlyTransactionByType;
 use App\Charts\MonthlyTransferByDay;
@@ -67,6 +68,7 @@ class WalletController extends Controller
             addSessionMsg(WalletFeedback::noActivity(), true);
         }
 
+        $balanceDailyChart = (new MonthlyBalanceByDay(new LarapexChart()))->build($wallet);
         $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart()))->build($id);
         $transactionTypeChart = (new MonthlyTransactionByType(new LarapexChart()))->build($id);
         $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart()))->build($wallet);
@@ -75,6 +77,7 @@ class WalletController extends Controller
 
         return view('wallet.details',
             compact(
+                'balanceDailyChart',
                 'transactionDailyChart',
                 'transactionTypeChart',
                 'transferDailyChart',
