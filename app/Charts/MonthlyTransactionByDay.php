@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\LineChart;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,7 +17,7 @@ class MonthlyTransactionByDay extends MonthlyBase
         $this->chart = $chart;
     }
 
-    public function build(string $walletID)
+    public function build(string $walletID): LineChart
     {
         /// https://stackoverflow.com/a/24888904
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
@@ -26,7 +27,7 @@ class MonthlyTransactionByDay extends MonthlyBase
 
         $income = $this->getForTransactionTypeOf($baseQuery, 1);
         $expense = $this->getForTransactionTypeOf($baseQuery, 2);
-        return $this->chart->areaChart()
+        return $this->chart->lineChart()
             ->setTitle(__('Daily transactions'))
             ->addData(
                 __('Income'),
