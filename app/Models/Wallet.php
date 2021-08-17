@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read float $current_balance
  * @property-read Collection|Transaction[] $transactions
  * @property-read int|null $transactions_count
  * @property-read Collection|Transfer[] $transfers
@@ -93,37 +94,13 @@ class Wallet extends Model
     }
 
     /**
-     * Transactions belonging to this wallet
-     * @return HasMany
+     * Check if a specified wallet has transactions
+     *
+     * @return bool
      */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class);
-    }
-
     public function hasTransactions(): bool
     {
         return $this->transactions->first() !== null;
-    }
-
-    /**
-     * All transfers related to a wallet
-     *
-     * @return HasMany
-     */
-    public function transfers(): HasMany
-    {
-        return $this->outgoingTransfers()->orWhere('to_wallet_id', '=', $this->id);
-    }
-
-    /**
-     * Transfers made from this wallet
-     *
-     * @return HasMany
-     */
-    public function outgoingTransfers(): HasMany
-    {
-        return $this->hasMany(Transfer::class, 'from_wallet_id');
     }
 
     /**
@@ -144,5 +121,53 @@ class Wallet extends Model
     public function hasTransfers(): bool
     {
         return $this->transfers->first() !== null;
+    }
+
+    /**
+     * Get balance of wallet taking int account transactions and transfers
+     *
+     * @return float
+     */
+    public function getCurrentBalanceAttribute(): float
+    {
+        $transactionVal = $this->transactions()
+            ->sumAmount()
+            ->first()
+            ->getAttributeValue('amount');
+
+        $transfersVal = $this->transfers()
+            ->sumAmount($this->id)
+            ->first()
+            ->getAttributeValue('amount');
+        return $transactionVal + $transfersVal;
+    }
+
+    /**
+     * Transactions belonging to this wallet
+     * @return HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * All transfers related to a wallet
+     *
+     * @return HasMany
+     */
+    public function transfers(): HasMany
+    {
+        return $this->outgoingTransfers()->orWhere('to_wallet_id', '=', $this->id);
+    }
+
+    /**
+     * Transfers made from this wallet
+     *
+     * @return HasMany
+     */
+    public function outgoingTransfers(): HasMany
+    {
+        return $this->hasMany(Transfer::class, 'from_wallet_id');
     }
 }
