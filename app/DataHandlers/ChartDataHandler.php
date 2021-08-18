@@ -102,7 +102,14 @@ class ChartDataHandler
     {
         $cutter = 10 ** $this->dataPrecision;
         $this->data = array_map(static function ($item) use ($cutter) {
-            return floor($item * $cutter) / $cutter;
+            if (is_array($item)) {
+                foreach (['in', 'out'] as $key) {
+                    $item[$key] = floor($item[$key] * $cutter) / $cutter;
+                }
+            } else {
+                $item = floor($item * $cutter) / $cutter;
+            }
+            return $item;
         }, $this->data);
         return $this;
     }
