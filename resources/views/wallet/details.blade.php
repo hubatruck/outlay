@@ -6,8 +6,9 @@
   <div class="uk-card-body uk-padding-remove">
     <div class="uk-card uk-card-body">
       <div class="uk-text-large">
+        @php($cb = $wallet->currentBalance)
         {{ __('Current balance') }}:
-        <div class="uk-text-bolder uk-inline">{{ $wallet->currentBalance }}</div>
+        <div class="uk-text-bolder uk-inline @if($cb < 0) uk-text-danger @else uk-text-success @endif">{{ $cb }}</div>
       </div>
     </div>
     <div class="uk-card uk-card-default uk-margin-medium-bottom">

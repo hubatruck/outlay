@@ -18,6 +18,7 @@
         </thead>
         <tbody>
         @foreach($wallets as $wallet)
+          @php($cb = $wallet->currentBalance)
           <tr @if($wallet->deleted_at) style="opacity: 0.6;" @endif>
             <td>
               <a
@@ -27,7 +28,7 @@
             </td>
             <td>{{ $wallet->name }}</td>
             <td
-              class="{{ $wallet->balance < 0 ? 'table-danger' : 'table-default' }}">{{ $wallet->balance }}</td>
+              class="{{ $cb < 0 ? 'uk-text-danger' : 'uk-text-success' }}">{{ $cb }}</td>
             <td>{{ $wallet->is_card ? __('yes') : __('no') }}</td>
             <td>{{ isset($wallet->deleted_at) ? __('HIDDEN') : __('Active') }}
           </tr>
