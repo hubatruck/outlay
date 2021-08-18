@@ -49,6 +49,8 @@ class TransferController extends Controller
                 route('transfer.view.all')
             );
         }
+
+        addSessionMsg(TransferFeedback::warnIrreversibleTransfer(), true);
         return view('transfer.create');
     }
 

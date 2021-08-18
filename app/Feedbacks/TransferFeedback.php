@@ -76,4 +76,19 @@ class TransferFeedback
             'type' => 'primary',
         ];
     }
+
+    /**
+     * Warn about transfers not being irreversible
+     *
+     * @return string[]
+     */
+    public static function warnIrreversibleTransfer(): array
+    {
+        return [
+            'content' =>
+                '<strong>' . __('Warning') . '</strong>: '
+                . __('Please be careful when selecting the destination wallet. Sending sums to wallets that have a name next to them and marked \'External\' is irreversible, as those belong to other users.'),
+            'type' => 'warning',
+        ];
+    }
 }
