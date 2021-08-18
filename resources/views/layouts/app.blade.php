@@ -24,7 +24,7 @@
   <x-status-alert/>
 
   <main>
-    <section class="uk-section">
+    <section class="uk-section uk-padding-small">
       <div class="uk-container">
         <div class="uk-flex-center uk-child-width-expand@l">
           <div class="uk-card uk-card-default">
