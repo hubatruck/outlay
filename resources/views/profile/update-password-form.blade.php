@@ -19,7 +19,12 @@
             <div class="uk-width-1-1 uk-width-2-3@s uk-width-2-3@m">
               <x-validation-errors :errors="$errors->updatePassword"/>
 
-              <form method="POST" action="{{ route('user-password.update') }}" id="profile-update-password">
+              <form
+                method="POST"
+                action="{{ route('user-password.update') }}"
+                id="profile-update-password"
+                class="uk-form uk-form-stacked"
+              >
                 @csrf
                 @method('PUT')
 
@@ -28,7 +33,10 @@
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: unlock"></span>
-                    <input type="password" name="current_password" required autocomplete="current-password"/>
+                    <input
+                      class="uk-input" type="password" name="current_password" required
+                      autocomplete="current-password"
+                    />
                   </div>
                 </div>
 
@@ -37,7 +45,7 @@
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                    <input type="password" name="password" required autocomplete="new-password"/>
+                    <input class="uk-input" type="password" name="password" required autocomplete="new-password"/>
                   </div>
                 </div>
 
@@ -46,7 +54,10 @@
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: check"></span>
-                    <input type="password" name="password_confirmation" required autocomplete="new-password"/>
+                    <input
+                      class="uk-input" type="password" name="password_confirmation" required
+                      autocomplete="new-password"
+                    />
                   </div>
                 </div>
               </form>
