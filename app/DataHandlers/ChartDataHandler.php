@@ -180,4 +180,14 @@ class ChartDataHandler
         });
         return $this;
     }
+
+    /**
+     * Get keys of the stored data
+     *
+     * @return array
+     */
+    public function keys(): array
+    {
+        return array_keys($this->data);
+    }
 }
