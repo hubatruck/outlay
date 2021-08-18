@@ -2,6 +2,7 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\ChartDataHandler;
 use App\Models\TransactionType;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PolarAreaChart;
@@ -24,10 +25,14 @@ class MonthlyTransactionByType extends MonthlyBase
             ->selectRaw('transaction_type_id as type, sum(amount) as amount')
             ->groupBy('type');
 
+        $data = ChartDataHandler::from($baseQuery->pluck('amount'));
+        $labels = ChartDataHandler::from(TransactionType::all()->pluck('name'))
+            ->translate();
+
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))
-            ->addData($this->reduceDataPrecision($baseQuery->pluck('amount')->toArray()))
-            ->setLabels($this->translateLabels(TransactionType::all()->pluck('name')->toArray()))
+            ->addData($data->reduceDPAndGet())
+            ->setLabels($labels->get())
             ->setColors(Arr::shuffle(self::$colors));
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\ByWalletDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\HorizontalBar;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 
 class MonthlyTransferByWallet extends MonthlyBase
 {
@@ -36,67 +35,19 @@ class MonthlyTransferByWallet extends MonthlyBase
             ->selectRaw('from_wallet_id, sum(amount) as amount')
             ->groupBy('from_wallet_id')
             ->get();
-        $data = $this->mapDataToWallets($in, $out);
+        $data = ByWalletDataHandler::mapTransfersToWallets($in, $out);
 
         return $this->chart->horizontalBarChart()
             ->setTitle(__('Transfers by wallet'))
             ->addData(
                 __('Received'),
-                $this->reduceDataPrecision(Arr::pluck($data, 'in'))
+                Arr::pluck($data->reduceDPAndGet(), 'in')
             )
             ->addData(
                 __('Sent'),
-                $this->reduceDataPrecision(Arr::pluck($data, 'out'))
+                Arr::pluck($data->reduceDPAndGet(), 'out')
             )
-            ->setXAxis(array_keys($data))
+            ->setXAxis($data->keys())
             ->setColors(Arr::shuffle(self::$colors));
-    }
-
-    /**
-     * Map incoming and outgoing transfers to wallet names
-     *
-     * @param Collection $incoming
-     * @param Collection $outgoing
-     * @return array
-     */
-    private function mapDataToWallets(Collection $incoming, Collection $outgoing): array
-    {
-        $data = [];
-        foreach ($incoming as $in) {
-            $key = $this->formatWalletName($in->fromWallet);
-            $data[$key['name']] = [
-                'in' => $in->amount,
-                'out' => 0.00,
-            ];
-        }
-
-        foreach ($outgoing as $out) {
-            $key = $this->formatWalletName($out->toWallet);
-            if (array_key_exists($key['name'], $data)) {
-                $data[$key['name']]['out'] = $out->amount;
-            } else {
-                $data[$key['name']] = [
-                    'out' => $out->amount,
-                    'in' => 0.00,
-                ];
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Append owner's name next to wallets not belonging to the user
-     *
-     * @param Wallet $wallet
-     * @return array
-     */
-    private function formatWalletName(Wallet $wallet): array
-    {
-        if (Auth::user()->owns($wallet)) {
-            return ['name' => $wallet->name];
-        }
-        return [
-            'name' => $wallet->name . ' (' . $wallet->user->name . ')',
-        ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
@@ -18,20 +19,35 @@ class MonthlyTransferByDay extends MonthlyBase
 
     public function build(Wallet $wallet): BarChart
     {
-        $transferIn = $this->filterTransfers($wallet->incomingTransfers())->get();
-        $transferOut = $this->filterTransfers($wallet->outgoingTransfers())->get();
+        $transferIn = ChartDataHandler::from(
+            $this->filterTransfers($wallet->incomingTransfers())->pluck('daily_amount', 'day')
+        );
+        $transferOut = ChartDataHandler::from(
+            $this->filterTransfers($wallet->outgoingTransfers())->pluck('daily_amount', 'day')
+        );
 
         return $this->chart->barChart()
             ->setTitle(__('Daily transfers'))
             ->addData(
                 __('Incoming transfer'),
-                $this->addEmptyDays($transferIn->pluck('daily_amount', 'day')->toArray())
+                $this->getData($transferIn)
             )
             ->addData(
                 __('Outgoing transfer'),
-                $this->addEmptyDays($transferOut->pluck('daily_amount', 'day')->toArray())
+                $this->getData($transferOut)
             )
             ->setXAxis($this->createAxisData())
             ->setColors(Arr::shuffle(self::$colors));
+    }
+
+    /**
+     * Small function to not repeat transformation method calls on data handlers
+     *
+     * @param ChartDataHandler $cdh
+     * @return array
+     */
+    private function getData(ChartDataHandler $cdh): array
+    {
+        return $cdh->addMissingDays()->reduceDPAndGet();
     }
 }

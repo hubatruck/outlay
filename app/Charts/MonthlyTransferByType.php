@@ -2,6 +2,7 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PieChart;
@@ -22,10 +23,12 @@ class MonthlyTransferByType extends MonthlyBase
             ->pluck('daily_amount')->sum();
         $transferOut = $this->filterTransfers($wallet->outgoingTransfers())
             ->pluck('daily_amount')->sum();
+        $data = ChartDataHandler::from([$transferIn, $transferOut]);
+
         return $this->chart->pieChart()
             ->setTitle(__('Transferred amounts by type'))
-            ->addData($this->reduceDataPrecision([$transferIn, $transferOut]))
-            ->setLabels($this->translateLabels(['Incoming transfer', 'Outgoing transfer']))
+            ->addData($data->reduceDPAndGet())
+            ->setLabels(ChartDataHandler::from(['Incoming transfer', 'Outgoing transfer'])->translate()->get())
             ->setDataLabels()
             ->setColors(Arr::shuffle(self::$colors));
     }

@@ -2,10 +2,12 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\BalanceChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\AreaChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
+use Carbon\Carbon;
 
 class MonthlyBalanceByDay extends MonthlyBase
 {
@@ -38,7 +40,10 @@ class MonthlyBalanceByDay extends MonthlyBase
      */
     private function getData(): array
     {
-        $transactionBalance = $this->addEmptyDays(
+        /**
+         * @var BalanceChartDataHandler $transactionBalance
+         */
+        $transactionBalance = BalanceChartDataHandler::from(
             $this->wallet->transactions()
                 ->sumAmount()
                 ->selectRaw('DATE(transaction_date) as day')
@@ -46,10 +51,12 @@ class MonthlyBalanceByDay extends MonthlyBase
                 ->groupBy('day')
                 ->orderBy('day')
                 ->pluck('amount', 'day')
-                ->toArray()
-        );
+        )->addMissingDays();
 
-        $transferBalance = $this->addEmptyDays(
+        /**
+         * @var BalanceChartDataHandler $transferBalance
+         */
+        $transferBalance = BalanceChartDataHandler::from(
             $this->wallet->transfers()
                 ->sumAmount($this->wallet->id)
                 ->selectRaw('DATE(transfer_date) as day')
@@ -57,56 +64,11 @@ class MonthlyBalanceByDay extends MonthlyBase
                 ->groupBy('day')
                 ->orderBy('day')
                 ->pluck('amount', 'day')
-                ->toArray()
-        );
-        return $this->reduceDataPrecision($this->offsetBalance($this->sumWithPreviousDays($this->joinData($transferBalance, $transactionBalance))));
-    }
+        )->addMissingDays();
 
-    /**
-     * Offset balance for chart, so previous month's balance is taken into account when
-     * displaying the data
-     *
-     * @param $data
-     * @return array
-     */
-    private function offsetBalance($data): array
-    {
-        $offset = $this->wallet->getBalanceBetween(null, $this->lastDate()) - $data[array_key_last($data)];
-
-        foreach ($data as &$item) {
-            $item += $offset;
-        }
-        return $data;
-    }
-
-    /**
-     * Convert balance, so that every day represents the balance of the wallet
-     * until that moment
-     *
-     * @param array $data
-     * @return array
-     */
-    private function sumWithPreviousDays(array $data): array
-    {
-        $keys = array_keys($data);
-        for ($i = 1; $i < sizeof($data); $i++) {
-            $data[$keys[$i]] += $data[$keys[$i - 1]];
-        }
-        return $data;
-    }
-
-    /**
-     * Join two array into a single one
-     *
-     * @param $array1
-     * @param $array2
-     * @return array
-     */
-    private function joinData($array1, $array2): array
-    {
-        foreach ($array1 as $day => $amount) {
-            $array1[$day] += $array2[$day];
-        }
-        return $array1;
+        return $transferBalance->with($transactionBalance)
+            ->sumWithPreviousDays()
+            ->offsetBalance($this->wallet->getBalanceBetween(null, Carbon::now()))
+            ->reduceDPAndGet();
     }
 }

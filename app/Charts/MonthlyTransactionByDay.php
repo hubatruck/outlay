@@ -2,6 +2,7 @@
 
 namespace App\Charts;
 
+use App\DataHandlers\ChartDataHandler;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\LineChart;
 use Arr;
@@ -25,17 +26,18 @@ class MonthlyTransactionByDay extends MonthlyBase
             ->selectRaw('DATE(transaction_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
 
-        $income = $this->getForTransactionTypeOf($baseQuery, 1);
-        $expense = $this->getForTransactionTypeOf($baseQuery, 2);
+        $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 1)->pluck('daily_amount', 'day'));
+        $expense = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 2)->pluck('daily_amount', 'day'));
+
         return $this->chart->lineChart()
             ->setTitle(__('Daily transactions'))
             ->addData(
                 __('Income'),
-                $this->addEmptyDays($income->pluck('daily_amount', 'day')->toArray())
+                $this->getData($income)
             )
             ->addData(
                 __('Expense'),
-                $this->addEmptyDays($expense->pluck('daily_amount', 'day')->toArray())
+                $this->getData($expense)
             )
             ->setXAxis($this->createAxisData())
             ->setGrid(false)
@@ -55,5 +57,16 @@ class MonthlyTransactionByDay extends MonthlyBase
         return (clone $baseQuery)
             ->where('transaction_type_id', '=', $transactionType)
             ->get();
+    }
+
+    /**
+     * Small function to not repeat transformation method calls on data sources.
+     *
+     * @param ChartDataHandler $cdh
+     * @return array
+     */
+    private function getData(ChartDataHandler $cdh): array
+    {
+        return $cdh->addMissingDays()->reduceDPAndGet();
     }
 }
