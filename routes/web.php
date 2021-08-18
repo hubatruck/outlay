@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\Wallet\WalletController;
@@ -28,11 +28,11 @@ Auth::routes([
 ]);
 
 Route::get('/', function () {
-    return redirect('/home');
+    return redirect('/dashboard');
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     if (config('app.debug')) {
         Route::get('debug', function () {

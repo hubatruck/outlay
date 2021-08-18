@@ -34,7 +34,7 @@ class RoutingTest extends TestCase
      */
     public function test_home_redirecting_to_login_when_not_authenticated(): void
     {
-        $this->get('/home')->assertStatus(302);
+        $this->get(route('dashboard'))->assertStatus(302);
         $this->assertGuest();
     }
 
@@ -45,7 +45,7 @@ class RoutingTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)->get('/home')->assertOk();
+        $this->actingAs($user)->get(route('dashboard'))->assertOk();
 
         $this->assertAuthenticatedAs($user);
     }

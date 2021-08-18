@@ -3,7 +3,7 @@
     @auth
       <span class="uk-margin-small-left" uk-icon="menu" uk-toggle="target: #side-menu"></span>
     @endauth
-    <a class="uk-navbar-item uk-logo" href="{{ route('home') }}">
+    <a class="uk-navbar-item uk-logo" href="{{ route('dashboard') }}">
       {{ config('app.name', 'Laravel') }}
     </a>
   </div>

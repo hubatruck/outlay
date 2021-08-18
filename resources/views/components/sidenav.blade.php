@@ -3,7 +3,7 @@
     <button class="uk-offcanvas-close" type="button" uk-close></button>
     <ul class="uk-nav uk-nav-primary uk-nav-default uk-navbar-dropdown-nav">
       <li class="uk-parent">
-        <a href="{{ route('home') }}">{{ __('Dashboard') }}</a>
+        <a href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
       </li>
       <li class="uk-parent">
         <a class="uk-active" href="{{ route('transaction.view.all') }}">{{ __('Transactions') }}</a>
