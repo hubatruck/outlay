@@ -34,6 +34,10 @@
       </div>
     </section>
   </main>
+
+  @auth
+    <x-sidenav/>
+  @endauth
 </div>
 
 <!-- App -->

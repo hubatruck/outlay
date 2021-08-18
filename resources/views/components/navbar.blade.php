@@ -1,5 +1,8 @@
 <nav class="uk-navbar-container" uk-navbar="mode: click">
   <div class="uk-navbar-left">
+    @auth
+      <span class="uk-margin-small-left" uk-icon="menu" uk-toggle="target: #side-menu"></span>
+    @endauth
     <a class="uk-navbar-item uk-logo" href="{{ route('home') }}">
       {{ config('app.name', 'Laravel') }}
     </a>
