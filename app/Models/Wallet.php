@@ -124,21 +124,44 @@ class Wallet extends Model
     }
 
     /**
-     * Get balance of wallet taking int account transactions and transfers
+     * Get wallet balance as of today
      *
      * @return float
      */
     public function getCurrentBalanceAttribute(): float
     {
+        return $this->getBalanceBetween(null, Carbon::now());
+    }
+
+    /**
+     * Get balance of wallet taking int account transactions and transfers
+     * in a specified date interval
+     *
+     * @param \Carbon\Carbon|string|null $from
+     * @param \Carbon\Carbon|string|null $to
+     * @return float
+     */
+    public function getBalanceBetween($from = null, $to = null): float
+    {
         $transactionVal = $this->transactions()
-            ->sumAmount()
-            ->first()
-            ->getAttributeValue('amount');
+            ->sumAmount();
 
         $transfersVal = $this->transfers()
-            ->sumAmount($this->id)
-            ->first()
-            ->getAttributeValue('amount');
+            ->sumAmount($this->id);
+
+        if ($from !== null) {
+            $transactionVal->whereDate('transaction_date', '>=', $from);
+            $transfersVal->whereDate('transfer_date', '>=', $from);
+        }
+        if ($to !== null) {
+            $transactionVal->whereDate('transaction_date', '<=', $to);
+            $transfersVal->whereDate('transfer_date', '<=', $to);
+        }
+
+        $transactionVal = $transactionVal->first()
+                ->getAttributeValue('amount') ?? 0.0;
+        $transfersVal = $transfersVal->first()
+                ->getAttributeValue('amount') ?? 0.0;
         return $transactionVal + $transfersVal;
     }
 

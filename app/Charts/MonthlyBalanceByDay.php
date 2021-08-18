@@ -42,6 +42,7 @@ class MonthlyBalanceByDay extends MonthlyBase
             $this->wallet->transactions()
                 ->sumAmount()
                 ->selectRaw('DATE(transaction_date) as day')
+                ->where('transaction_date', '<=', $this->lastDate())
                 ->groupBy('day')
                 ->orderBy('day')
                 ->pluck('amount', 'day')
@@ -52,7 +53,9 @@ class MonthlyBalanceByDay extends MonthlyBase
             $this->wallet->transfers()
                 ->sumAmount($this->wallet->id)
                 ->selectRaw('DATE(transfer_date) as day')
+                ->where('transfer_date', '<=', $this->lastDate())
                 ->groupBy('day')
+                ->orderBy('day')
                 ->pluck('amount', 'day')
                 ->toArray()
         );
@@ -68,7 +71,7 @@ class MonthlyBalanceByDay extends MonthlyBase
      */
     private function offsetBalance($data): array
     {
-        $offset = $this->wallet->currentBalance - $data[array_key_last($data)];
+        $offset = $this->wallet->getBalanceBetween(null, $this->lastDate()) - $data[array_key_last($data)];
 
         foreach ($data as &$item) {
             $item += $offset;
