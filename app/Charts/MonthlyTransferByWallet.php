@@ -10,7 +10,7 @@ use Arr;
 
 class MonthlyTransferByWallet extends MonthlyBase
 {
-    protected $chart;
+    protected LarapexChart $chart;
 
     public function __construct(LarapexChart $chart)
     {

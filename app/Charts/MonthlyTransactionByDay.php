@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MonthlyTransactionByDay extends MonthlyBase
 {
-    protected $chart;
+    protected LarapexChart $chart;
 
     public function __construct(LarapexChart $chart)
     {

@@ -11,8 +11,13 @@ use Carbon\Carbon;
 
 class MonthlyBalanceByDay extends MonthlyBase
 {
-    protected $chart;
-    protected $wallet;
+    protected LarapexChart $chart;
+
+    /**
+     * Current wallet
+     * @var Wallet
+     */
+    protected Wallet $wallet;
 
     public function __construct(LarapexChart $chart)
     {
