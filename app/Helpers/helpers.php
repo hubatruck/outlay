@@ -57,3 +57,15 @@ if (!function_exists('reducePrecision')) {
         return floor($number * $cutter) / $cutter;
     }
 }
+
+if (!function_exists('currentDayOfTheMonth')) {
+    /**
+     * Returns what day should we consider as the last (current) day of the month
+     *
+     * @return false|string
+     */
+    function currentDayOfTheMonth()
+    {
+        return date('Y-m-d');
+    }
+}

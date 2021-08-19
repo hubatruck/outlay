@@ -151,22 +151,12 @@ class ChartDataHandler
     protected function eachDayOfTheMonth(callable $transformerCallback): array
     {
         $newData = [];
-        $period = CarbonPeriod::create(date('Y-m-01'), $this->lastDate());
+        $period = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
         foreach ($period as $day) {
             $newData[] = $transformerCallback($day);
         }
 
         return $newData;
-    }
-
-    /**
-     * Which day should be the last day of the month, that we display
-     *
-     * @return string
-     */
-    protected function lastDate(): string
-    {
-        return date('Y-m-d');
     }
 
     /**

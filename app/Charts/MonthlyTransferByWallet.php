@@ -22,16 +22,14 @@ class MonthlyTransferByWallet extends MonthlyBase
         $out = $wallet->outgoingTransfers()
             ->with(['toWallet', 'toWallet.user'])
             ->without(['transactionType'])
-            ->whereDate('transfer_date', '>=', date('Y-m-01'))
-            ->whereDate('transfer_date', '<=', $this->lastDate())
+            ->thisMonth()
             ->selectRaw('to_wallet_id, sum(amount) as amount')
             ->groupBy('to_wallet_id')
             ->get();
         $in = $wallet->incomingTransfers()
             ->with(['fromWallet', 'fromWallet.user'])
+            ->thisMonth()
             ->without(['transactionType'])
-            ->whereDate('transfer_date', '>=', date('Y-m-01'))
-            ->whereDate('transfer_date', '<=', $this->lastDate())
             ->selectRaw('from_wallet_id, sum(amount) as amount')
             ->groupBy('from_wallet_id')
             ->get();

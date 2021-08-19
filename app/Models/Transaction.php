@@ -122,7 +122,7 @@ class Transaction extends Model
      */
     public function scopeThisMonth(Builder $query, $lastDay = null): Builder
     {
-        $lastDay = $lastDay ?? date('Y-m-t');
+        $lastDay = $lastDay ?? currentDayOfTheMonth();
         return $query->whereDate('transaction_date', '>=', date('Y-m-01'))
             ->whereDate('transaction_date', '<=', $lastDay);
     }

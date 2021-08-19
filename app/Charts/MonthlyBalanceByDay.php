@@ -7,7 +7,6 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\AreaChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
-use Carbon\Carbon;
 
 class MonthlyBalanceByDay extends MonthlyBase
 {
@@ -52,7 +51,7 @@ class MonthlyBalanceByDay extends MonthlyBase
             $this->wallet->transactions()
                 ->sumAmount()
                 ->selectRaw('DATE(transaction_date) as day')
-                ->where('transaction_date', '<=', $this->lastDate())
+                ->where('transaction_date', '<=', currentDayOfTheMonth())
                 ->groupBy('day')
                 ->orderBy('day')
                 ->pluck('amount', 'day')
@@ -65,7 +64,7 @@ class MonthlyBalanceByDay extends MonthlyBase
             $this->wallet->transfers()
                 ->sumAmount($this->wallet->id)
                 ->selectRaw('DATE(transfer_date) as day')
-                ->where('transfer_date', '<=', $this->lastDate())
+                ->where('transfer_date', '<=', currentDayOfTheMonth())
                 ->groupBy('day')
                 ->orderBy('day')
                 ->pluck('amount', 'day')
@@ -73,7 +72,7 @@ class MonthlyBalanceByDay extends MonthlyBase
 
         return $transferBalance->with($transactionBalance)
             ->sumWithPreviousDays()
-            ->offsetBalance($this->wallet->getBalanceBetween(null, Carbon::now()))
+            ->offsetBalance($this->wallet->getBalanceBetween(null, currentDayOfTheMonth()))
             ->reduceDPAndGet();
     }
 }

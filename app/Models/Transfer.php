@@ -96,7 +96,7 @@ class Transfer extends Model
      */
     public function scopeThisMonth($query, $lastDay = null)
     {
-        $lastDay = $lastDay ?? date('Y-m-t');
+        $lastDay = $lastDay ?? currentDayOfTheMonth();
         return $query->whereDate('transfer_date', '>=', date('Y-m-01'))
             ->whereDate('transfer_date', '<=', $lastDay);
     }

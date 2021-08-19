@@ -28,7 +28,7 @@ class MonthlyBase
     protected function getBaseQuery(string $walletID): Builder
     {
         return Transaction::with(['transactionType', 'wallet'])
-            ->thisMonth($this->lastDate())
+            ->thisMonth(currentDayOfTheMonth())
             ->join('wallets', 'wallet_id', '=', 'wallets.id')
             ->join(
                 'transaction_types',
@@ -45,16 +45,6 @@ class MonthlyBase
     }
 
     /**
-     * Which day should be the last displayed for current month
-     *
-     * @return string
-     */
-    protected function lastDate(): string
-    {
-        return date('Y-m-d');
-    }
-
-    /**
      * Filter transfers, by selecting just current month's
      *
      * @param $transfers
@@ -62,7 +52,7 @@ class MonthlyBase
      */
     protected function filterTransfers($transfers)
     {
-        return $transfers->thisMonth($this->lastDate())
+        return $transfers->thisMonth(currentDayOfTheMonth())
             ->selectRaw('DATE(transfer_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
     }
