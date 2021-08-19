@@ -38,10 +38,10 @@ class BalanceChartDataHandler extends ChartDataHandler
      * This is needed, because otherwise previous month's balances won't
      * be taken into account.
      *
-     * @param int $walletBalance Balance of the wallet, as of today
+     * @param float $walletBalance Balance of the wallet, as of today
      * @return $this
      */
-    public function offsetBalance(int $walletBalance): BalanceChartDataHandler
+    public function offsetBalance(float $walletBalance): BalanceChartDataHandler
     {
         $offset = $walletBalance - $this->data[array_key_last($this->data)];
 
