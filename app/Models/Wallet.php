@@ -162,7 +162,7 @@ class Wallet extends Model
                 ->getAttributeValue('amount') ?? 0.0;
         $transfersVal = $transfersVal->first()
                 ->getAttributeValue('amount') ?? 0.0;
-        return $transactionVal + $transfersVal;
+        return reducePrecision($transactionVal + $transfersVal);
     }
 
     /**

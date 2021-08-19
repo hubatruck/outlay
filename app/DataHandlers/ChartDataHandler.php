@@ -100,14 +100,13 @@ class ChartDataHandler
      */
     public function reduceDataPrecision(): ChartDataHandler
     {
-        $cutter = 10 ** $this->dataPrecision;
-        $this->data = array_map(static function ($item) use ($cutter) {
+        $this->data = array_map(function ($item) {
             if (is_array($item)) {
                 foreach (['in', 'out'] as $key) {
-                    $item[$key] = floor($item[$key] * $cutter) / $cutter;
+                    $item[$key] = reducePrecision($item[$key], $this->dataPrecision);
                 }
             } else {
-                $item = floor($item * $cutter) / $cutter;
+                $item = reducePrecision($item, $this->dataPrecision);
             }
             return $item;
         }, $this->data);
@@ -134,9 +133,11 @@ class ChartDataHandler
      */
     public function addMissingDays(): ChartDataHandler
     {
-        $cutter = 10 ** $this->dataPrecision;
-        $this->data = $this->eachDayOfTheMonth(function (Carbon $date) use ($cutter) {
-            return floor(($this->data[$date->format(self::DATE_FORMAT)] ?? 0) * $cutter) / $cutter;
+        $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
+            return reducePrecision(
+                $this->data[$date->format(self::DATE_FORMAT)] ?? 0,
+                $this->dataPrecision
+            );
         });
         return $this;
     }

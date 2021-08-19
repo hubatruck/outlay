@@ -42,3 +42,18 @@ if (!function_exists('addSessionMsg')) {
         }
     }
 }
+
+if (!function_exists('reducePrecision')) {
+    /**
+     * Reduce floating point precision for $number to $decimalPlaces digits
+     *
+     * @param float $number
+     * @param int $decimalPlaces
+     * @return float|int
+     */
+    function reducePrecision(float $number, $decimalPlaces = 2)
+    {
+        $cutter = 10 ** $decimalPlaces;
+        return floor($number * $cutter) / $cutter;
+    }
+}
