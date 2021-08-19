@@ -51,7 +51,7 @@ if (!function_exists('reducePrecision')) {
      * @param int $decimalPlaces
      * @return float|int
      */
-    function reducePrecision(float $number, $decimalPlaces = 2)
+    function reducePrecision(float $number, int $decimalPlaces = 2)
     {
         $cutter = 10 ** $decimalPlaces;
         return floor($number * $cutter) / $cutter;
