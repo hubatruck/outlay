@@ -120,7 +120,20 @@ class Wallet extends Model
      */
     public function hasTransfers(): bool
     {
-        return $this->transfers->first() !== null;
+        return $this->transfers()->first() !== null;
+    }
+
+    /**
+     * All transfers related to a wallet
+     *
+     * @return Builder
+     */
+    public function transfers(): Builder
+    {
+        return Transfer::orWhere(function ($query) {
+            $query->where('from_wallet_id', '=', $this->id)
+                ->orWhere('to_wallet_id', '=', $this->id);
+        });
     }
 
     /**
@@ -172,16 +185,6 @@ class Wallet extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
-    }
-
-    /**
-     * All transfers related to a wallet
-     *
-     * @return HasMany
-     */
-    public function transfers(): HasMany
-    {
-        return $this->outgoingTransfers()->orWhere('to_wallet_id', '=', $this->id);
     }
 
     /**

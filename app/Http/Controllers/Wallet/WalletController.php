@@ -91,7 +91,6 @@ class WalletController extends Controller
 
         if ($request->has('range')) {
             /// FIXME: not working correctly if start date is same as end date
-            /// Fixme: incorrect wallet balance if before any action happened date is selected
             $rawRange = explode(' - ', $request->get('range'));
             $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
         } else {

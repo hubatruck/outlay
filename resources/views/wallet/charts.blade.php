@@ -27,8 +27,7 @@
   </div>
 @endif
 
-@if(count($wallet->transfers))
-
+@if($wallet->hasTransfers())
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
       <h4 class="uk-h4">{{  __('Transfer charts for :month', ['month' => __(date('F'))]) }}</h4>
