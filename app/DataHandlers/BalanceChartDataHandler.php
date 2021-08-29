@@ -45,7 +45,7 @@ class BalanceChartDataHandler extends ChartDataHandler
      */
     public function offsetBalance(float $walletBalance): BalanceChartDataHandler
     {
-        $offset = $walletBalance - $this->data[array_key_last($this->data)];
+        $offset = reducePrecision($walletBalance) - reducePrecision($this->data[array_key_last($this->data)]);
 
         foreach ($this->data as &$item) {
             $item += $offset;

@@ -157,10 +157,7 @@ class ChartDataHandler
     public function addMissingDays(): ChartDataHandler
     {
         $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
-            return reducePrecision(
-                $this->data[$date->format(self::DATE_FORMAT)] ?? 0,
-                $this->dataPrecision
-            );
+            return $this->data[$date->format(self::DATE_FORMAT)] ?? 0;
         });
         return $this;
     }
