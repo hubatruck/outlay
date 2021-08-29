@@ -2,6 +2,7 @@
 
 namespace App\DataHandlers;
 
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 class BalanceChartDataHandler extends ChartDataHandler
@@ -10,11 +11,12 @@ class BalanceChartDataHandler extends ChartDataHandler
      * Creates a new instance of this class
      *
      * @param Collection|array|null $data
-     * @return ChartDataHandler
+     * @param CarbonPeriod|null $range
+     * @return BalanceChartDataHandler
      */
-    protected static function newInstance($data = null): BalanceChartDataHandler
+    protected static function newInstance($data = null, CarbonPeriod $range = null): BalanceChartDataHandler
     {
-        return new BalanceChartDataHandler($data);
+        return new BalanceChartDataHandler($data, $range);
     }
 
     /**

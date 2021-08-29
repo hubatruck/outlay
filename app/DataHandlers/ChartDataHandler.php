@@ -14,6 +14,13 @@ class ChartDataHandler
     public const DATE_FORMAT = 'Y-m-d';
 
     /**
+     * Date range of the data
+     *
+     * @var CarbonPeriod
+     */
+    protected CarbonPeriod $range;
+
+    /**
      * Stored data
      *
      * @var array|Collection|null
@@ -29,14 +36,16 @@ class ChartDataHandler
 
     /**
      * @param array|Collection|null $data
+     * @param CarbonPeriod|null $range
      * @param int $dataPrecision
      */
-    public function __construct($data = null, int $dataPrecision = 2)
+    public function __construct($data = null, CarbonPeriod $range = null, int $dataPrecision = 2)
     {
         if ($data instanceof Collection) {
             $data = $data->toArray();
         }
         $this->data = $data;
+        $this->range = $range ?? CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
         $this->dataPrecision = $dataPrecision;
     }
 
@@ -46,22 +55,36 @@ class ChartDataHandler
      * instead of going the regular $someVar = new ChartDataHandler(...) way
      *
      * @param Collection|array|null $data
+     * @param CarbonPeriod|null $range
      * @return ChartDataHandler
      */
-    public static function from($data = null): ChartDataHandler
+    public static function from($data = null, CarbonPeriod $range = null): ChartDataHandler
     {
-        return static::newInstance($data);
+        return static::newInstance($data, $range);
     }
 
     /**
      * Creates a new instance of this class
      *
      * @param Collection|array|null $data
+     * @param CarbonPeriod|null $range
      * @return ChartDataHandler
      */
-    protected static function newInstance($data = null): ChartDataHandler
+    protected static function newInstance($data = null, CarbonPeriod $range = null): ChartDataHandler
     {
-        return new ChartDataHandler($data);
+        return new ChartDataHandler($data, $range);
+    }
+
+    /**
+     * Set the date range
+     *
+     * @param CarbonPeriod $range
+     * @return $this
+     */
+    public function setRange(CarbonPeriod $range): ChartDataHandler
+    {
+        $this->range = $range;
+        return $this;
     }
 
     /**
@@ -151,8 +174,7 @@ class ChartDataHandler
     protected function eachDayOfTheMonth(callable $transformerCallback): array
     {
         $newData = [];
-        $period = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
-        foreach ($period as $day) {
+        foreach ($this->range as $day) {
             $newData[] = $transformerCallback($day);
         }
 
