@@ -1,7 +1,7 @@
 @if ($wallet->hasTransactions() || $wallet->hasTransfers())
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Balance chart for :month', ['month' => __(date('F'))]) }}</h4>
+      <h4 class="uk-h4">{{  __('Balance chart') }}</h4>
     </div>
     <div class="uk-card-body">
       <div class="uk-width-1-1">
@@ -14,7 +14,7 @@
 @if ($wallet->hasTransactions())
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Transaction charts for :month', ['month' => __(date('F'))]) }}</h4>
+      <h4 class="uk-h4">{{  __('Transaction charts') }}</h4>
     </div>
     <div class="uk-card-body uk-child-width-1-2@l">
       <div class="uk-width-1-1@l">
@@ -30,7 +30,7 @@
 @if($wallet->hasTransfers())
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Transfer charts for :month', ['month' => __(date('F'))]) }}</h4>
+      <h4 class="uk-h4">{{  __('Transfer charts') }}</h4>
     </div>
     <div class="uk-card-body uk-child-width-1-2@l">
       <div class="uk-width-1-1">
