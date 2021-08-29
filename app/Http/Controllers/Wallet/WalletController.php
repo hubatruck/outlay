@@ -12,6 +12,7 @@ use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Carbon\CarbonPeriod;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -68,14 +69,43 @@ class WalletController extends Controller
             addSessionMsg(WalletFeedback::noActivity(), true);
         }
 
-        $balanceDailyChart = (new MonthlyBalanceByDay(new LarapexChart()))->build($wallet);
-        $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart()))->build($id);
-        $transactionTypeChart = (new MonthlyTransactionByType(new LarapexChart()))->build($id);
-        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart()))->build($wallet);
-        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart()))->build($wallet);
-        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart()))->build($wallet);
+        return view('wallet.details', compact('wallet'));
+    }
 
-        return view('wallet.details',
+    /**
+     * Get charts for a specified date range
+     *
+     * @param Request $request
+     * @param string $id
+     * @return RedirectResponse|string
+     */
+    public function charts(Request $request, string $id)
+    {
+        $wallet = Wallet::withTrashed()->findOrFail($id);
+        if (!Auth::user()->owns($wallet)) {
+            return WalletFeedback::viewError();
+        }
+        if (!$wallet->hasTransactions() || !$wallet->hasTransfers()) {
+            addSessionMsg(WalletFeedback::noActivity(), true);
+        }
+
+        if ($request->has('range')) {
+            /// FIXME: not working correctly if start date is same as end date
+            /// Fixme: incorrect wallet balance if before any action happened date is selected
+            $rawRange = explode(' - ', $request->get('range'));
+            $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
+        } else {
+            $range = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
+        }
+
+        $balanceDailyChart = (new MonthlyBalanceByDay(new LarapexChart(), $range))->build($wallet);
+        $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart(), $range))->build($id);
+        $transactionTypeChart = (new MonthlyTransactionByType(new LarapexChart(), $range))->build($id);
+        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart(), $range))->build($wallet);
+        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart(), $range))->build($wallet);
+        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart(), $range))->build($wallet);
+
+        return view('wallet.charts',
             compact(
                 'balanceDailyChart',
                 'transactionDailyChart',
@@ -84,7 +114,7 @@ class WalletController extends Controller
                 'transferTypeChart',
                 'transferWalletChart',
                 'wallet'
-            ));
+            ))->render();
     }
 
     /**

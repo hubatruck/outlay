@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('edit', [WalletController::class, 'updateWallet'])->name('wallet.data.update');
 
             Route::get('details', [WalletController::class, 'detailsView'])->name('wallet.view.details');
+            Route::get('charts', [WalletController::class, 'charts'])->name('wallet.view.charts');
 
             Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');
             Route::get('toggle_hidden', [WalletController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
