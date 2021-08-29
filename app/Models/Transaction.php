@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Database\Factories\TransactionFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
  * @property-read TransactionType $transactionType
  * @property-read Wallet $wallet
  * @method static TransactionFactory factory(...$parameters)
+ * @method static Builder|Transaction betweenDateRange(CarbonPeriod $range)
  * @method static Builder|Transaction newModelQuery()
  * @method static Builder|Transaction newQuery()
  * @method static Builder|Transaction query()
@@ -123,8 +125,20 @@ class Transaction extends Model
     public function scopeThisMonth(Builder $query, $lastDay = null): Builder
     {
         $lastDay = $lastDay ?? currentDayOfTheMonth();
-        return $query->whereDate('transaction_date', '>=', date('Y-m-01'))
-            ->whereDate('transaction_date', '<=', $lastDay);
+        return $this->scopeBetweenDateRange($query, CarbonPeriod::create(date('Y-m-01'), $lastDay));
+    }
+
+    /**
+     * Return transactions occurred in a specific date range
+     *
+     * @param Builder $query
+     * @param CarbonPeriod $range
+     * @return Builder
+     */
+    public function scopeBetweenDateRange(Builder $query, CarbonPeriod $range): Builder
+    {
+        return $query->whereDate('transaction_date', '>=', $range->first())
+            ->whereDate('transaction_date', '<=', $range->last());
     }
 
     /**
