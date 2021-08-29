@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonPeriod;
 use Database\Factories\TransferFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read Wallet|null $fromWallet
  * @property-read Wallet|null $toWallet
  * @method static TransferFactory factory(...$parameters)
+ * @method static Builder|Transfer betweenDateRange(CarbonPeriod $range)
  * @method static Builder|Transfer newModelQuery()
  * @method static Builder|Transfer newQuery()
  * @method static Builder|Transfer query()
@@ -90,16 +92,29 @@ class Transfer extends Model
     /**
      * Only get transfers occurred this month
      *
-     * @param $query
+     * @param Builder $query
      * @param null $lastDay
-     * @return mixed
+     * @return Builder
      */
-    public function scopeThisMonth($query, $lastDay = null)
+    public function scopeThisMonth(Builder $query, $lastDay = null): Builder
     {
         $lastDay = $lastDay ?? currentDayOfTheMonth();
-        return $query->whereDate('transfer_date', '>=', date('Y-m-01'))
-            ->whereDate('transfer_date', '<=', $lastDay);
+        return $this->scopeBetweenDateRange($query, CarbonPeriod::create(date('Y-m-01'), $lastDay));
     }
+
+    /**
+     * Return transfers occurred in a specific date range
+     *
+     * @param Builder $query
+     * @param CarbonPeriod $range
+     * @return Builder
+     */
+    public function scopeBetweenDateRange(Builder $query, CarbonPeriod $range): Builder
+    {
+        return $query->whereDate('transfer_date', '>=', $range->first())
+            ->whereDate('transfer_date', '<=', $range->last());
+    }
+
 
     /**
      * Sum incoming and outgoing transaction amounts
