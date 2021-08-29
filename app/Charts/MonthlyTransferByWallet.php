@@ -7,14 +7,16 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\HorizontalBar;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
+use Carbon\CarbonPeriod;
 
 class MonthlyTransferByWallet extends MonthlyBase
 {
     protected LarapexChart $chart;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(Wallet $wallet): HorizontalBar
@@ -22,13 +24,13 @@ class MonthlyTransferByWallet extends MonthlyBase
         $out = $wallet->outgoingTransfers()
             ->with(['toWallet', 'toWallet.user'])
             ->without(['transactionType'])
-            ->thisMonth()
+            ->betweenDateRange($this->range)
             ->selectRaw('to_wallet_id, sum(amount) as amount')
             ->groupBy('to_wallet_id')
             ->get();
         $in = $wallet->incomingTransfers()
             ->with(['fromWallet', 'fromWallet.user'])
-            ->thisMonth()
+            ->betweenDateRange($this->range)
             ->without(['transactionType'])
             ->selectRaw('from_wallet_id, sum(amount) as amount')
             ->groupBy('from_wallet_id')

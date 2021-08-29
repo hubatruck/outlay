@@ -6,6 +6,7 @@ use App\DataHandlers\ChartDataHandler;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\LineChart;
 use Arr;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -13,9 +14,10 @@ class MonthlyTransactionByDay extends MonthlyBase
 {
     protected LarapexChart $chart;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(string $walletID): LineChart
@@ -26,8 +28,10 @@ class MonthlyTransactionByDay extends MonthlyBase
             ->selectRaw('DATE(transaction_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
 
-        $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 1)->pluck('daily_amount', 'day'));
-        $expense = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 2)->pluck('daily_amount', 'day'));
+        $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 1)->pluck('daily_amount', 'day'))
+            ->setRange($this->range);
+        $expense = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 2)->pluck('daily_amount', 'day'))
+            ->setRange($this->range);
 
         return $this->chart->lineChart()
             ->setTitle(__('Daily transactions'))

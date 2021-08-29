@@ -7,6 +7,7 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\AreaChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
+use Carbon\CarbonPeriod;
 
 class MonthlyBalanceByDay extends MonthlyBase
 {
@@ -18,9 +19,10 @@ class MonthlyBalanceByDay extends MonthlyBase
      */
     protected Wallet $wallet;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(Wallet $wallet): AreaChart
@@ -49,12 +51,13 @@ class MonthlyBalanceByDay extends MonthlyBase
          */
         $transactionBalance = BalanceChartDataHandler::from(
             $this->wallet->transactions()
+                ->betweenDateRange($this->range)
                 ->sumAmount()
                 ->selectRaw('DATE(transaction_date) as day')
-                ->where('transaction_date', '<=', currentDayOfTheMonth())
                 ->groupBy('day')
                 ->orderBy('day')
-                ->pluck('amount', 'day')
+                ->pluck('amount', 'day'),
+            $this->range
         )->addMissingDays();
 
         /**
@@ -63,16 +66,17 @@ class MonthlyBalanceByDay extends MonthlyBase
         $transferBalance = BalanceChartDataHandler::from(
             $this->wallet->transfers()
                 ->sumAmount($this->wallet->id)
+                ->betweenDateRange($this->range)
                 ->selectRaw('DATE(transfer_date) as day')
-                ->where('transfer_date', '<=', currentDayOfTheMonth())
                 ->groupBy('day')
                 ->orderBy('day')
-                ->pluck('amount', 'day')
+                ->pluck('amount', 'day'),
+            $this->range
         )->addMissingDays();
 
         return $transferBalance->with($transactionBalance)
             ->sumWithPreviousDays()
-            ->offsetBalance($this->wallet->getBalanceBetween(null, currentDayOfTheMonth()))
+            ->offsetBalance($this->wallet->getBalanceBetween(null, $this->range->last()))
             ->reduceDPAndGet();
     }
 }

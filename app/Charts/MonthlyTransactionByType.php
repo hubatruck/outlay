@@ -7,14 +7,16 @@ use App\Models\TransactionType;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 use Arr;
+use Carbon\CarbonPeriod;
 
 class MonthlyTransactionByType extends MonthlyBase
 {
     protected LarapexChart $chart;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(string $walletID): PolarAreaChart

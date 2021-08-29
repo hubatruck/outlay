@@ -4,6 +4,7 @@ namespace App\Charts;
 
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Transaction;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +21,13 @@ class MonthlyBase
     ];
 
     /**
+     * The date interval/range for the data
+     *
+     * @var CarbonPeriod
+     */
+    protected CarbonPeriod $range;
+
+    /**
      * Generate a base query that can be used for charts
      *
      * @param string $walletID
@@ -28,7 +36,7 @@ class MonthlyBase
     protected function getBaseQuery(string $walletID): Builder
     {
         return Transaction::with(['transactionType', 'wallet'])
-            ->thisMonth(currentDayOfTheMonth())
+            ->betweenDateRange($this->range)
             ->join('wallets', 'wallet_id', '=', 'wallets.id')
             ->join(
                 'transaction_types',
@@ -52,7 +60,7 @@ class MonthlyBase
      */
     protected function filterTransfers($transfers)
     {
-        return $transfers->thisMonth(currentDayOfTheMonth())
+        return $transfers->betweenDateRange($this->range)
             ->selectRaw('DATE(transfer_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
     }
@@ -64,6 +72,6 @@ class MonthlyBase
      */
     protected function createAxisData(): array
     {
-        return ChartDataHandler::from([])->daysOfMonth()->get();
+        return ChartDataHandler::from([], $this->range)->daysOfMonth()->get();
     }
 }

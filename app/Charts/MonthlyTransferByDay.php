@@ -7,23 +7,27 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
+use Carbon\CarbonPeriod;
 
 class MonthlyTransferByDay extends MonthlyBase
 {
     protected LarapexChart $chart;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(Wallet $wallet): BarChart
     {
         $transferIn = ChartDataHandler::from(
-            $this->filterTransfers($wallet->incomingTransfers())->pluck('daily_amount', 'day')
+            $this->filterTransfers($wallet->incomingTransfers())->pluck('daily_amount', 'day'),
+            $this->range
         );
         $transferOut = ChartDataHandler::from(
-            $this->filterTransfers($wallet->outgoingTransfers())->pluck('daily_amount', 'day')
+            $this->filterTransfers($wallet->outgoingTransfers())->pluck('daily_amount', 'day'),
+            $this->range
         );
 
         return $this->chart->barChart()

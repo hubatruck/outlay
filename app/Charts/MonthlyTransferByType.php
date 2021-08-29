@@ -7,14 +7,16 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\PieChart;
 use Arr;
+use Carbon\CarbonPeriod;
 
 class MonthlyTransferByType extends MonthlyBase
 {
     protected LarapexChart $chart;
 
-    public function __construct(LarapexChart $chart)
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
     {
         $this->chart = $chart;
+        $this->range = $range;
     }
 
     public function build(Wallet $wallet): PieChart
