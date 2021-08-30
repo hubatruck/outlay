@@ -12,7 +12,9 @@ use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Carbon\Exceptions as CarbonExceptions;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -89,13 +91,7 @@ class WalletController extends Controller
             addSessionMsg(WalletFeedback::noActivity(), true);
         }
 
-        if ($request->has('range')) {
-            /// FIXME: not working correctly if start date is same as end date
-            $rawRange = explode(' - ', $request->get('range'));
-            $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
-        } else {
-            $range = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
-        }
+        $range = $this->parseRange($request);
 
         $balanceDailyChart = (new MonthlyBalanceByDay(new LarapexChart(), $range))->build($wallet);
         $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart(), $range))->build($id);
@@ -114,6 +110,38 @@ class WalletController extends Controller
                 'transferWalletChart',
                 'wallet'
             ))->render();
+    }
+
+    /**
+     * Parse the date range for charts from the request
+     *
+     * @param Request $request
+     * @return CarbonPeriod
+     */
+    private function parseRange(Request $request): CarbonPeriod
+    {
+        $fallback = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
+        if ($request->has('range')) {
+            $rawRange = explode(' - ', $request->get('range'));
+
+            /// Single day selected workaround
+            if (sizeof($rawRange) !== 2) {
+                try {
+                    $rawRange[0] = Carbon::parse($rawRange[0])->startOfDay();
+                    $rawRange[1] = $rawRange[0]->endOfDay();
+                } catch (CarbonExceptions\InvalidFormatException $e) {
+                    $rawRange[0] = $rawRange[1] = currentDayOfTheMonth();
+                }
+            }
+
+            /// In case of correct range format (xx - yy), but un-parseable data
+            try {
+                $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
+            } catch (CarbonExceptions\InvalidIntervalException $e) {
+                $range = $fallback;
+            }
+        }
+        return $range ?? $fallback;
     }
 
     /**
