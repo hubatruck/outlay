@@ -26,7 +26,20 @@
       align: '{!! $chart->subtitlePosition() !!}'
     },
     xaxis: {
-      categories: {!! $chart->xAxis() !!}
+      categories: {!! $chart->xAxis() !!},
+      @if (in_array($chart->type(), ['area', 'line', 'bar']) && !json_decode($chart->horizontal(), false, 512, JSON_THROW_ON_ERROR)->horizontal)
+      type: 'datetime',
+      labels: {
+        formatter: function (value, timestamp) {
+          const date = new Date(timestamp);
+          return date.toLocaleDateString('{{ config('app.locale') }}', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        },
+      },
+      @endif
     },
     grid: {!! $chart->grid() !!},
     markers: {!! $chart->markers() !!},
