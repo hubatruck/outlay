@@ -1,5 +1,5 @@
 <script>
-  var options = {
+  const options_{!! $chart->id() !!} = {
     chart: {
       type: '{!! $chart->type() !!}',
       height: {!! $chart->height() !!},
@@ -33,11 +33,11 @@
     @if($chart->stroke())
     stroke: {!! $chart->stroke() !!},
     @endif
-  }
+  };
 
-  var chart = new ApexCharts(
+  const chart_{!! $chart->id() !!} = new ApexCharts(
     document.querySelector("#{!! $chart->id() !!}"),
-    options
+    options_{!! $chart->id() !!}
   );
-  chart.render();
+  chart_{!! $chart->id() !!}.render();
 </script>
