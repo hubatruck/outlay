@@ -2,15 +2,20 @@
 
 namespace {{ namespace }};
 
-use ArielMejiaDev\LarapexCharts\HorizontalBar;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 
-class {{ class }} extends BaseChart
+class {{ class }}
 {
-    public function build(): HorizontalBar
+    protected $chart;
+
+    public function __construct(LarapexChart $chart)
     {
-        return $this->chart
-            ->horizontalBarChart()
+        $this->chart = $chart;
+    }
+
+    public function build(): \ArielMejiaDev\LarapexCharts\HorizontalBar
+    {
+        return $this->chart->horizontalBarChart()
             ->setTitle('Los Angeles vs Miami.')
             ->setSubtitle('Wins during season 2021.')
             ->setColors(['#FFC107', '#D32F2F'])

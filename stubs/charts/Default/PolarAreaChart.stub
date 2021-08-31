@@ -3,11 +3,17 @@
 namespace {{ namespace }};
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
-use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 
-class {{ class }} extends BaseChart
+class {{ class }}
 {
-    public function build(): PolarAreaChart
+    protected $chart;
+
+    public function __construct(LarapexChart $chart)
+    {
+        $this->chart = $chart;
+    }
+
+    public function build(): \ArielMejiaDev\LarapexCharts\PolarAreaChart
     {
         return $this->chart
             ->polarAreaChart()
