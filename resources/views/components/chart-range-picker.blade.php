@@ -4,11 +4,19 @@
 
 <div class="uk-padding-small">
   <label class="uk-form-label uk-margin-small-right" for="chart-date-range">{{ __('Chart date interval') }}:</label>
-  <input
-    type="date"
-    class="uk-input uk-form-width-large" id="chart-date-range"
-    placeholder="{{ __('Show charts between...') }}"
-  >
+  <div class="uk-inline">
+    <button
+      class="uk-form-icon uk-form-icon-flip"
+      uk-icon="refresh"
+      onclick="resetRange()"
+      uk-tooltip="{{ __('Reset range') }}"
+    ></button>
+    <input
+      type="date"
+      class="uk-input uk-form-width-large" id="chart-date-range"
+      placeholder="{{ __('Show charts between...') }}"
+    >
+  </div>
 </div>
 
 @push('scripts')
@@ -17,7 +25,7 @@
     const loadingTemplate = "<div class=\"" + nonChartClasses + "\"><div uk-spinner></div>&nbsp;{{ __('Loading...') }}</div>";
     let previousRange = "{{ $defaultDateRange }}";
 
-    $('#chart-date-range').flatpickr({
+    const rangePicker = $('#chart-date-range').flatpickr({
       mode: 'range',
       altInput: true,
       locale: "{{ config('app.locale') }}",
@@ -32,6 +40,11 @@
       },
       defaultDate: "{{ $defaultDateRange }}"
     });
+
+    function resetRange() {
+      loadCharts("{{ $defaultDateRange }}");
+      rangePicker.setDate("{{ $defaultDateRange }}");
+    }
 
     function loadCharts(range) {
       let scrollLocation = document.documentElement.scrollTop;
