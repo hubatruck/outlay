@@ -9,7 +9,7 @@ use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
 use Carbon\CarbonPeriod;
 
-class MonthlyTransferByWallet extends MonthlyBase
+class TransfersByWalletChart extends BaseChart
 {
     protected LarapexChart $chart;
 

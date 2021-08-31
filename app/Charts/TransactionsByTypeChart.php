@@ -9,7 +9,7 @@ use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 use Arr;
 use Carbon\CarbonPeriod;
 
-class MonthlyTransactionByType extends MonthlyBase
+class TransactionsByTypeChart extends BaseChart
 {
     protected LarapexChart $chart;
 

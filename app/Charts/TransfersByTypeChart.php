@@ -9,7 +9,7 @@ use ArielMejiaDev\LarapexCharts\PieChart;
 use Arr;
 use Carbon\CarbonPeriod;
 
-class MonthlyTransferByType extends MonthlyBase
+class TransfersByTypeChart extends BaseChart
 {
     protected LarapexChart $chart;
 

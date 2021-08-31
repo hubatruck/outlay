@@ -9,7 +9,7 @@ use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
 use Carbon\CarbonPeriod;
 
-class MonthlyBalanceByDay extends MonthlyBase
+class DailyBalanceChart extends BaseChart
 {
     protected LarapexChart $chart;
 

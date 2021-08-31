@@ -8,7 +8,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class MonthlyBase
+class BaseChart
 {
     /**
      * Colors used for the chart

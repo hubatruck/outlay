@@ -1,6 +1,6 @@
 <?php
 
-use App\Charts\MonthlyBase;
+use App\Charts\BaseChart;
 
 return [
 
@@ -27,5 +27,5 @@ return [
     |
     */
 
-    'colors' => MonthlyBase::$colors,
+    'colors' => BaseChart::$colors,
 ];

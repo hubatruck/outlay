@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use App\Charts\MonthlyBalanceByDay;
-use App\Charts\MonthlyTransactionByDay;
-use App\Charts\MonthlyTransactionByType;
-use App\Charts\MonthlyTransferByDay;
-use App\Charts\MonthlyTransferByType;
-use App\Charts\MonthlyTransferByWallet;
+use App\Charts\DailyBalanceChart;
+use App\Charts\DailyTransactionsChart;
+use App\Charts\DailyTransfersChart;
+use App\Charts\TransactionsByTypeChart;
+use App\Charts\TransfersByTypeChart;
+use App\Charts\TransfersByWalletChart;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
@@ -93,12 +93,12 @@ class WalletController extends Controller
 
         $range = $this->parseRange($request);
 
-        $balanceDailyChart = (new MonthlyBalanceByDay(new LarapexChart(), $range))->build($wallet);
-        $transactionDailyChart = (new MonthlyTransactionByDay(new LarapexChart(), $range))->build($id);
-        $transactionTypeChart = (new MonthlyTransactionByType(new LarapexChart(), $range))->build($id);
-        $transferDailyChart = (new MonthlyTransferByDay(new LarapexChart(), $range))->build($wallet);
-        $transferTypeChart = (new MonthlyTransferByType(new LarapexChart(), $range))->build($wallet);
-        $transferWalletChart = (new MonthlyTransferByWallet(new LarapexChart(), $range))->build($wallet);
+        $balanceDailyChart = (new DailyBalanceChart(new LarapexChart(), $range))->build($wallet);
+        $transactionDailyChart = (new DailyTransactionsChart(new LarapexChart(), $range))->build($id);
+        $transactionTypeChart = (new TransactionsByTypeChart(new LarapexChart(), $range))->build($id);
+        $transferDailyChart = (new DailyTransfersChart(new LarapexChart(), $range))->build($wallet);
+        $transferTypeChart = (new TransfersByTypeChart(new LarapexChart(), $range))->build($wallet);
+        $transferWalletChart = (new TransfersByWalletChart(new LarapexChart(), $range))->build($wallet);
 
         return view('wallet.charts',
             compact(

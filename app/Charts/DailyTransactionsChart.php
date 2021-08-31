@@ -10,7 +10,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class MonthlyTransactionByDay extends MonthlyBase
+class DailyTransactionsChart extends BaseChart
 {
     protected LarapexChart $chart;
 
