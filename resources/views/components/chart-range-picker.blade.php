@@ -2,7 +2,7 @@
   $defaultDateRange = date('Y-m-01').' - '.currentDayOfTheMonth()
 @endphp
 
-<div class="uk-padding-small uk-flex uk-flex-middle">
+<div class="uk-padding-small">
   <label class="uk-form-label uk-margin-small-right" for="chart-date-range">{{ __('Chart date interval') }}:</label>
   <input
     type="date"
