@@ -3,7 +3,10 @@
 @endphp
 
 <div class="uk-padding-small">
-  <label class="uk-form-label uk-margin-small-right" for="chart-date-range">{{ __('Chart date interval') }}:</label>
+  <label
+    class="uk-form-label uk-text-bold uk-margin-small-right"
+    for="chart-date-range"
+  > {{ __('Chart date interval') }}: </label>
   <div class="uk-inline">
     <button
       class="uk-form-icon uk-form-icon-flip"
