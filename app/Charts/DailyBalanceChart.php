@@ -15,6 +15,7 @@ class DailyBalanceChart extends BaseChart
 
     /**
      * Current wallet
+     *
      * @var Wallet
      */
     protected Wallet $wallet;

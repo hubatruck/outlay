@@ -34,7 +34,6 @@ class BalanceChartDataHandler extends ChartDataHandler
         return $this;
     }
 
-
     /**
      * Offset the balance data, so it will be displayed correctly
      * This is needed, because otherwise previous month's balances won't
