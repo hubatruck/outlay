@@ -5,20 +5,10 @@ namespace App\Charts;
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\BarChart;
-use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
-use Carbon\CarbonPeriod;
 
 class DailyTransfersChart extends BaseChart
 {
-    protected LarapexChart $chart;
-
-    public function __construct(LarapexChart $chart, CarbonPeriod $range)
-    {
-        $this->chart = $chart;
-        $this->range = $range;
-    }
-
     public function build(Wallet $wallet): BarChart
     {
         $transferIn = ChartDataHandler::from(
