@@ -86,6 +86,6 @@ class BaseChart
      */
     protected function createAxisData(): array
     {
-        return ChartDataHandler::from([], $this->range)->daysOfMonth()->get();
+        return ChartDataHandler::from([], $this->range)->fillWithDaysOfRange()->get();
     }
 }
