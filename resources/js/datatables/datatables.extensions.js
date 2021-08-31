@@ -90,7 +90,7 @@
     function fnDomSwitch(nParent, iFrom, iTo) {
         var anTags = [];
         for (var i = 0, iLen = nParent.childNodes.length; i < iLen; i++) {
-            if (nParent.childNodes[i].nodeType == 1) {
+            if (nParent.childNodes[i].nodeType === 1) {
                 anTags.push(nParent.childNodes[i]);
             }
         }
@@ -134,7 +134,7 @@
         };
 
         /* Sanity check in the input */
-        if (iFrom == iTo) {
+        if (iFrom === iTo) {
             /* Pointless reorder */
             return;
         }
@@ -680,7 +680,7 @@
 
             /* State loading, overrides the column order given */
             if (this.s.dt.oLoadedState && typeof this.s.dt.oLoadedState.ColReorder != 'undefined' &&
-                this.s.dt.oLoadedState.ColReorder.length == this.s.dt.aoColumns.length) {
+                this.s.dt.oLoadedState.ColReorder.length === this.s.dt.aoColumns.length) {
                 aiOrder = this.s.dt.oLoadedState.ColReorder;
             }
 
@@ -731,7 +731,7 @@
         "_fnOrderColumns": function (a) {
             var changed = false;
 
-            if (a.length != this.s.dt.aoColumns.length) {
+            if (a.length !== this.s.dt.aoColumns.length) {
                 this.s.dt.oInstance.oApi._fnLog(this.s.dt, 1, "ColReorder - array reorder does not " +
                     "match known number of columns. Skipping.");
                 return;
@@ -739,7 +739,7 @@
 
             for (var i = 0, iLen = a.length; i < iLen; i++) {
                 var currIndex = $.inArray(i, a);
-                if (i != currIndex) {
+                if (i !== currIndex) {
                     /* Reorder our switching array */
                     fnArraySwitch(a, currIndex, i);
 

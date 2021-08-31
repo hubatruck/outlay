@@ -214,8 +214,7 @@
         },
 
         action: function (e, dt, button, config) {
-            const url = _buildUrl(dt, 'pdf');
-            window.location = url;
+            window.location = _buildUrl(dt, 'pdf');
         }
     };
 
@@ -335,7 +334,9 @@
                 b.on(`column-visibility.dt${c.namespace}`, function (h, k) {
                     k.bDestroying || k.nTable !== b.settings()[0].nTable || d.active(b.column(c.columns).visible())
                 }).on(`column-reorder.dt${c.namespace}`, function (h, k, m) {
-                    1 === b.columns(c.columns).count() && (d.text(c._columnText(b, c)), d.active(b.column(c.columns).visible()))
+                    if (b.columns(c.columns).count() && (d.text(c._columnText(b, c)))) {
+                        d.active(b.column(c.columns).visible());
+                    }
                 });
                 this.active(b.column(c.columns).visible())
             },
