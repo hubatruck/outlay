@@ -41,7 +41,8 @@ class DailyTransfersChart extends BaseChart
                 $this->getData($transferOut)
             )
             ->setXAxis($this->createAxisData())
-            ->setColors(Arr::shuffle(self::$colors));
+            ->setColors(Arr::shuffle(self::$colors))
+            ->setToolbar(true);
     }
 
     /**

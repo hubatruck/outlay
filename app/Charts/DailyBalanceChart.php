@@ -36,7 +36,8 @@ class DailyBalanceChart extends BaseChart
             )
             ->setXAxis($this->createAxisData())
             ->setGrid(false)
-            ->setColors(Arr::shuffle(self::$colors));
+            ->setColors(Arr::shuffle(self::$colors))
+            ->setToolbar(true);
     }
 
     /**
