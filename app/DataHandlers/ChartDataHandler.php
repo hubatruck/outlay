@@ -5,6 +5,7 @@ namespace App\DataHandlers;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use UnexpectedValueException;
 
 class ChartDataHandler
 {
@@ -152,13 +153,39 @@ class ChartDataHandler
     /**
      * Fill out the keys of the array, so each day of the month is present
      *
+     * @param bool $convertKeysToEpochTime
      * @return $this
      */
-    public function addMissingDays(): ChartDataHandler
+    public function addMissingDays(bool $convertKeysToEpochTime = true): ChartDataHandler
     {
+        if ($convertKeysToEpochTime && strpos(array_key_first($this->data), '-')) {
+            $this->data = $this->keysToEpoch()->data;
+        }
+
         $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
-            return $this->data[$date->format(self::DATE_FORMAT)] ?? 0;
+            return $this->data[$date->getTimestampMs()] ?? 0;
         });
+        return $this;
+    }
+
+    /**
+     * Converts data keys to Epoch time
+     *
+     * @return $this
+     * @throws UnexpectedValueException When key is not parseable
+     */
+    public function keysToEpoch(): ChartDataHandler
+    {
+        $newData = [];
+        foreach ($this->data as $key => $value) {
+            $newKey = strtotime($key);
+            if (!$newKey) {
+                throw new UnexpectedValueException("Failed to parse array key '$key' as date");
+            }
+            $newData[$newKey . '000'] = $value;
+        }
+        $this->data = $newData;
+
         return $this;
     }
 
@@ -186,7 +213,7 @@ class ChartDataHandler
     public function daysOfMonth(): ChartDataHandler
     {
         $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
-            return $date->format(self::DATE_FORMAT);
+            return $date->getTimestampMs();
         });
         return $this;
     }
