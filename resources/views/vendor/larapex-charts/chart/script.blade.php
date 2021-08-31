@@ -45,6 +45,8 @@
     markers: {!! $chart->markers() !!},
     @if($chart->stroke())
     stroke: {!! $chart->stroke() !!},
+    @else
+    stroke: {curve: 'smooth'},
     @endif
   };
 
