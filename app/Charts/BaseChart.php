@@ -4,6 +4,7 @@ namespace App\Charts;
 
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Transaction;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,19 @@ class BaseChart
      * @var CarbonPeriod
      */
     protected CarbonPeriod $range;
+
+    /**
+     * Chart component
+     *
+     * @var LarapexChart
+     */
+    protected LarapexChart $chart;
+
+    public function __construct(LarapexChart $chart, CarbonPeriod $range)
+    {
+        $this->chart = $chart;
+        $this->range = $range;
+    }
 
     /**
      * Generate a base query that can be used for charts
@@ -72,6 +86,6 @@ class BaseChart
      */
     protected function createAxisData(): array
     {
-        return ChartDataHandler::from([], $this->range)->daysOfMonth()->get();
+        return ChartDataHandler::from([], $this->range)->fillWithDaysOfRange()->get();
     }
 }

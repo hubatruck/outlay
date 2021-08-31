@@ -5,20 +5,10 @@ namespace App\Charts;
 use App\DataHandlers\ByWalletDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\HorizontalBar;
-use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
-use Carbon\CarbonPeriod;
 
 class TransfersByWalletChart extends BaseChart
 {
-    protected LarapexChart $chart;
-
-    public function __construct(LarapexChart $chart, CarbonPeriod $range)
-    {
-        $this->chart = $chart;
-        $this->range = $range;
-    }
-
     public function build(Wallet $wallet): HorizontalBar
     {
         $out = $wallet->outgoingTransfers()

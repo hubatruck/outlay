@@ -5,26 +5,16 @@ namespace App\Charts;
 use App\DataHandlers\BalanceChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\AreaChart;
-use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Arr;
-use Carbon\CarbonPeriod;
 
 class DailyBalanceChart extends BaseChart
 {
-    protected LarapexChart $chart;
-
     /**
      * Current wallet
      *
      * @var Wallet
      */
     protected Wallet $wallet;
-
-    public function __construct(LarapexChart $chart, CarbonPeriod $range)
-    {
-        $this->chart = $chart;
-        $this->range = $range;
-    }
 
     public function build(Wallet $wallet): AreaChart
     {
@@ -37,7 +27,8 @@ class DailyBalanceChart extends BaseChart
             )
             ->setXAxis($this->createAxisData())
             ->setGrid(false)
-            ->setColors(Arr::shuffle(self::$colors));
+            ->setColors(Arr::shuffle(self::$colors))
+            ->setToolbar(true);
     }
 
     /**

@@ -5,14 +5,10 @@ namespace App\DataHandlers;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use UnexpectedValueException;
 
 class ChartDataHandler
 {
-    /**
-     * Date format used to display dates
-     */
-    public const DATE_FORMAT = 'Y-m-d';
-
     /**
      * Date range of the data
      *
@@ -150,25 +146,51 @@ class ChartDataHandler
     }
 
     /**
-     * Fill out the keys of the array, so each day of the month is present
+     * Fill out the keys of the array, so each day of the range is present
      *
+     * @param bool $convertKeysToEpochTime
      * @return $this
      */
-    public function addMissingDays(): ChartDataHandler
+    public function addMissingDays(bool $convertKeysToEpochTime = true): ChartDataHandler
     {
-        $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
-            return $this->data[$date->format(self::DATE_FORMAT)] ?? 0;
+        if ($convertKeysToEpochTime && strpos(array_key_first($this->data), '-')) {
+            $this->data = $this->keysToEpoch()->data;
+        }
+
+        $this->data = $this->eachDayOfTheRange(function (Carbon $date) {
+            return $this->data[$date->getTimestampMs()] ?? 0;
         });
         return $this;
     }
 
     /**
-     * Do something with each day of the month
+     * Converts data keys to Epoch time
+     *
+     * @return $this
+     * @throws UnexpectedValueException When key is not parseable
+     */
+    public function keysToEpoch(): ChartDataHandler
+    {
+        $newData = [];
+        foreach ($this->data as $key => $value) {
+            $newKey = strtotime($key);
+            if (!$newKey) {
+                throw new UnexpectedValueException("Failed to parse array key '$key' as date");
+            }
+            $newData[$newKey . '000'] = $value;
+        }
+        $this->data = $newData;
+
+        return $this;
+    }
+
+    /**
+     * Do something with each day of the given range
      *
      * @param callable $transformerCallback
      * @return array
      */
-    protected function eachDayOfTheMonth(callable $transformerCallback): array
+    protected function eachDayOfTheRange(callable $transformerCallback): array
     {
         $newData = [];
         foreach ($this->range as $day) {
@@ -179,14 +201,14 @@ class ChartDataHandler
     }
 
     /**
-     * Fill data array with the days of the month
+     * Fill data array with the days of the given range
      *
      * @return $this
      */
-    public function daysOfMonth(): ChartDataHandler
+    public function fillWithDaysOfRange(): ChartDataHandler
     {
-        $this->data = $this->eachDayOfTheMonth(function (Carbon $date) {
-            return $date->format(self::DATE_FORMAT);
+        $this->data = $this->eachDayOfTheRange(function (Carbon $date) {
+            return $date->getTimestampMs();
         });
         return $this;
     }

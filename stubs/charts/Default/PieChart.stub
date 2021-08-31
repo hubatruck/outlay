@@ -3,19 +3,14 @@
 namespace {{ namespace }};
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\PieChart;
 
-class {{ class }}
+class {{ class }} extends BaseChart
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
+    public function build(): PieChart
     {
-        $this->chart = $chart;
-    }
-
-    public function build(): \ArielMejiaDev\LarapexCharts\PieChart
-    {
-        return $this->chart->pieChart()
+        return $this->chart
+            ->pieChart()
             ->setTitle('Top 3 scorers of the team.')
             ->setSubtitle('Season 2021.')
             ->addData([40, 50, 30])

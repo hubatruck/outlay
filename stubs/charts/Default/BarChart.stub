@@ -2,20 +2,15 @@
 
 namespace {{ namespace }};
 
+use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 
-class {{ class }}
+class {{ class }} extends BaseChart
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
+    public function build(): BarChart
     {
-        $this->chart = $chart;
-    }
-
-    public function build(): \ArielMejiaDev\LarapexCharts\BarChart
-    {
-        return $this->chart->barChart()
+        return $this->chart
+            ->barChart()
             ->setTitle('San Francisco vs Boston.')
             ->setSubtitle('Wins during season 2021.')
             ->addData('San Francisco', [6, 9, 3, 4, 10, 8])

@@ -2,20 +2,15 @@
 
 namespace {{ namespace }};
 
+use ArielMejiaDev\LarapexCharts\DonutChart;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 
-class {{ class }}
+class {{ class }} extends BaseChart
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
+    public function build(): DonutChart
     {
-        $this->chart = $chart;
-    }
-
-    public function build(): \ArielMejiaDev\LarapexCharts\DonutChart
-    {
-        return $this->chart->donutChart()
+        return $this->chart
+            ->donutChart()
             ->setTitle('Top 3 scorers of the team.')
             ->setSubtitle('Season 2021.')
             ->addData([20, 24, 30])
