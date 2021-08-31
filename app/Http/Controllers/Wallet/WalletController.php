@@ -29,7 +29,7 @@ class WalletController extends Controller
      *
      * @var string
      */
-    private $editorViewName = 'wallet/edit';
+    private string $editorViewName = 'wallet/edit';
 
     /**
      * Show the view for editing wallet
