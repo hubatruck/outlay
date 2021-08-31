@@ -26,8 +26,9 @@
         }
       },
       onReady: function () {
-        loadCharts("{{ date('Y-m-01').' - '.currentDayOfTheMonth() }}");
+        loadCharts("{{ $defaultDateRange }}");
       },
+      defaultDate: "{{ $defaultDateRange }}"
     });
 
     function loadCharts(range) {
