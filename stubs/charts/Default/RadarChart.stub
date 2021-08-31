@@ -3,19 +3,14 @@
 namespace {{ namespace }};
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\RadarChart;
 
-class {{ class }}
+class {{ class }} extends BaseChart
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
+    public function build(): RadarChart
     {
-        $this->chart = $chart;
-    }
-
-    public function build(): \ArielMejiaDev\LarapexCharts\RadarChart
-    {
-        return $this->chart->radarChart()
+        return $this->chart
+            ->radarChart()
             ->setTitle('Individual Player Stats.')
             ->setSubtitle('Season 2021.')
             ->addData('Stats', [70, 93, 78, 97, 50, 90])

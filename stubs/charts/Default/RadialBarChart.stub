@@ -3,19 +3,14 @@
 namespace {{ namespace }};
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\RadialChart;
 
-class {{ class }}
+class {{ class }} extends BaseChart
 {
-    protected $chart;
-
-    public function __construct(LarapexChart $chart)
+    public function build(): RadialChart
     {
-        $this->chart = $chart;
-    }
-
-    public function build(): \ArielMejiaDev\LarapexCharts\RadialChart
-    {
-        return $this->chart->radialChart()
+        return $this->chart
+            ->radialChart()
             ->setTitle('Passing effectiveness.')
             ->setSubtitle('Barcelona city vs Madrid sports.')
             ->addData([75, 60])
