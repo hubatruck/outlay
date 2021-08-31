@@ -13,12 +13,17 @@
 
 @push('scripts')
   <script>
+    let previousRange = "{{ $defaultDateRange }}";
+
     $('#chart-date-range').flatpickr({
       mode: 'range',
       altInput: true,
       locale: "{{ config('app.locale') }}",
       onClose: function (selectedDates, dateStr) {
-        loadCharts(dateStr);
+        if (previousRange !== dateStr) {
+          previousRange = dateStr;
+          loadCharts(dateStr);
+        }
       },
       onReady: function () {
         loadCharts("{{ date('Y-m-01').' - '.currentDayOfTheMonth() }}");
