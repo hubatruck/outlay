@@ -60,37 +60,12 @@
         </a>
       </div>
     </div>
-    <div>
-      <input type="date" class="uk-input" id="chart-date-range" placeholder="{{ __('Show charts between...') }}">
-    </div>
+
+    <x-chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
     <div id="charts"></div>
   </div>
 @endsection
 
 @push('scripts')
   <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-  <script>
-    $('#chart-date-range').flatpickr({
-      mode: 'range',
-      altInput: true,
-      locale: "{{ config('app.locale') }}",
-      onClose: function (selectedDates, dateStr) {
-        loadCharts(dateStr);
-      },
-      onReady: function () {
-        loadCharts("{{ date('Y-m-01').' - '.currentDayOfTheMonth() }}");
-      },
-    });
-
-    function loadCharts(range) {
-      const container = $('#charts');
-      const request = $.ajax({
-        url: "{{ route('wallet.view.charts', ['id' => $wallet->id]) }}",
-        data: {range: range},
-      });
-      request.done(function (data) {
-        container.html(data);
-      });
-    }
-  </script>
 @endpush
