@@ -8,6 +8,7 @@ use ErrorException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\View;
+use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -25,7 +26,20 @@ abstract class DataTableBase extends DataTable
      *
      * @var array
      */
-    protected $dateColumns = [];
+    protected array $dateColumns = [];
+
+    /**
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return DataTableAbstract
+     */
+    public function dataTable($query): DataTableAbstract
+    {
+        return datatables()
+            ->eloquent($query)
+            ->smart();
+    }
 
     /**
      * Apply custom filters to DB query

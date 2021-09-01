@@ -22,9 +22,7 @@ class TransfersDataTable extends DataTableBase
      */
     public function dataTable($query): DataTableAbstract
     {
-        return datatables()
-            ->eloquent($query)
-            ->smart()
+        return parent::dataTable($query)
             ->editColumn('transfer_date', function ($row) {
                 return $row->transfer_date->translatedFormat('Y/m/d, l');
             })

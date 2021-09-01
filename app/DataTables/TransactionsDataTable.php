@@ -22,9 +22,7 @@ class TransactionsDataTable extends DataTableBase
      */
     public function dataTable($query): DataTableAbstract
     {
-        return datatables()
-            ->eloquent($query)
-            ->smart()
+        return parent::dataTable($query)
             ->addColumn('actions', function ($row) {
                 return View::make('components.transaction-dt-actions')->with([
                     'editURL' => route('transaction.view.update', ['id' => $row->transaction_id]),
