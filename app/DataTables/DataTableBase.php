@@ -5,6 +5,7 @@ namespace App\DataTables;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use ErrorException;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\View;
 use Yajra\DataTables\Html\Builder;
@@ -29,7 +30,7 @@ abstract class DataTableBase extends DataTable
     /**
      * Apply custom filters to DB query
      *
-     * @return HasManyThrough|\Illuminate\Database\Query\Builder|\Illuminate\Database\Schema\Builder
+     * @return HasMany|HasManyThrough
      */
     public function query()
     {
@@ -46,7 +47,7 @@ abstract class DataTableBase extends DataTable
     /**
      * Query for getting data from the database
      *
-     * @return HasManyThrough|\Illuminate\Database\Query\Builder|\Illuminate\Database\Schema\Builder
+     * @return HasManyThrough|HasMany
      */
     abstract protected function queryBase();
 

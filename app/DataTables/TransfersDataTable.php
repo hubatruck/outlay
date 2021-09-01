@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Transfer;
 use App\Models\Wallet;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
@@ -62,12 +63,13 @@ class TransfersDataTable extends DataTableBase
     /**
      * Get query source of dataTable
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return HasMany
      */
-    public function queryBase(): \Illuminate\Database\Eloquent\Builder
+    public function queryBase(): HasMany
     {
         return Auth::user()->transfers()
-            ->with(['toWallet', 'fromWallet', 'toWallet.user', 'fromWallet.user']);
+            ->with(['toWallet', 'fromWallet', 'toWallet.user', 'fromWallet.user'])
+            ->select(['transfers.*', 'wallets_to.name as to_wallet_name', 'wallets_from.name as from_wallet_name']);
     }
 
     /**
