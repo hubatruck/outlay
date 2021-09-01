@@ -47,7 +47,7 @@ class BaseChart
      * @param string $walletID
      * @return Builder
      */
-    protected function getBaseQuery(string $walletID): Builder
+    protected function getTransactionBaseQuery(string $walletID): Builder
     {
         return Transaction::with(['transactionType', 'wallet'])
             ->betweenDateRange($this->range)

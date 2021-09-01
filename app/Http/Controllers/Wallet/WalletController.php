@@ -94,8 +94,8 @@ class WalletController extends Controller
         $range = $this->parseRange($request);
 
         $balanceDailyChart = (new DailyBalanceChart(new LarapexChart(), $range))->build($wallet);
-        $transactionDailyChart = (new DailyTransactionsChart(new LarapexChart(), $range))->build($id);
-        $transactionTypeChart = (new TransactionsByTypeChart(new LarapexChart(), $range))->build($id);
+        $transactionDailyChart = (new DailyTransactionsChart(new LarapexChart(), $range))->build($wallet);
+        $transactionTypeChart = (new TransactionsByTypeChart(new LarapexChart(), $range))->build($wallet);
         $transferDailyChart = (new DailyTransfersChart(new LarapexChart(), $range))->build($wallet);
         $transferTypeChart = (new TransfersByTypeChart(new LarapexChart(), $range))->build($wallet);
         $transferWalletChart = (new TransfersByWalletChart(new LarapexChart(), $range))->build($wallet);

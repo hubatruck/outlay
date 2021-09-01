@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use App\DataHandlers\ChartDataHandler;
+use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LineChart;
 use Arr;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,11 +11,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DailyTransactionsChart extends BaseChart
 {
-    public function build(string $walletID): LineChart
+    public function build(Wallet $wallet): LineChart
     {
         /// https://stackoverflow.com/a/24888904
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
-        $baseQuery = $this->getBaseQuery($walletID)
+        $baseQuery = $this->getTransactionBaseQuery($wallet->id)
             ->selectRaw('DATE(transaction_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
 
