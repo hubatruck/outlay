@@ -166,20 +166,27 @@ class User extends Authenticatable
      */
     public function hasTransfers(): bool
     {
-        return $this->transfers()->first() !== null;
+        return $this->transfers->first() !== null;
     }
 
     /**
      * Transfers made from or to any of the user's wallets
      *
-     * return Builder
+     * @return HasMany
      */
-    public function transfers()
+    public function transfers(): HasMany
     {
-        return Transfer::select(['transfers.*', 'wallets_to.name as to_wallet_name', 'wallets_from.name as from_wallet_name'])
-            ->join('wallets as wallets_from', 'wallets_from.id', '=', 'from_wallet_id')
+        $relationship = $this->hasMany(Transfer::class, Wallet::class);
+
+        /** @var  $query Builder */
+        $query = Transfer::join('wallets as wallets_from', 'wallets_from.id', '=', 'from_wallet_id')
             ->leftJoin('wallets as wallets_to', 'wallets_to.id', '=', 'to_wallet_id')
             ->whereRaw('(wallets_to.user_id = ? or wallets_from.user_id = ?)', [$this->id, $this->id]);
+
+        $relationship->setQuery(
+            $query->getQuery()
+        );
+        return $relationship;
     }
 
     /**
