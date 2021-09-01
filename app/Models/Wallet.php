@@ -100,7 +100,16 @@ class Wallet extends Model
      */
     public function hasTransactions(): bool
     {
-        return $this->transactions->first() !== null;
+        return $this->transactions()->exists();
+    }
+
+    /**
+     * Transactions belonging to this wallet
+     * @return HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     /**
@@ -120,7 +129,7 @@ class Wallet extends Model
      */
     public function hasTransfers(): bool
     {
-        return $this->transfers()->first() !== null;
+        return $this->transfers()->exists();
     }
 
     /**
@@ -180,15 +189,6 @@ class Wallet extends Model
         $transfersVal = $transfersVal->first()
                 ->getAttributeValue('amount') ?? 0.0;
         return reducePrecision($transactionVal + $transfersVal);
-    }
-
-    /**
-     * Transactions belonging to this wallet
-     * @return HasMany
-     */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class);
     }
 
     /**
