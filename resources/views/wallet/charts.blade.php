@@ -1,4 +1,8 @@
-@if ($wallet->hasTransactions() || $wallet->hasTransfers())
+@php
+  $hasTransactions = $wallet->hasTransactions();
+  $hasTransfers = $wallet->hasTransfers()
+@endphp
+@if ($hasTransactions || $hasTransfers)
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
       <h4 class="uk-h4">{{  __('Balance chart') }}</h4>
@@ -11,7 +15,7 @@
   </div>
 @endif
 
-@if ($wallet->hasTransactions())
+@if ($hasTransactions)
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
       <h4 class="uk-h4">{{  __('Transaction charts') }}</h4>
@@ -27,7 +31,7 @@
   </div>
 @endif
 
-@if($wallet->hasTransfers())
+@if($hasTransfers)
   <div class="uk-card uk-card-default uk-child-width-1-1">
     <div class="uk-card-header">
       <h4 class="uk-h4">{{  __('Transfer charts') }}</h4>

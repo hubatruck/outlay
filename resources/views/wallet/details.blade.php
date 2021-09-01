@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+  $hasTransactions = $wallet->hasTransactions()
+@endphp
+
 @section('content')
   <x-page-title>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</x-page-title>
 
@@ -50,8 +54,8 @@
         </a>
         <a
           class="uk-button uk-button-danger @if($wallet->hasTransactions())uk-link-muted @endif"
-          href="{{ $wallet->hasTransactions() ? '#' : route('wallet.manage.delete', ['id' => $wallet->id]) }}"
-          @if($wallet->hasTransactions())
+          href="{{ $hasTransactions ? '#' : route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+          @if($hasTransactions)
           uk-tooltip="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
           @endif
         >
