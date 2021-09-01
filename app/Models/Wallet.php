@@ -126,14 +126,18 @@ class Wallet extends Model
     /**
      * All transfers related to a wallet
      *
-     * @return Builder
+     * @return HasMany
      */
-    public function transfers(): Builder
+    public function transfers(): HasMany
     {
-        return Transfer::orWhere(function ($query) {
-            $query->where('from_wallet_id', '=', $this->id)
-                ->orWhere('to_wallet_id', '=', $this->id);
-        });
+        $relation = $this->hasMany(Transfer::class);
+        $relation->setQuery(
+            Transfer::where(function ($query) {
+                $query->where('from_wallet_id', '=', $this->id)
+                    ->orWhere('to_wallet_id', '=', $this->id);
+            })->getQuery()
+        );
+        return $relation;
     }
 
     /**
