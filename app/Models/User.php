@@ -100,8 +100,9 @@ class User extends Authenticatable
 
     /**
      * Get previous transaction date created by the user.
-     * This function is used to determine the prefill date for transaction
+     * This function is used to determine the prefilled date for transaction
      * creation.
+     *
      * @return string
      */
     public function previousTransactionDate(): string
@@ -132,6 +133,7 @@ class User extends Authenticatable
 
     /**
      * Get all active wallets for user
+     *
      * @return Collection
      */
     public function activeWallets(): Collection
