@@ -15,6 +15,7 @@ use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Carbon\Exceptions as CarbonExceptions;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -137,7 +138,7 @@ class WalletController extends Controller
             /// In case of correct range format (xx - yy), but un-parseable data
             try {
                 $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
-            } catch (CarbonExceptions\InvalidIntervalException) {
+            } catch (Exception) {
                 $range = $fallback;
             }
         }
