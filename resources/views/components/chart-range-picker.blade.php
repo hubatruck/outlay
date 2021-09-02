@@ -3,6 +3,12 @@
 @endphp
 
 <div class="uk-padding-small">
+  <div class="uk-button-group uk-width-expand uk-margin-small">
+    <button id="reload" class="uk-button uk-button-default">{{ __('Reload data') }}</button>
+    <button id="7days" class="uk-button uk-button-default">{{ __('Last 7 days') }}</button>
+    <button id="30days" class="uk-button uk-button-default">{{ __('Last 30 days') }}</button>
+    <button id="6months" class="uk-button uk-button-default">{{ __('Last 6 months') }}</button>
+  </div>
   <label
     class="uk-form-label uk-text-bold uk-margin-small-right"
     for="chart-date-range"
@@ -75,6 +81,37 @@
         container.html(content);
         container.fadeIn(duration, callback);
       });
+    }
+
+    $('#reload').click(() => {
+      setRange(previousRange);
+    });
+    $('#7days').click(function () {
+      const start = new Date();
+      start.setDate(start.getDate() - 7);
+      setRange(rangeBeginningWith(start));
+    });
+    $('#30days').click(function () {
+      const start = new Date();
+      start.setMonth(start.getMonth() - 1);
+      setRange(rangeBeginningWith(start));
+    });
+    $('#6months').click(function () {
+      const start = new Date();
+      start.setMonth(start.getMonth() - 6);
+      setRange(rangeBeginningWith(start));
+    });
+
+    function rangeBeginningWith(rangeStart) {
+      const now = new Date();
+      const dateLocale = 'en-CA'; // YYYY-MM-DD
+      return `${rangeStart.toLocaleDateString(dateLocale)} - ${now.toLocaleDateString(dateLocale)}`;
+    }
+
+    function setRange(range) {
+      previousRange = range;
+      loadCharts(range);
+      rangePicker.setDate(range);
     }
   </script>
 @endpush
