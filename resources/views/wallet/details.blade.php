@@ -26,6 +26,30 @@
         @endif
 
         <x-quick-create-button :wallet="$wallet" :targetType="'transaction'"></x-quick-create-button>
+        <x-quick-create-button :wallet="$wallet" targetType="transfer" destinationParam='from_wallet'>
+          <x-slot name="dropdownContent">
+            <x-quick-create-button
+              :wallet="$wallet"
+              targetType='transfer'
+              destinationParam='from_wallet'
+              class="uk-child-width-expand"
+              notPrimary="true"
+              icon="arrow-left"
+            >
+              <x-slot name="label">{{ __('As source') }}</x-slot>
+            </x-quick-create-button>
+            <x-quick-create-button
+              :wallet="$wallet"
+              targetType='transfer'
+              destinationParam='to_wallet'
+              class="uk-child-width-expand"
+              notPrimary="true"
+              icon="arrow-right"
+            >
+              <x-slot name="label">{{ __('As destination') }}</x-slot>
+            </x-quick-create-button>
+          </x-slot>
+        </x-quick-create-button>
         <a
           class="uk-button uk-button-secondary"
           href="{{ route('wallet.view.update', ['id' => $wallet->id]) }}"
