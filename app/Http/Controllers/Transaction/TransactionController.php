@@ -53,7 +53,7 @@ class TransactionController extends Controller
             $wallet = Wallet::find($wallet_id);
 
             if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
-                return WalletFeedback::quickCreateError();
+                return WalletFeedback::quickCreateError('transaction');
             }
         }
 

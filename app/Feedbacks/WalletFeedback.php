@@ -64,12 +64,14 @@ class WalletFeedback
     /**
      * Wallet cannot be used for quick transaction creation.
      * Type: error
+     *
+     * @param string $targetType
      * @return RedirectResponse
      */
-    public static function quickCreateError(): RedirectResponse
+    public static function quickCreateError(string $targetType): RedirectResponse
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Wallet unavailable for quick transaction creation.'),
+            'content' => __('Error') . ': ' . __('Wallet unavailable for quick :target creation.', ['target' => __($targetType)]),
             'type' => 'danger',
         ]);
         return redirect(previousUrlOr(route(self::WALLET_VIEW_ALL)));
