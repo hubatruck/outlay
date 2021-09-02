@@ -69,7 +69,7 @@ if (!function_exists('currentDayOfTheMonth')) {
      */
     function currentDayOfTheMonth(): bool|string
     {
-        return date('Y-m-d');
+        return date(globalDateFormat());
     }
 }
 
@@ -96,7 +96,19 @@ if (!function_exists('defaultChartRangeAsFlatpickrValue')) {
     function defaultChartRangeAsFlatpickrValue(): string
     {
         $range = defaultChartRange();
-        $format = 'Y-m-d';
+        $format = globalDateFormat();
         return $range->first()->format($format) . ' - ' . $range->last()->format($format);
+    }
+}
+
+if (!function_exists('globalDateFormat')) {
+    /**
+     * The default date format used everywhere
+     *
+     * @return string
+     */
+    function globalDateFormat(): string
+    {
+        return 'Y-m-d';
     }
 }

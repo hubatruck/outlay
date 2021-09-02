@@ -85,7 +85,7 @@ class Transfer extends Model
      */
     public function setTransferDateAttribute(Carbon|string $value): void
     {
-        $this->attributes['transfer_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
+        $this->attributes['transfer_date'] = (Carbon::parse($value)->format(globalDateFormat()) . ' 03:00:00');
     }
 
     /**

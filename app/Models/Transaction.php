@@ -111,7 +111,7 @@ class Transaction extends Model
      */
     public function setTransactionDateAttribute(Carbon|string $value): void
     {
-        $this->attributes['transaction_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
+        $this->attributes['transaction_date'] = (Carbon::parse($value)->format(globalDateFormat()) . ' 03:00:00');
     }
 
     /**

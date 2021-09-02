@@ -122,7 +122,7 @@ class TransactionController extends Controller
                 'required',
                 Rule::in(TransactionType::all()->pluck('id')->toArray()),
             ],
-            'transaction_date' => 'required|date|date_format:Y-m-d',
+            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
         ]);
     }
 

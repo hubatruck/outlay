@@ -137,7 +137,7 @@
             class="uk-input @error('transfer_date') uk-form-danger @enderror"
             name="transfer_date"
             type="date"
-            value="{{ \Carbon\Carbon::parse(old('transfer_date', \Carbon\Carbon::now()))->format('Y-m-d') }}"
+            value="{{ \Carbon\Carbon::parse(old('transfer_date', \Carbon\Carbon::now()))->format(globalDateFormat()) }}"
           />
         </div>
         @error('transfer_date')

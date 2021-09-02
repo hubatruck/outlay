@@ -144,7 +144,7 @@
             name="transaction_date"
             type="date"
             value="{{ \Carbon\Carbon::parse(old('transaction_date', $transaction->transaction_date
-                                    ?? Auth::user()->previousTransactionDate()))->format('Y-m-d') }}"
+                                    ?? Auth::user()->previousTransactionDate()))->format(globalDateFormat()) }}"
           />
         </div>
         @error('transaction_date')

@@ -81,7 +81,7 @@ class TransferController extends Controller
             'from_wallet_id' => ['required', new UserOwnsWalletRule(), new WalletIsActiveRule()],
             'to_wallet_id' => ['required', 'different:from_wallet_id', new WalletExistsRule()],
             'amount' => 'numeric|min:0.01|max:999999.99',
-            'transfer_date' => 'required|date|date_format:Y-m-d|before_or_equal:' . date('Y-m-d'),
+            'transfer_date' => 'required|date|date_format:' . globalDateFormat() . '|before_or_equal:' . date(globalDateFormat()),
         ]);
     }
 }

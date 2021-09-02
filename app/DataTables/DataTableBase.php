@@ -76,7 +76,7 @@ abstract class DataTableBase extends DataTable
         $dateRange = [];
 
         if ($reqDateRange) {
-            $format = 'Y-m-d H:i:s';
+            $format = globalDateFormat() . ' H:i:s';
 
             [$from, $to] = explode(' - ', $reqDateRange);
             if (!$from || !$to) {
