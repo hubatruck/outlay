@@ -120,7 +120,7 @@ class WalletController extends Controller
      */
     private function parseRange(Request $request): CarbonPeriod
     {
-        $fallback = CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
+        $fallback = defaultChartRange();
         if ($request->has('range')) {
             $rawRange = explode(' - ', $request->get('range'));
 

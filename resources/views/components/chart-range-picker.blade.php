@@ -1,5 +1,5 @@
 @php
-  $defaultDateRange = date('Y-m-01').' - '.currentDayOfTheMonth()
+  $defaultDateRange = defaultChartRangeAsFlatpickrValue()
 @endphp
 
 <div class="uk-padding-small">

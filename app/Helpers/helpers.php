@@ -1,5 +1,8 @@
 <?php
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+
 if (!function_exists('previousUrlOr')) {
     /**
      * Get previous URL or fallback
@@ -67,5 +70,33 @@ if (!function_exists('currentDayOfTheMonth')) {
     function currentDayOfTheMonth(): bool|string
     {
         return date('Y-m-d');
+    }
+}
+
+if (!function_exists('defaultChartRange')) {
+    /**
+     * Returns the default date range used for charts if none is provided
+     *
+     * @return CarbonPeriod last 7 days
+     */
+    function defaultChartRange(): CarbonPeriod
+    {
+        return CarbonPeriod::create(Carbon::now()->subWeek(), Carbon::now());
+    }
+}
+
+
+if (!function_exists('defaultChartRangeAsFlatpickrValue')) {
+    /**
+     * Get the defaultChartRange() function's value as Flatpickr parseable
+     * values
+     *
+     * @return string
+     */
+    function defaultChartRangeAsFlatpickrValue(): string
+    {
+        $range = defaultChartRange();
+        $format = 'Y-m-d';
+        return $range->first()->format($format) . ' - ' . $range->last()->format($format);
     }
 }

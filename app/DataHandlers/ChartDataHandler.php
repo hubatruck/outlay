@@ -41,7 +41,7 @@ class ChartDataHandler
             $data = $data->toArray();
         }
         $this->data = $data;
-        $this->range = $range ?? CarbonPeriod::create(date('Y-m-01'), currentDayOfTheMonth());
+        $this->range = $range ?? defaultChartRange();
         $this->dataPrecision = $dataPrecision;
     }
 
