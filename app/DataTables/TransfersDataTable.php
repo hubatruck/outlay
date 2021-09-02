@@ -26,9 +26,6 @@ class TransfersDataTable extends DataTableBase
             ->editColumn('transfer_date', function ($row) {
                 return $row->transfer_date->translatedFormat('Y/m/d, l');
             })
-            ->filterColumn('transfer_date', function ($query, $keyword) {
-                $this->dateFilter($query, $keyword, 'transfer_date');
-            })
             ->editColumn('from_wallet_name', function (Transfer $row) {
                 return $this->getWalletNameFor($row->fromWallet);
             })
