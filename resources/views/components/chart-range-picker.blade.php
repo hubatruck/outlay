@@ -16,7 +16,7 @@
   <div class="uk-inline">
     <button
       class="uk-form-icon uk-form-icon-flip"
-      uk-icon="refresh"
+      uk-icon="trash"
       onclick="resetRange()"
       uk-tooltip="{{ __('Reset range') }}"
     ></button>
@@ -51,8 +51,7 @@
     });
 
     function resetRange() {
-      loadCharts("{{ $defaultDateRange }}");
-      rangePicker.setDate("{{ $defaultDateRange }}");
+      setRange('{{ $defaultDateRange }}');
     }
 
     function loadCharts(range) {
