@@ -4,5 +4,7 @@
     "/css/app.css": "/css/app.css",
     "/js/vendor.js": "/js/vendor.js",
     "/js/datatables.bundle.js": "/js/datatables.bundle.js",
-    "/js/datatables.bundle.min.js": "/js/datatables.bundle.min.js"
+    "/js/datatables.bundle.min.js": "/js/datatables.bundle.min.js",
+    "/js/charts.bundle.js": "/js/charts.bundle.js",
+    "/js/charts.bundle.min.js": "/js/charts.bundle.min.js"
 }

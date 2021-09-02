@@ -38,6 +38,10 @@ mix
     .combine('resources/js/datatables/*.js', 'public/js/datatables.bundle.js')
     .minify('public/js/datatables.bundle.js', 'public/js')
 
+    /// Chart scripts
+    .combine('resources/js/charts/*.js', 'public/js/charts.bundle.js')
+    .minify('public/js/charts.bundle.js', 'public/js')
+
     // Compile Sass
     .sass('resources/scss/app.scss', 'public/css')
 
