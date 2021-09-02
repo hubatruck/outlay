@@ -10,11 +10,11 @@ class BalanceChartDataHandler extends ChartDataHandler
     /**
      * Creates a new instance of this class
      *
-     * @param Collection|array|null $data
+     * @param array|Collection|null $data
      * @param CarbonPeriod|null $range
      * @return BalanceChartDataHandler
      */
-    protected static function newInstance($data = null, CarbonPeriod $range = null): BalanceChartDataHandler
+    protected static function newInstance(array|Collection $data = null, CarbonPeriod $range = null): BalanceChartDataHandler
     {
         return new BalanceChartDataHandler($data, $range);
     }

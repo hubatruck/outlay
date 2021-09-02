@@ -41,7 +41,7 @@
                   </button>
                 </form>
               @else
-                @if(session('status') == 'two-factor-authentication-enabled')
+                @if(session('status') === 'two-factor-authentication-enabled')
                   {{-- Show SVG QR Code, After Enabling 2FA --}}
                   <div>
                     {{ __('Two factor authentication is now enabled. Scan the following QR code using your phone\'s authenticator application.') }}
@@ -54,7 +54,7 @@
 
                 {{-- Show 2FA Recovery Codes --}}
                 <div class="hidden-recovery-codes"
-                     @unless(session('status') == 'two-factor-authentication-enabled')hidden @endunless>
+                     @unless(session('status') === 'two-factor-authentication-enabled')hidden @endunless>
                   <div>
                     {{ __('Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.') }}
                   </div>
@@ -68,7 +68,7 @@
 
                 <div class="uk-flex uk-flex-middle uk-visible@s">
                   <div class="hidden-recovery-codes"
-                       @unless(session('status') == 'two-factor-authentication-enabled')hidden @endunless>
+                       @unless(session('status') === 'two-factor-authentication-enabled')hidden @endunless>
                     {{-- Regenerate 2FA Recovery Codes --}}
                     <form method="POST" action="{{ url('user/two-factor-recovery-codes') }}">
                       @csrf
@@ -83,7 +83,7 @@
                     type="submit"
                     class="uk-button uk-button-primary hidden-recovery-codes"
                     uk-toggle="target: .hidden-recovery-codes"
-                    @if(session('status') == 'two-factor-authentication-enabled') hidden @endif>
+                    @if(session('status') === 'two-factor-authentication-enabled') hidden @endif>
                     {{ __('Show Recovery Codes') }}
                   </button>
 
@@ -102,7 +102,7 @@
 
                 <div class="uk-flex uk-flex-middle uk-flex-column uk-hidden@s">
                   <div class="hidden-recovery-codes"
-                       @unless(session('status') == 'two-factor-authentication-enabled')hidden @endunless>
+                       @unless(session('status') === 'two-factor-authentication-enabled')hidden @endunless>
                     {{-- Regenerate 2FA Recovery Codes --}}
                     <form method="POST" action="{{ url('user/two-factor-recovery-codes') }}">
                       @csrf
@@ -117,7 +117,7 @@
                     type="submit"
                     class="uk-button uk-button-primary hidden-recovery-codes uk-width-1-1"
                     uk-toggle="target: .hidden-recovery-codes"
-                    @if(session('status') == 'two-factor-authentication-enabled') hidden @endif>
+                    @if(session('status') === 'two-factor-authentication-enabled') hidden @endif>
                     {{ __('Show Recovery Codes') }}
                   </button>
 

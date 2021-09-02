@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Column;
 
 class TransfersDataTable extends DataTableBase
 {
-    protected $dateColumns = ['transfer_date'];
+    protected array $dateColumns = ['transfer_date'];
 
     /**
      * Build DataTable class.
@@ -20,7 +20,7 @@ class TransfersDataTable extends DataTableBase
      * @param mixed $query Results from query() method.
      * @return DataTableAbstract
      */
-    public function dataTable($query): DataTableAbstract
+    public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
             ->editColumn('transfer_date', function ($row) {

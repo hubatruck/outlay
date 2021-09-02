@@ -51,7 +51,7 @@ if (!function_exists('reducePrecision')) {
      * @param int $decimalPlaces
      * @return float|int
      */
-    function reducePrecision(float $number, int $decimalPlaces = 2)
+    function reducePrecision(float $number, int $decimalPlaces = 2): float|int
     {
         $cutter = 10 ** $decimalPlaces;
         return floor($number * $cutter) / $cutter;
@@ -62,9 +62,9 @@ if (!function_exists('currentDayOfTheMonth')) {
     /**
      * Returns what day should we consider as the last (current) day of the month
      *
-     * @return false|string
+     * @return bool|string
      */
-    function currentDayOfTheMonth()
+    function currentDayOfTheMonth(): bool|string
     {
         return date('Y-m-d');
     }

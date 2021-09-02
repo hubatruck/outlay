@@ -4,10 +4,10 @@ namespace App\DataTables;
 
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
-use ErrorException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\View;
+use JetBrains\PhpStorm\ArrayShape;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -34,7 +34,7 @@ abstract class DataTableBase extends DataTable
      * @param mixed $query Results from query() method.
      * @return DataTableAbstract
      */
-    public function dataTable($query): DataTableAbstract
+    public function dataTable(mixed $query): DataTableAbstract
     {
         return datatables()
             ->eloquent($query)
@@ -46,7 +46,7 @@ abstract class DataTableBase extends DataTable
      *
      * @return HasMany|HasManyThrough
      */
-    public function query()
+    public function query(): HasManyThrough|HasMany
     {
         $query = $this->queryBase();
         $range = $this->parseDateRange();
@@ -63,7 +63,7 @@ abstract class DataTableBase extends DataTable
      *
      * @return HasManyThrough|HasMany
      */
-    abstract protected function queryBase();
+    abstract protected function queryBase(): HasManyThrough|HasMany;
 
     /**
      * Parse data range from request
@@ -78,17 +78,15 @@ abstract class DataTableBase extends DataTable
         if ($reqDateRange) {
             $format = 'Y-m-d H:i:s';
 
-            try {
-                [$from, $to] = explode(' - ', $reqDateRange);
-            } catch (ErrorException $e) {
-                /// In case the user selects a single day
+            [$from, $to] = explode(' - ', $reqDateRange);
+            if (!$from || !$to) {
                 $to = $from = $reqDateRange;
             }
 
             try {
                 $dateRange[] = Carbon::parse($from)->startOfDay()->format($format);
                 $dateRange[] = Carbon::parse($to)->endOfDay()->format($format);
-            } catch (InvalidFormatException $e) {
+            } catch (InvalidFormatException) {
                 $dateRange = [];
             }
         }
@@ -157,6 +155,7 @@ abstract class DataTableBase extends DataTable
      *
      * @return string[]
      */
+    #[ArrayShape(['date_range' => "string"])]
     protected function dateRangeHandler(): array
     {
         return ['date_range' => '$("#' . self::DATE_RANGE_ID . '").val()'];

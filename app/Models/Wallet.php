@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Feedbacks\WalletFeedback;
 use Database\Factories\WalletFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,7 +54,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Wallet whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|Wallet withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Wallet withoutTrashed()
- * @mixin Eloquent
+ * @mixin Model
  */
 class Wallet extends Model
 {
@@ -167,7 +166,7 @@ class Wallet extends Model
      * @param \Carbon\Carbon|string|null $to
      * @return float
      */
-    public function getBalanceBetween($from = null, $to = null): float
+    public function getBalanceBetween(\Carbon\Carbon|string $from = null, \Carbon\Carbon|string $to = null): float
     {
         $transactionVal = $this->transactions()
             ->sumAmount();

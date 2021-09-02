@@ -72,7 +72,7 @@ class BaseChart
      * @param $transfers
      * @return mixed
      */
-    protected function filterTransfers($transfers)
+    protected function filterTransfers($transfers): mixed
     {
         return $transfers->betweenDateRange($this->range)
             ->selectRaw('DATE(transfer_date) as day, sum(amount) as daily_amount')

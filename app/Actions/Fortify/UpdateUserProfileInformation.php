@@ -50,7 +50,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      * @param array $input
      * @return void
      */
-    protected function updateVerifiedUser($user, array $input): void
+    protected function updateVerifiedUser(mixed $user, array $input): void
     {
         $user->forceFill([
             'name' => $input['name'],

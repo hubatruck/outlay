@@ -21,7 +21,7 @@ use Illuminate\Validation\Rule;
 
 class TransactionController extends Controller
 {
-    private $viewName = 'transaction/edit';
+    private string $editViewName = 'transaction/edit';
 
     /**
      * Show all transactions for the user
@@ -29,23 +29,23 @@ class TransactionController extends Controller
      * @param TransactionsDataTable $dataTable
      * @return mixed
      */
-    public function index(TransactionsDataTable $dataTable)
+    public function index(TransactionsDataTable $dataTable): mixed
     {
         if (!Auth::user()->hasWallet()) {
             addSessionMsg(TransactionFeedback::noWalletMsg(), true);
         } else if (!Auth::user()->hasAnyActiveWallet()) {
             addSessionMsg(TransactionFeedback::noActiveWalletMsg(), true);
         }
-        return $dataTable->render('transaction.list',);
+        return $dataTable->render('transaction.list');
     }
 
     /**
      * Show the view for creating a transaction
      *
      * @param Request $request
-     * @return Application|Factory|View|RedirectResponse
+     * @return View|Factory|RedirectResponse|Application
      */
-    public function createView(Request $request)
+    public function createView(Request $request): View|Factory|RedirectResponse|Application
     {
         /// pre-select the wallet, if there is intent
         $wallet_id = $request->get('wallet_id');
@@ -60,7 +60,7 @@ class TransactionController extends Controller
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
-        return view($this->viewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
+        return view($this->editViewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
     }
 
     /**
@@ -69,9 +69,9 @@ class TransactionController extends Controller
      * see also: https://stackoverflow.com/a/59745972
      *
      * @param string $id
-     * @return Application|Factory|View|RedirectResponse
+     * @return View|Factory|RedirectResponse|Application
      */
-    public function editView(string $id)
+    public function editView(string $id): View|Factory|RedirectResponse|Application
     {
         if (!Auth::user()->hasWallet()) {
             return WalletFeedback::noWalletError();
@@ -80,10 +80,8 @@ class TransactionController extends Controller
         $transaction = Transaction::find($id);
 
         $permissionCheck = Transaction::checkStatus($transaction);
-        return $permissionCheck === null
-            ? view($this->viewName, compact('transaction'))
-            : $permissionCheck;
 
+        return $permissionCheck ?? view($this->editViewName, compact('transaction'));
     }
 
     /**

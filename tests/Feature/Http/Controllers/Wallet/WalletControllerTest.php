@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Wallet;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -138,7 +139,7 @@ class WalletControllerTest extends TestCase
 
     /**
      * Create wallet with too long name
-     * @throws \Exception
+     * @throws Exception
      */
     public function test_save_wallet_validate_too_long_name(): void
     {
@@ -204,7 +205,7 @@ class WalletControllerTest extends TestCase
 
     /**
      * Update wallet with too long name
-     * @throws \Exception
+     * @throws Exception
      */
     public function test_update_wallet_validate_too_long_name(): void
     {

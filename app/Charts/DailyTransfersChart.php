@@ -5,7 +5,7 @@ namespace App\Charts;
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\BarChart;
-use Arr;
+use Illuminate\Support\Arr;
 
 class DailyTransfersChart extends BaseChart
 {

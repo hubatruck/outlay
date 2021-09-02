@@ -12,7 +12,7 @@ class CreateTransactionTypesTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('transaction_types', function (Blueprint $table) {
             $table->id();
@@ -24,17 +24,6 @@ class CreateTransactionTypesTable extends Migration
         $this->transactionTypeCreate('Income', 'Expense');
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('transaction_types');
-    }
-
-    /// https://stackoverflow.com/a/53872157
     private function transactionTypeCreate(string ...$types): void
     {
         foreach ($types as $type) {
@@ -42,5 +31,17 @@ class CreateTransactionTypesTable extends Migration
             $tType->setAttribute('name', $type);
             $tType->save();
         }
+    }
+
+    /// https://stackoverflow.com/a/53872157
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('transaction_types');
     }
 }

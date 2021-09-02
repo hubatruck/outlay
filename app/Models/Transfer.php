@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon\CarbonPeriod;
 use Database\Factories\TransferFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Transfer whereToWalletId($value)
  * @method static Builder|Transfer whereTransferDate($value)
  * @method static Builder|Transfer whereUpdatedAt($value)
- * @mixin Eloquent
+ * @mixin Model
  */
 class Transfer extends Model
 {
@@ -82,9 +81,9 @@ class Transfer extends Model
     /**
      * Set transfer date from DATE format to DATETIME format
      *
-     * @param \Carbon\Carbon|string $value
+     * @param Carbon|string $value
      */
-    public function setTransferDateAttribute($value): void
+    public function setTransferDateAttribute(Carbon|string $value): void
     {
         $this->attributes['transfer_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
     }

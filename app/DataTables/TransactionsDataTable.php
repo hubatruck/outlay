@@ -4,7 +4,7 @@ namespace App\DataTables;
 
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Auth;
-use View;
+use Illuminate\Support\Facades\View;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Column;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Column;
 class TransactionsDataTable extends DataTableBase
 {
 
-    protected $dateColumns = ['transaction_date'];
+    protected array $dateColumns = ['transaction_date'];
 
     /**
      * Build DataTable class.
@@ -20,7 +20,7 @@ class TransactionsDataTable extends DataTableBase
      * @param mixed $query Results from query() method.
      * @return DataTableAbstract
      */
-    public function dataTable($query): DataTableAbstract
+    public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
             ->addColumn('actions', function ($row) {

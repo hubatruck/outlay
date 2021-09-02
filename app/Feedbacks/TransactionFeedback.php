@@ -46,9 +46,9 @@ class TransactionFeedback
     /**
      * Redirect user with 'cannot edit this transaction' error
      *
-     * @return Application|RedirectResponse|Redirector
+     * @return Redirector|RedirectResponse|Application
      */
-    public static function editError()
+    public static function editError(): Redirector|RedirectResponse|Application
     {
         addSessionMsg([
             'content' => __('Error') . ': ' . __('You cannot edit this transaction.'),

@@ -5,7 +5,7 @@ namespace App\Charts;
 use App\DataHandlers\BalanceChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\AreaChart;
-use Arr;
+use Illuminate\Support\Arr;
 
 class DailyBalanceChart extends BaseChart
 {

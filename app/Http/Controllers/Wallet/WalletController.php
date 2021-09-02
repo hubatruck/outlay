@@ -45,9 +45,9 @@ class WalletController extends Controller
      * Show the view for editing wallet
      *
      * @param string $id
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @return \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
      */
-    public function editView(string $id)
+    public function editView(string $id): \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->find($id);
 
@@ -59,9 +59,9 @@ class WalletController extends Controller
      * Show details page for wallet, if user owns it
      *
      * @param string $id
-     * @return Application|Factory|\Illuminate\Contracts\View\View|RedirectResponse
+     * @return \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
      */
-    public function detailsView(string $id)
+    public function detailsView(string $id): \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->findOrFail($id);
         if (!Auth::user()->owns($wallet)) {
@@ -81,7 +81,7 @@ class WalletController extends Controller
      * @param string $id
      * @return RedirectResponse|string
      */
-    public function charts(Request $request, string $id)
+    public function charts(Request $request, string $id): string|RedirectResponse
     {
         $wallet = Wallet::withTrashed()->findOrFail($id);
         if (!Auth::user()->owns($wallet)) {
@@ -129,7 +129,7 @@ class WalletController extends Controller
                 try {
                     $rawRange[0] = Carbon::parse($rawRange[0])->startOfDay();
                     $rawRange[1] = $rawRange[0]->endOfDay();
-                } catch (CarbonExceptions\InvalidFormatException $e) {
+                } catch (CarbonExceptions\InvalidFormatException) {
                     $rawRange[0] = $rawRange[1] = currentDayOfTheMonth();
                 }
             }
@@ -137,7 +137,7 @@ class WalletController extends Controller
             /// In case of correct range format (xx - yy), but un-parseable data
             try {
                 $range = CarbonPeriod::create(($rawRange[0]), ($rawRange[1]));
-            } catch (CarbonExceptions\InvalidIntervalException $e) {
+            } catch (CarbonExceptions\InvalidIntervalException) {
                 $range = $fallback;
             }
         }

@@ -5,9 +5,9 @@ namespace App\Charts;
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LineChart;
-use Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class DailyTransactionsChart extends BaseChart
 {
@@ -47,7 +47,7 @@ class DailyTransactionsChart extends BaseChart
      * @param int $transactionType
      * @return Builder[]|Collection
      */
-    private function getForTransactionTypeOf(Builder $baseQuery, int $transactionType)
+    private function getForTransactionTypeOf(Builder $baseQuery, int $transactionType): Collection|array
     {
         /// https://stackoverflow.com/a/46227628 (comment)
         return (clone $baseQuery)

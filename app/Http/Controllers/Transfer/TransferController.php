@@ -25,7 +25,7 @@ class TransferController extends Controller
      * @param TransfersDataTable $dataTable
      * @return mixed
      */
-    public function index(TransfersDataTable $dataTable)
+    public function index(TransfersDataTable $dataTable): mixed
     {
         if (!Auth::user()->hasWallet()) {
             addSessionMsg(TransferFeedback::noWalletMsg(), true);
@@ -33,15 +33,15 @@ class TransferController extends Controller
             addSessionMsg(TransferFeedback::noActiveWalletMsg(), true);
         }
 
-        return $dataTable->render('transfer/list',);
+        return $dataTable->render('transfer/list');
     }
 
     /**
      * Show the create a transfer view
      *
-     * @return Application|Factory|View|RedirectResponse
+     * @return View|Factory|RedirectResponse|Application
      */
-    public function createView()
+    public function createView(): View|Factory|RedirectResponse|Application
     {
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(

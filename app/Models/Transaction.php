@@ -6,7 +6,6 @@ use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Database\Factories\TransactionFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +43,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Transaction whereTransactionTypeId($value)
  * @method static Builder|Transaction whereUpdatedAt($value)
  * @method static Builder|Transaction whereWalletId($value)
- * @mixin Eloquent
+ * @mixin Model
  */
 class Transaction extends Model
 {
@@ -108,9 +107,9 @@ class Transaction extends Model
 
     /**
      * Set transaction type from DATE format to DATETIME format
-     * @param Carbon|string $value
+     * @param string|Carbon $value
      */
-    public function setTransactionDateAttribute($value): void
+    public function setTransactionDateAttribute(Carbon|string $value): void
     {
         $this->attributes['transaction_date'] = (Carbon::parse($value)->format('Y-m-d') . ' 03:00:00');
     }

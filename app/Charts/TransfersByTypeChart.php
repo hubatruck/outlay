@@ -5,7 +5,7 @@ namespace App\Charts;
 use App\DataHandlers\ChartDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\PieChart;
-use Arr;
+use Illuminate\Support\Arr;
 
 class TransfersByTypeChart extends BaseChart
 {

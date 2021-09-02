@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\TransactionType
  *
  * @property int $id
  * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @method static Builder|TransactionType newModelQuery()
  * @method static Builder|TransactionType newQuery()
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|TransactionType whereId($value)
  * @method static Builder|TransactionType whereName($value)
  * @method static Builder|TransactionType whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Model
  */
 class TransactionType extends Model
 {

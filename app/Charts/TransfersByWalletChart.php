@@ -5,7 +5,7 @@ namespace App\Charts;
 use App\DataHandlers\ByWalletDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\HorizontalBar;
-use Arr;
+use Illuminate\Support\Arr;
 
 class TransfersByWalletChart extends BaseChart
 {

@@ -6,7 +6,7 @@ use App\DataHandlers\ChartDataHandler;
 use App\Models\TransactionType;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\PolarAreaChart;
-use Arr;
+use Illuminate\Support\Arr;
 
 class TransactionsByTypeChart extends BaseChart
 {

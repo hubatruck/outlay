@@ -4,8 +4,9 @@ namespace App\DataHandlers;
 
 use App\Models\Wallet;
 use Carbon\CarbonPeriod;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use JetBrains\PhpStorm\ArrayShape;
 
 class ByWalletDataHandler extends ChartDataHandler
 {
@@ -58,11 +59,11 @@ class ByWalletDataHandler extends ChartDataHandler
     }
 
     /**
-     * @param Collection|array|null $data
+     * @param array|Collection|null $data
      * @param CarbonPeriod|null $range
      * @return ByWalletDataHandler
      */
-    protected static function newInstance($data = null, CarbonPeriod $range = null): ByWalletDataHandler
+    protected static function newInstance(array|Collection $data = null, CarbonPeriod $range = null): ByWalletDataHandler
     {
         return new ByWalletDataHandler($data, $range);
     }

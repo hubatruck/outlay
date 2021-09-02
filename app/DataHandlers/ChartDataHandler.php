@@ -21,7 +21,7 @@ class ChartDataHandler
      *
      * @var array|Collection|null
      */
-    protected $data;
+    protected Collection|array|null $data;
 
     /**
      * Floating point digit precision
@@ -35,7 +35,7 @@ class ChartDataHandler
      * @param CarbonPeriod|null $range
      * @param int $dataPrecision
      */
-    public function __construct($data = null, CarbonPeriod $range = null, int $dataPrecision = 2)
+    public function __construct(array|Collection $data = null, CarbonPeriod $range = null, int $dataPrecision = 2)
     {
         if ($data instanceof Collection) {
             $data = $data->toArray();
@@ -50,11 +50,11 @@ class ChartDataHandler
      * This function eases usage of the class, by adding the ability to call statically the constructor,
      * instead of going the regular $someVar = new ChartDataHandler(...) way
      *
-     * @param Collection|array|null $data
+     * @param array|Collection|null $data
      * @param CarbonPeriod|null $range
      * @return ChartDataHandler
      */
-    public static function from($data = null, CarbonPeriod $range = null): ChartDataHandler
+    public static function from(array|Collection $data = null, CarbonPeriod $range = null): ChartDataHandler
     {
         return static::newInstance($data, $range);
     }
@@ -62,11 +62,11 @@ class ChartDataHandler
     /**
      * Creates a new instance of this class
      *
-     * @param Collection|array|null $data
+     * @param array|Collection|null $data
      * @param CarbonPeriod|null $range
      * @return ChartDataHandler
      */
-    protected static function newInstance($data = null, CarbonPeriod $range = null): ChartDataHandler
+    protected static function newInstance(array|Collection $data = null, CarbonPeriod $range = null): ChartDataHandler
     {
         return new ChartDataHandler($data, $range);
     }
@@ -88,7 +88,7 @@ class ChartDataHandler
      *
      * @param int|mixed $dataPrecision
      */
-    public function setDataPrecision($dataPrecision): void
+    public function setDataPrecision(mixed $dataPrecision): void
     {
         $this->dataPrecision = $dataPrecision;
     }
