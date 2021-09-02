@@ -128,12 +128,25 @@ class WalletFeedback
     }
 
     /**
+     * The wallet does not have any transactions nor transfers, no charts
+     *
+     * @return string[]
+     */
+    public static function noActivity(): array
+    {
+        return [
+            'content' => __('Note') . ': ' . __('Wallet does not have activity tied to it. Charts feature is hidden.'),
+            'type' => 'primary',
+        ];
+    }
+
+    /**
      * The specified wallet does not have transactions or transfers, so
      * some chats are hidden.
      *
      * @return string[]
      */
-    public static function noActivity(): array
+    public static function partialActivity(): array
     {
         return [
             'content' => __('Note') . ': ' . __('No transactions or transfers for this wallet. Some charts are hidden.'),

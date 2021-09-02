@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @php
+  $hasTransfers = $wallet->hasTransfers();
   $hasTransactions = $wallet->hasTransactions()
 @endphp
 
@@ -15,7 +16,7 @@
         <div class="uk-text-bolder uk-inline @if($cb < 0) uk-text-danger @else uk-text-success @endif">{{ $cb }}</div>
       </div>
     </div>
-    <div class="uk-card uk-card-default uk-margin-medium-bottom">
+    <div class="uk-card uk-card-default @if ($hasTransactions || $hasTransfers)uk-margin-medium-bottom @endif">
       <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
       <div class="uk-card-body uk-button-group">
         @if(config('app.debug'))
@@ -65,11 +66,15 @@
       </div>
     </div>
 
-    <x-chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
-    <div id="charts"></div>
+    @if ($hasTransactions || $hasTransfers)
+      <x-chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
+      <div id="charts"></div>
+    @endif
   </div>
 @endsection
 
-@push('scripts')
-  <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-@endpush
+@if ($hasTransactions || $hasTransfers)
+  @push('scripts')
+    <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
+  @endpush
+@endif

@@ -89,6 +89,8 @@ class WalletController extends Controller
             return WalletFeedback::viewError();
         }
         if (!$wallet->hasTransactions() || !$wallet->hasTransfers()) {
+            addSessionMsg(WalletFeedback::partialActivity(), true);
+        } else {
             addSessionMsg(WalletFeedback::noActivity(), true);
         }
 

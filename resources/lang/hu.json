@@ -96,6 +96,7 @@
     "Wallets": "Tárcák",
     "Wallet details for :wallet": ":wallet tárca részletei",
     "Wallet does not exist.": "A tárca nem létezik.",
+    "Wallet does not have activity tied to it. Charts feature is hidden.": "Nincs aktivitás a tárcához kapcsolódva. Grafikon funkció elrejtve",
     "Wallet has transactions linked to it. Cannot be deleted.": "A tárcához tranzakciók tartoznak. Nem lehet törölni.",
     "Wallet represents credit card": "A tárca bankkártyát képvisel",
     "Wallet :action successfully.": "Tárca sikeresen :action.",
