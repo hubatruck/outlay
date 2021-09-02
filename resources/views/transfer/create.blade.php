@@ -73,7 +73,7 @@
               @if($wallet->deleted_at === null)
                 <option
                   value="{{ $wallet->id }}"
-                  @if(($selected_wallet_id ?? '') === (string) $wallet->id
+                  @if(($selected_from_wallet_id ?? '') === (string) $wallet->id
                       || (old('from_wallet_id') && (string) $wallet->id === old('from_wallet_id')))
                   selected
                   @endif
@@ -108,7 +108,8 @@
             @foreach(\App\Models\Wallet::withTrashed()->get() as $wallet)
               <option
                 value="{{ $wallet->id }}"
-                @if((old('to_wallet_id') && (string) $wallet->id === old('to_wallet_id')))
+                @if(($selected_to_wallet_id ?? '') === (string) $wallet->id
+                    || (old('from_wallet_id') && (string) $wallet->id === old('from_wallet_id')))
                 selected
                 @endif
               >

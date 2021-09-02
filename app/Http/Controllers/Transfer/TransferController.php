@@ -7,6 +7,7 @@ use App\Feedbacks\TransferFeedback;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Transfer;
+use App\Models\Wallet;
 use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletExistsRule;
 use App\Rules\WalletIsActiveRule;
@@ -39,10 +40,19 @@ class TransferController extends Controller
     /**
      * Show the create a transfer view
      *
+     * @param Request $request
      * @return View|Factory|RedirectResponse|Application
      */
-    public function createView(): View|Factory|RedirectResponse|Application
+    public function createView(Request $request): View|Factory|RedirectResponse|Application
     {
+        $fromWalletID = $request->get('from_wallet');
+        $toWalletID = $request->get('to_wallet');
+        $fromWalletCheck = $this->quickCreateWalletCheck($fromWalletID);
+        $toWalletCheck = $this->quickCreateWalletCheck($toWalletID, false);
+        if ($toWalletCheck || $fromWalletCheck) {
+            return $toWalletCheck ?? $fromWalletCheck;
+        }
+
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(
                 Auth::user()->hasWallet() ? 'active' : '',
@@ -51,7 +61,30 @@ class TransferController extends Controller
         }
 
         addSessionMsg(TransferFeedback::warnIrreversibleTransfer(), true);
-        return view('transfer.create');
+        return view('transfer.create', [
+            'selected_from_wallet_id' => $fromWalletID ?? '-1',
+            'selected_to_wallet_id' => $toWalletID ?? '-1',
+        ]);
+    }
+
+    /**
+     * Check if a wallet can be used for quick transfer creation
+     *
+     * @param string|null $walletID
+     * @param bool $checkOwner Check if user owns the wallet
+     * @return RedirectResponse|null
+     */
+    private function quickCreateWalletCheck(string $walletID = null, bool $checkOwner = true): ?RedirectResponse
+    {
+        if ($walletID !== null) {
+            $wallet = Wallet::find($walletID);
+
+            $ownership = $checkOwner && !Auth::user()->owns($wallet);
+            if ($wallet === null || $wallet->trashed() || $ownership) {
+                return WalletFeedback::quickCreateError('transfer');
+            }
+        }
+        return null;
     }
 
     /**
