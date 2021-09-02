@@ -49,6 +49,7 @@ class TransactionsDataTable extends DataTableBase
         $buttons = $this->getButtons(Auth::user()->hasAnyActiveWallet());
 
         return $this->sharedHtmlBuild($buttons)
+            ->orderBy(4)
             ->setTableId('transactions-table');
     }
 
