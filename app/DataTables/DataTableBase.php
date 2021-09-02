@@ -79,7 +79,7 @@ abstract class DataTableBase extends DataTable
             $format = 'Y-m-d H:i:s';
 
             try {
-                [$from, $to] = explode(' to ', $reqDateRange);
+                [$from, $to] = explode(' - ', $reqDateRange);
             } catch (ErrorException $e) {
                 /// In case the user selects a single day
                 $to = $from = $reqDateRange;
