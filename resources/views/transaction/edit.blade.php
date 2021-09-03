@@ -8,24 +8,11 @@
       :cancelURL="previousUrlOr(route('transaction.view.all'))"
     >
       <div class="uk-margin">
-        <label for="scope" class="uk-form-label">
-          {{ __('Scope') }}<span class="uk-text-danger">*</span>
-        </label>
-        <div class="uk-form-controls">
-          <input
-            id="scope"
-            class="uk-input @error('scope')uk-form-danger @enderror"
-            name="scope"
-            type="text"
-            value="{{ old('scope', $transaction->scope ?? '') }}"
-            required
-          />
-        </div>
-        @error('scope')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.text-input
+          fieldName="scope"
+          :label="__('Scope')"
+          :value="$transaction->scope ?? ''"
+        />
       </div>
 
       <div class="uk-margin">

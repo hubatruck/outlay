@@ -8,22 +8,11 @@
       :cancelURL="previousUrlOr(isset($wallet) ? route('wallet.view.details', ['id' => $wallet->id]) : route('wallet.view.all'))"
     >
       <div class="uk-margin">
-        <label for="name" class="uk-form-label">{{ __('Name') }}<span class="uk-text-danger">*</span></label>
-        <div class="uk-form controls">
-          <input
-            id="name"
-            class="uk-input @error('name')uk-form-danger @enderror"
-            name="name"
-            type="text"
-            value="{{ old('name', isset($wallet) ? $wallet->name : '') }}"
-            required
-          />
-        </div>
-        @error('name')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.text-input
+          fieldName="name"
+          :label="__('Name')"
+          :value="$wallet->name ?? ''"
+        />
       </div>
 
       <div class="uk-margin">
