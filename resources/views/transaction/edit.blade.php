@@ -29,22 +29,7 @@
       </div>
 
       <div class="uk-margin">
-        <label for="amount" class="uk-form-label">{{ __('Amount') }}</label>
-        <div class="uk-form-controls">
-          <input
-            id="amount"
-            class="uk-input @error('amount')uk-form-danger @enderror"
-            name="amount"
-            type="number"
-            value="{{ old('amount', $transaction->amount ?? 0) }}"
-            step="0.01"
-          />
-        </div>
-        @error('amount')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.amount-input :value="$transaction->amount ?? 0"/>
       </div>
 
       <div class="uk-margin">
