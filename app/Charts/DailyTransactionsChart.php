@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use App\DataHandlers\ChartDataHandler;
+use App\Models\TransactionType;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LineChart;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,9 +20,9 @@ class DailyTransactionsChart extends BaseChart
             ->selectRaw('DATE(transaction_date) as day, sum(amount) as daily_amount')
             ->groupBy('day');
 
-        $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 1)->pluck('daily_amount', 'day'))
+        $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, TransactionType::INCOME)->pluck('daily_amount', 'day'))
             ->setRange($this->range);
-        $expense = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, 2)->pluck('daily_amount', 'day'))
+        $expense = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, TransactionType::EXPENSE)->pluck('daily_amount', 'day'))
             ->setRange($this->range);
 
         return $this->chart->lineChart()

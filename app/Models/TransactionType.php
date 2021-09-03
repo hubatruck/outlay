@@ -28,4 +28,7 @@ use Illuminate\Support\Carbon;
 class TransactionType extends Model
 {
     use HasFactory;
+
+    public const INCOME = 1;
+    public const EXPENSE = 2;
 }

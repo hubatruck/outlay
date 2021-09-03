@@ -149,6 +149,9 @@ class Transaction extends Model
     public function scopeSumAmount(Builder $query): Builder
     {
         return $query
-            ->selectRaw('sum(case when transaction_type_id = 1 then amount when transaction_type_id = 2 then -amount end) as amount');
+            ->selectRaw(
+                'sum(case when transaction_type_id = ? then amount when transaction_type_id = ? then -amount end) as amount',
+                [TransactionType::INCOME, TransactionType::EXPENSE]
+            );
     }
 }
