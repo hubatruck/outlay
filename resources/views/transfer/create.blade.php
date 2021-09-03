@@ -71,7 +71,7 @@
       </div>
 
       <div class="uk-margin">
-        <x-date-picker fieldName="transfer_date"></x-date-picker>
+        <x-forms.date-picker fieldName="transfer_date"></x-forms.date-picker>
       </div>
     </x-forms.skeleton>
   </div>

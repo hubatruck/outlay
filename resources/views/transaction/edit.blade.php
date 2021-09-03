@@ -131,10 +131,10 @@
       </div>
 
       <div class="uk-margin">
-        <x-date-picker
+        <x-forms.date-picker
           fieldName="transaction_date"
           :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
-        ></x-date-picker>
+        ></x-forms.date-picker>
       </div>
     </x-forms.skeleton>
   </div>
