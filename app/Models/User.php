@@ -101,14 +101,31 @@ class User extends Authenticatable
     /**
      * Get previous transaction date created by the user.
      * This function is used to determine the prefilled date for transaction
-     * creation.
+     * creation. If the user made transactions today, those date will be used,
+     * otherwise today's date.
      *
-     * @return string
+     * @return Carbon
      */
-    public function previousTransactionDate(): string
+    public function previousTransactionDate(): Carbon
     {
-        $last_transaction = $this->transactions->last();
-        return ($last_transaction !== null) ? (string) $last_transaction->transaction_date : (string) now();
+        $lastTransaction = $this->transactions->last();
+        $response = now();
+        if ($lastTransaction && $this->hasMadeTransactionsToday($lastTransaction)) {
+            $response = $lastTransaction->transaction_date;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Check if the user made any transactions today
+     *
+     * @param Transaction $lastTransaction
+     * @return bool
+     */
+    private function hasMadeTransactionsToday(Transaction $lastTransaction): bool
+    {
+        return Carbon::parse($lastTransaction->created_at)->format(globalDateFormat()) === now()->format(globalDateFormat());
     }
 
     /**
