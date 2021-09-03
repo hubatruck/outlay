@@ -17,12 +17,12 @@ class TransferFeedback
     {
         return redirect(route('transfer.view.all'))
             ->with([
-                'message' => __(
+                'content' => __(
                     'Transfer :action successfully.', [
                         'action' => __($performedAction),
                     ]
                 ),
-                'status' => 'success',
+                'type' => 'success',
             ]);
     }
 
