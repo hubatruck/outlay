@@ -56,76 +56,22 @@
       </div>
 
       <div class="uk-margin">
-        <label for="from_wallet_id" class="uk-form-label">
-          {{ __('Source wallet') }}<span class="uk-text-danger">*</span>
-        </label>
-        <div class="uk-form-controls">
-          <select
-            id="from_wallet_id"
-            class="uk-select @error('from_wallet_id') uk-form-danger @enderror"
-            name="from_wallet_id"
-            required
-          >
-            <option selected disabled hidden value="">
-              {{ __('Select...') }}
-            </option>
-            @foreach(Auth::user()->wallets as $wallet)
-              @if($wallet->deleted_at === null)
-                <option
-                  value="{{ $wallet->id }}"
-                  @if(($selected_from_wallet_id ?? '') === (string) $wallet->id
-                      || (old('from_wallet_id') && (string) $wallet->id === old('from_wallet_id')))
-                  selected
-                  @endif
-                >
-                  {{ $wallet->name }}
-                </option>
-              @endif
-            @endforeach
-          </select>
-        </div>
-        @error('from_wallet_id')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.wallet-select
+          fieldName="from_wallet_id"
+          :selectedWalletID="$selected_from_wallet_id"
+          :label="__('Source wallet')"
+          :wallets="Auth::user()->wallets"
+        />
       </div>
 
       <div class="uk-margin">
-        <label for="to_wallet_id" class="uk-form-label">
-          {{ __('Destination wallet') }}<span class="uk-text-danger">*</span>
-        </label>
-        <div class="uk-form-controls">
-          <select
-            id="to_wallet_id"
-            class="uk-select @error('to_wallet_id') uk-form-danger @enderror"
-            name="to_wallet_id"
-            required
-          >
-            <option selected disabled hidden value="">
-              {{ __('Select...') }}
-            </option>
-            @foreach(\App\Models\Wallet::withTrashed()->get() as $wallet)
-              <option
-                value="{{ $wallet->id }}"
-                @if(($selected_to_wallet_id ?? '') === (string) $wallet->id
-                    || (old('from_wallet_id') && (string) $wallet->id === old('from_wallet_id')))
-                selected
-                @endif
-              >
-                {{ $wallet->name }}
-                @if (!Auth::user()->owns($wallet))
-                  ({{ $wallet->user->name }}) - {{ __('External wallet') }}
-                @endif
-              </option>
-            @endforeach
-          </select>
-        </div>
-        @error('to_wallet_id')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.wallet-select
+          fieldName="to_wallet_id"
+          :selectedWalletID="$selected_to_wallet_id"
+          :label="__('Destination wallet')"
+          :wallets="\App\Models\Wallet::withTrashed()->get()"
+          :addOwnerName="true"
+        />
       </div>
 
       <div class="uk-margin">
