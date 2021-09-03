@@ -70,10 +70,10 @@ class WalletController extends Controller
         }
 
         $activity = (int) $wallet->hasTransfers() + (int) $wallet->hasTransactions();
-        if ($activity === 2) {
-            addSessionMsg(WalletFeedback::noActivity(), true);
-        } else if ($activity === 1) {
+        if ($activity === 1) {
             addSessionMsg(WalletFeedback::partialActivity(), true);
+        } else if ($activity === 0) {
+            addSessionMsg(WalletFeedback::noActivity(), true);
         }
 
         return view('wallet.details', compact('wallet'));
