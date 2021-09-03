@@ -52,9 +52,15 @@
   </div>
 @endif
 
-{{ $balanceDailyChart->script() }}
-{{ $transactionDailyChart->script() }}
-{{ $transactionTypeChart->script() }}
-{{ $transferDailyChart->script() }}
-{{ $transferTypeChart->script() }}
-{{ $transferWalletChart->script() }}
+@if ($hasTransactions || $hasTransfers)
+  {{ $balanceDailyChart->script() }}
+@endif
+@if ($hasTransactions)
+  {{ $transactionDailyChart->script() }}
+  {{ $transactionTypeChart->script() }}
+@endif
+@if ($hasTransfers)
+  {{ $transferDailyChart->script() }}
+  {{ $transferTypeChart->script() }}
+  {{ $transferWalletChart->script() }}
+@endif
