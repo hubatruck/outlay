@@ -61,7 +61,7 @@ function loadCharts(range) {
                 }, 100);
             },
             error: () => {
-                setChartContainerContents("<div class=\"" + nonChartClasses + "\">{{ __('Uh-oh, something went wrong! Please try again later.') }}</div>",);
+                setChartContainerContents("<div class=\"" + nonChartClasses + "\">" + rpConfig.errorMessage + "</div>",)
             }
         });
     });

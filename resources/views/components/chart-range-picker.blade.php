@@ -31,6 +31,7 @@
       chartContainer: "{{ $chartContainer }}",
       defaultDateRange: "{{ defaultChartRangeAsFlatpickrValue() }}",
       locale: "{{ config('app.locale') }}",
+      errorMessage: "{{ __('Uh-oh, something went wrong! Please try again later.') }}"
     }
   </script>
   <script src="{{ mix('js/charts.bundle.min.js') }}"></script>
