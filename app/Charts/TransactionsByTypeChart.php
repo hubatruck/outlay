@@ -18,7 +18,13 @@ class TransactionsByTypeChart extends BaseChart
             ->selectRaw('transaction_type_id as type, sum(amount) as amount')
             ->groupBy('type');
 
-        $data = ChartDataHandler::from($baseQuery->pluck('amount'));
+        /// Workaround in case when the wallet has got only expenses, but no income
+        $data = $baseQuery->pluck('amount')->toArray();
+        if (!$wallet->incomingTransfers()->exists()) {
+            $data = [0, $data[0]];
+        }
+        $data = ChartDataHandler::from($data);
+
         $labels = ChartDataHandler::from(TransactionType::all()->pluck('name'))
             ->translate();
 
