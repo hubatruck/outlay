@@ -135,23 +135,10 @@
       </div>
 
       <div class="uk-margin">
-        <label for="transaction_date" class="uk-form-label">
-          {{ __('Date') }}<span class="uk-text-danger">*</span></label>
-        <div class="uk-form-controls">
-          <input
-            id="transaction_date"
-            class="uk-input @error('transaction_date') uk-form-danger @enderror"
-            name="transaction_date"
-            type="date"
-            value="{{ \Carbon\Carbon::parse(old('transaction_date', $transaction->transaction_date
-                                    ?? Auth::user()->previousTransactionDate()))->format(globalDateFormat()) }}"
-          />
-        </div>
-        @error('transaction_date')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-date-picker
+          fieldName="transaction_date"
+          :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
+        ></x-date-picker>
       </div>
 
       <div class="uk-text-danger">{{ __('Fields marked with * are required.') }}</div>

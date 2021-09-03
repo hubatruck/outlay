@@ -129,23 +129,7 @@
       </div>
 
       <div class="uk-margin">
-        <label for="transfer_date" class="uk-form-label">
-          {{ __('Date') }}<span class="uk-text-danger">*</span>
-        </label>
-        <div class="uk-form-controls">
-          <input
-            id="transfer_date"
-            class="uk-input @error('transfer_date') uk-form-danger @enderror"
-            name="transfer_date"
-            type="date"
-            value="{{ \Carbon\Carbon::parse(old('transfer_date', \Carbon\Carbon::now()))->format(globalDateFormat()) }}"
-          />
-        </div>
-        @error('transfer_date')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-date-picker fieldName="transfer_date"></x-date-picker>
       </div>
 
       <div class="uk-text-danger">{{ __('Fields marked with * are required.') }}</div>
