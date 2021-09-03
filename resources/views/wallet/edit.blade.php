@@ -3,14 +3,10 @@
 @section('content')
   <x-page-title>{{ isset($wallet) ? __(':action wallet', ['action'=> __('Edit')]) : __(':action wallet', ['action' => __('Create')]) }}</x-page-title>
   <div class="uk-card-body">
-    <form
-      method="POST"
-      action="{{ isset($wallet) ? route('wallet.data.update', ['id' => $wallet->id]) : route('wallet.data.create') }}"
-      enctype="multipart/form-data"
-      class="uk-form-stacked"
+    <x-forms.skeleton
+      :action="isset($wallet) ? route('wallet.data.update', ['id' => $wallet->id]) : route('wallet.data.create')"
+      :cancelURL="previousUrlOr(isset($wallet) ? route('wallet.view.details', ['id' => $wallet->id]) : route('wallet.view.all'))"
     >
-      @csrf
-
       <div class="uk-margin">
         <label for="name" class="uk-form-label">{{ __('Name') }}<span class="uk-text-danger">*</span></label>
         <div class="uk-form controls">
@@ -80,20 +76,6 @@
           </label>
         </div>
       </div>
-
-      <div class="uk-text-danger">{{ __('Fields marked with * are required.') }}</div>
-      <div class="uk-margin-small-top">
-        <button type="submit" class="uk-button uk-button-primary">
-          {{ isset($wallet) ? __('Save') : __('Create') }}
-        </button>
-        <a
-          type="submit"
-          href="{{ previousUrlOr(isset($wallet) ? route('wallet.view.details', ['id' => $wallet->id]) : route('wallet.view.all')) }}"
-          class="uk-button uk-button-danger"
-        >
-          {{ __('Cancel') }}
-        </a>
-      </div>
-    </form>
+    </x-forms.skeleton>
   </div>
 @endsection

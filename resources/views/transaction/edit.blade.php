@@ -3,14 +3,10 @@
 @section('content')
   <x-page-title>{{ isset($transaction) ? __(':action transaction', ['action'=> __('Edit')]) : __(':action transaction', ['action' => __('Create')]) }}</x-page-title>
   <div class="uk-card-body">
-    <form
-      method="POST"
-      action="{{ isset($transaction) ? route('transaction.data.update', ['id' => $transaction->id]) : route('transaction.data.create') }}"
-      enctype="multipart/form-data"
-      class="uk-form uk-form-stacked"
+    <x-forms.skeleton
+      :action="isset($transaction) ? route('transaction.data.update', ['id' => $transaction->id]) : route('transaction.data.create')"
+      :cancelURL="previousUrlOr(route('transaction.view.all'))"
     >
-      @csrf
-
       <div class="uk-margin">
         <label for="scope" class="uk-form-label">
           {{ __('Scope') }}<span class="uk-text-danger">*</span>
@@ -140,20 +136,7 @@
           :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
         ></x-date-picker>
       </div>
-
-      <div class="uk-text-danger">{{ __('Fields marked with * are required.') }}</div>
-      <div class="uk-margin-small-top">
-        <button type="submit" class="uk-button uk-button-primary">
-          {{ isset($transaction) ? __('Save') : __('Create') }}
-        </button>
-        <a type="submit"
-           href="{{ previousUrlOr(route('transaction.view.all')) }}"
-           class="uk-button uk-button-danger"
-        >
-          {{ __('Cancel') }}
-        </a>
-      </div>
-    </form>
+    </x-forms.skeleton>
   </div>
 
 @endsection

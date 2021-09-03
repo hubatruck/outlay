@@ -3,14 +3,10 @@
 @section('content')
   <x-page-title>{{ __('Create a transfer') }}</x-page-title>
   <div class="uk-card-body">
-    <form
-      method="POST"
-      action="{{ route('transfer.data.create') }}"
-      enctype="multipart/form-data"
-      class="uk-form uk-form-stacked"
+    <x-forms.skeleton
+      :action="route('transfer.data.create')"
+      :cancelURL="previousUrlOr(route('transaction.view.all'))"
     >
-      @csrf
-
       <div class="uk-margin">
         <label for="description" class="uk-form-label">
           {{ __('Description') }}<span class="uk-text-danger">*</span>
@@ -77,19 +73,6 @@
       <div class="uk-margin">
         <x-date-picker fieldName="transfer_date"></x-date-picker>
       </div>
-
-      <div class="uk-text-danger">{{ __('Fields marked with * are required.') }}</div>
-      <div class="uk-margin-small-top">
-        <button type="submit" class="uk-button uk-button-primary">
-          {{ __('Send') }}
-        </button>
-        <a type="submit"
-           href="{{ previousUrlOr(route('transaction.view.all')) }}"
-           class="uk-button uk-button-danger"
-        >
-          {{ __('Cancel') }}
-        </a>
-      </div>
-    </form>
+    </x-forms.skeleton>
   </div>
 @endsection
