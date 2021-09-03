@@ -57,7 +57,6 @@ div.DTCR_pointer {
     }
 }
 
-
 table.fixedHeader-floating {
     position: fixed !important;
     background-color: white;
@@ -76,4 +75,99 @@ table.fixedHeader-locked {
     table.fixedHeader-floating {
         display: none;
     }
+}
+
+$sortingClasses: '.sorting', '.sorting_asc', '.sorting_desc', '.sorting_asc_disabled', '.sorting_desc_disabled';
+
+table.dataTable thead {
+    & > tr {
+        & > td.sorting_asc, & > td.sorting_desc, & > td.sorting {
+            padding-right: 30px;
+        }
+
+        & > th:active, & > tr:active {
+            outline: none;
+        }
+    }
+
+    @each $class in $sortingClasses {
+        #{$class} {
+            cursor: pointer;
+            position: relative;
+
+            &:before, &:after {
+                position: absolute;
+                bottom: 1.2em;
+                display: block;
+                opacity: 0.3;
+            }
+
+            &:before {
+                right: 1em;
+                content: "↑";
+            }
+
+            &:after {
+                right: 0.5em;
+                content: "↓";
+            }
+        }
+    }
+
+}
+
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:after {
+    opacity: 1;
+}
+
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:after {
+    opacity: 0;
+}
+
+div.dataTables_scrollHead table.dataTable {
+    margin-bottom: 0 !important;
+}
+
+div.dataTables_scrollBody table {
+    border-top: none;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+div.dataTables_scrollBody table thead .sorting:after,
+div.dataTables_scrollBody table thead .sorting_asc:after,
+div.dataTables_scrollBody table thead .sorting_desc:after {
+    display: none;
+}
+
+div.dataTables_scrollBody table tbody tr:first-child th,
+div.dataTables_scrollBody table tbody tr:first-child td {
+    border-top: none;
+}
+
+div.dataTables_scrollFoot table {
+    margin-top: 0 !important;
+    border-top: none;
+}
+
+@media screen and (max-width: 767px) {
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_info,
+    div.dataTables_wrapper div.dataTables_paginate {
+        text-align: center;
+    }
+}
+
+table.dataTable.uk-table-condensed > thead > tr > th {
+    padding-right: 20px;
+}
+
+table.dataTable.uk-table-condensed .sorting:after,
+table.dataTable.uk-table-condensed .sorting_asc:after,
+table.dataTable.uk-table-condensed .sorting_desc:after {
+    top: 6px;
+    right: 6px;
 }
