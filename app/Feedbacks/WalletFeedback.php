@@ -86,11 +86,36 @@ class WalletFeedback
      */
     public static function hasTransactionsError(Wallet $wallet): RedirectResponse
     {
+        return self::hasError($wallet, 'transactions');
+    }
+
+    /**
+     * Wallet cannot be deleted because has got $targetType tied to it
+     * Type: error
+     *
+     * @param Wallet $wallet
+     * @param $targetType
+     * @return RedirectResponse
+     */
+    public static function hasError(Wallet $wallet, $targetType): RedirectResponse
+    {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Wallet has transactions linked to it. Cannot be deleted.'),
+            'content' => __('Error') . ': ' . __('Wallet has :target linked to it. Cannot be deleted.', ['target' => __($targetType)]),
             'type' => 'danger',
         ]);
         return redirect(previousUrlOr(route('wallet.view.details', ['id' => $wallet->id])));
+    }
+
+    /**
+     * Wallet got transfers
+     * Type: error
+     *
+     * @param Wallet $wallet
+     * @return RedirectResponse
+     */
+    public static function hasTransfersError(Wallet $wallet): RedirectResponse
+    {
+        return self::hasError($wallet, 'transfers');
     }
 
     /**

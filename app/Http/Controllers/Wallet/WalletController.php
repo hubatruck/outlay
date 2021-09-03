@@ -68,8 +68,12 @@ class WalletController extends Controller
         if (!Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
         }
-        if (!$wallet->hasTransactions() || !$wallet->hasTransfers()) {
+
+        $activity = (int) $wallet->hasTransfers() + (int) $wallet->hasTransactions();
+        if ($activity === 2) {
             addSessionMsg(WalletFeedback::noActivity(), true);
+        } else if ($activity === 1) {
+            addSessionMsg(WalletFeedback::partialActivity(), true);
         }
 
         return view('wallet.details', compact('wallet'));
@@ -87,11 +91,6 @@ class WalletController extends Controller
         $wallet = Wallet::withTrashed()->findOrFail($id);
         if (!Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
-        }
-        if (!$wallet->hasTransactions() || !$wallet->hasTransfers()) {
-            addSessionMsg(WalletFeedback::partialActivity(), true);
-        } else {
-            addSessionMsg(WalletFeedback::noActivity(), true);
         }
 
         $range = $this->parseRange($request);
@@ -220,8 +219,11 @@ class WalletController extends Controller
             return $permissionCheck;
         }
 
-        if ($wallet->hasTransactions()) {
-            return WalletFeedback::hasTransactionsError($wallet);
+        $hasTransactions = $wallet->hasTransactions();
+        if ($hasTransactions || $wallet->hasTransfers()) {
+            return $hasTransactions
+                ? WalletFeedback::hasTransactionsError($wallet)
+                : WalletFeedback::hasTransfersError($wallet);
         }
 
         $wallet->forceDelete();

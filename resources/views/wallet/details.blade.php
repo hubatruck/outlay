@@ -2,7 +2,8 @@
 
 @php
   $hasTransfers = $wallet->hasTransfers();
-  $hasTransactions = $wallet->hasTransactions()
+  $hasTransactions = $wallet->hasTransactions();
+  $hasActivity = $hasTransactions || $hasTransfers
 @endphp
 
 @section('content')
@@ -70,10 +71,10 @@
           @endif
         </a>
         <a
-          class="uk-button uk-button-danger @if($wallet->hasTransactions())uk-link-muted @endif"
-          href="{{ $hasTransactions ? '#' : route('wallet.manage.delete', ['id' => $wallet->id]) }}"
-          @if($hasTransactions)
-          uk-tooltip="{{ __('Wallet has transactions linked to it. Cannot be deleted.') }}"
+          class="uk-button uk-button-danger @if($hasActivity)uk-link-muted @endif"
+          href="{{ $hasActivity ? '#' : route('wallet.manage.delete', ['id' => $wallet->id]) }}"
+          @if($hasActivity)
+          uk-tooltip="{{ __('Wallet has :target linked to it. Cannot be deleted.', ['target' => __( $hasTransactions ? 'transactions' : 'transfers')]) }}"
           @endif
         >
           <span class="uk-margin-small" uk-icon="trash"></span>
