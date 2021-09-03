@@ -132,5 +132,10 @@
     "Current Password": "Jelenlegi jelszó",
     "Confirm Password": "Jelszó megerősítése",
     "Ensure your account is using a long, random password to stay secure.": "Bizonyosodj meg, hogy a fiókod egy hosszú, véletleneszerő jelszót használt ahhoz, hogy biztonságban légy.",
-    "Whoops! Something went wrong.": "Hoppá! Valami rosszul sikerült."
+    "Whoops! Something went wrong.": "Hoppá! Valami rosszul sikerült.",
+    "Usage help": "Használati tippek",
+    "Use the upper search box to filter all columns": "Használd a felső kereső dobozt az összes oszlop szűréséhez",
+    "Filter individual columns using the input boxes found at the bottom of the table": "Egyénileg szűrheted az oszlopokat a tábla alján található kereső dobozokkal",
+    "Hold down <code>SHIFT</code>, while clicking on column headers to sort by multiple columns at the same time": "Tartsd lenyomva a <code>SHIFT</code> gombot, miközben a fejlécekre kattintasz, hogy több oszlop alapján rendezd az adatokat ugyanabban az időben",
+    "Columns can be reordered, by clicking and holding a column header, and then dragging it": "Az oszlopok átrendezéséhez kattints és tartsd lenyomva egy oszlopfejlécen a kurzort, majd mozgasd az oszlopot a kívánt helyre"
 }
