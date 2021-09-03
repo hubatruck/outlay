@@ -24,16 +24,14 @@
   </div>
 </div>
 
-@if ($hasTransactions || $hasTransfers)
-  @push('scripts')
-    <script>
-      const rpConfig = {
-        chartURL: "{{ route('wallet.view.charts', ['id' => $walletID]) }}",
-        chartContainer: "{{ $chartContainer }}",
-        defaultDateRange: "{{ defaultChartRangeAsFlatpickrValue() }}",
-        locale: "{{ config('app.locale') }}",
-      }
-    </script>
-    <script src="{{ mix('js/charts.bundle.min.js') }}"></script>
-  @endpush
-@endif
+@push('scripts')
+  <script>
+    const rpConfig = {
+      chartURL: "{{ route('wallet.view.charts', ['id' => $walletID]) }}",
+      chartContainer: "{{ $chartContainer }}",
+      defaultDateRange: "{{ defaultChartRangeAsFlatpickrValue() }}",
+      locale: "{{ config('app.locale') }}",
+    }
+  </script>
+  <script src="{{ mix('js/charts.bundle.min.js') }}"></script>
+@endpush
