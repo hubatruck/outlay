@@ -76,7 +76,7 @@
         <x-forms.date-picker
           fieldName="transaction_date"
           :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
-        ></x-forms.date-picker>
+        />
       </div>
     </x-forms.skeleton>
   </div>
