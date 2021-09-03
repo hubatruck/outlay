@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('previousUrlOr')) {
     /**
@@ -110,5 +112,26 @@ if (!function_exists('globalDateFormat')) {
     function globalDateFormat(): string
     {
         return 'Y-m-d';
+    }
+}
+
+if (!function_exists('walletNameWithOwner')) {
+    /**
+     * Format wallet name, by adding the owner's name in parentheses (if it's the case)
+     *
+     * @param Wallet $wallet
+     * @param bool $flagExternal Mark wallet as external
+     * @return string
+     */
+    function walletNameWithOwner(Wallet $wallet, bool $flagExternal = false): string
+    {
+        $name = $wallet->name;
+        if (!Auth::user()->owns($wallet)) {
+            $name .= ' (' . $wallet->user->name . ')';
+            if ($flagExternal) {
+                $name .= ' - ' . __('External wallet');
+            }
+        }
+        return $name;
     }
 }

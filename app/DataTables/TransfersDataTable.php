@@ -43,16 +43,7 @@ class TransfersDataTable extends DataTableBase
      */
     private function getWalletNameFor(Wallet $wallet = null): string
     {
-        if ($wallet === null) {
-            return __('[DELETED]');
-        }
-
-        $user = Auth::user();
-        $name = $wallet->name;
-        if ($user !== null && !$user->owns($wallet)) {
-            $name .= ' (' . $wallet->user->name . ')';
-        }
-        return $name;
+        return $wallet !== null ? walletNameWithOwner($wallet) : __('[DELETED]');
     }
 
     /**

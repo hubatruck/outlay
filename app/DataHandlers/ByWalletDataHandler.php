@@ -5,8 +5,6 @@ namespace App\DataHandlers;
 use App\Models\Wallet;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use JetBrains\PhpStorm\ArrayShape;
 
 class ByWalletDataHandler extends ChartDataHandler
 {
@@ -50,12 +48,7 @@ class ByWalletDataHandler extends ChartDataHandler
      */
     private static function formatWalletName(Wallet $wallet): array
     {
-        if (Auth::user()->owns($wallet)) {
-            return ['name' => $wallet->name];
-        }
-        return [
-            'name' => $wallet->name . ' (' . $wallet->user->name . ')',
-        ];
+        return ['name' => walletNameWithOwner($wallet)];
     }
 
     /**
