@@ -33,10 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('wallets')->group(function () {
-        Route::get('/', function () {
-            $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
-            return view('wallet/list', compact('wallets'));
-        })->name('wallet.view.all');
+        Route::get('/', [WalletController::class, 'index'])->name('wallet.view.all');
 
         Route::get('create', [WalletController::class, 'createView'])->name('wallet.view.create');
         Route::post('create', [WalletController::class, 'storeWallet'])->name('wallet.data.create');

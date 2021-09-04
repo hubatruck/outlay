@@ -22,6 +22,17 @@ class WalletController extends Controller
     private string $editorViewName = 'wallet/edit';
 
     /**
+     * List all wallets view
+     *
+     * @return Factory|\Illuminate\Contracts\View\View|Application
+     */
+    public function index(): Factory|\Illuminate\Contracts\View\View|Application
+    {
+        $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
+        return view('wallet.list', compact('wallets'));
+    }
+
+    /**
      * Show the view for editing wallet
      *
      * @return View
