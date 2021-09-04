@@ -16,7 +16,6 @@
     };
 
     const _getVisibleColumns = function () {
-
         const visible_columns = [];
         $.each(DataTable.settings[0].aoColumns, function (key, col) {
             if (col.bVisible) {
@@ -64,7 +63,7 @@
                             a.click();
                         }
                     } else {
-                        window.location = downloadUrl;
+                        window.open(downloadUrl, '_blank');
                     }
 
                     setTimeout(function () {
@@ -241,7 +240,7 @@
         },
 
         action: function (e, dt, button, config) {
-            window.location = _buildUrl(dt, 'print');
+            window.open(_buildUrl(dt, 'print'), '_blank');
         }
     };
 
