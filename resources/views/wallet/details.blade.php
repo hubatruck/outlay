@@ -84,7 +84,7 @@
     </div>
 
     @if ($hasTransactions || $hasTransfers)
-      <x-chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
+      <x-forms.chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
       <div id="charts"></div>
     @endif
   </div>
