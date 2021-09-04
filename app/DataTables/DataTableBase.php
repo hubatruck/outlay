@@ -4,12 +4,12 @@ namespace App\DataTables;
 
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View;
-use JetBrains\PhpStorm\ArrayShape;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -80,8 +80,9 @@ abstract class DataTableBase extends DataTable
         if ($reqDateRange) {
             $format = globalDateFormat() . ' H:i:s';
 
-            [$from, $to] = explode(' - ', $reqDateRange);
-            if (!$from || !$to) {
+            try {
+                [$from, $to] = explode(' - ', $reqDateRange);
+            } catch (Exception) {
                 $to = $from = $reqDateRange;
             }
 
@@ -157,7 +158,6 @@ abstract class DataTableBase extends DataTable
      *
      * @return string[]
      */
-    #[ArrayShape(['date_range' => "string"])]
     protected function dateRangeHandler(): array
     {
         return ['date_range' => '$("#' . self::DATE_RANGE_ID . '").val()'];
