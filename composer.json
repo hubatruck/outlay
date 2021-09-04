@@ -10,9 +10,11 @@
     "require": {
         "php": "^8.0",
         "arielmejiadev/larapex-charts": "^3.0",
+        "barryvdh/laravel-snappy": "^0.4.8",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "laravel/framework": "^8.54",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
