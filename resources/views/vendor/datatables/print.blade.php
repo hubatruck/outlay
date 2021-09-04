@@ -33,5 +33,13 @@
     </tr>
   @endforeach
 </table>
+<script>
+  window.onload = () => {
+    window.print();
+    setTimeout(() => {
+      window.close()
+    }, 0);
+  }
+</script>
 </body>
 </html>
