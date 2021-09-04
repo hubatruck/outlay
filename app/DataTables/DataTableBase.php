@@ -201,13 +201,13 @@ abstract class DataTableBase extends DataTable
     /**
      * Get mapped columns versus final decorated output.
      * Overwrites the base function, by displaying the columns in the order
-     * set by the user in the datatable.
+     * set by the user in the datatable UI.
      *
      * @return array
      */
     protected function getDataForPrint(): array
     {
-        $columns = $this->orderColumnsInRequestOrder();
+        $columns = $this->orderColumnsInRequestOrder($this->printColumns());
 
         return $this->mapResponseToColumns($columns, 'printable');
     }
@@ -215,11 +215,11 @@ abstract class DataTableBase extends DataTable
     /**
      * Orders the table columns based on the request
      *
+     * @param Collection $columns
      * @return Collection
      */
-    private function orderColumnsInRequestOrder(): Collection
+    private function orderColumnsInRequestOrder(Collection $columns): Collection
     {
-        $columns = $this->printColumns();
         $order = array_flip(Arr::pluck($this->request->get('columns'), 'data'));
         $newColumns = array_fill(0, sizeof($columns), null);
 
@@ -230,5 +230,18 @@ abstract class DataTableBase extends DataTable
         }
 
         return collect($newColumns);
+    }
+
+    /**
+     * Get mapped columns versus final decorated output.
+     * Overwrites the base function, by displaying the columns in the order
+     * set by the user in the datatable UI.
+     * @return array
+     */
+    protected function getDataForExport(): array
+    {
+        $columns = $this->orderColumnsInRequestOrder($this->exportColumns());
+
+        return $this->mapResponseToColumns($columns, 'exportable');
     }
 }
