@@ -16,20 +16,11 @@
       </div>
 
       <div class="uk-margin">
-        <label for="notes" class="uk-form-label">{{ __('Notes') }}</label>
-        <div class="form-controls">
-        <textarea
-          id="notes"
-          class="uk-textarea @error('notes')uk-form-danger @enderror"
-          name="notes"
-          placeholder="{{ __('This field is optional.') }}"
-        >{{ old('notes', isset($wallet) ? $wallet->notes : '') }}</textarea>
-        </div>
-        @error('notes')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
+        <x-forms.textarea
+          fieldName="notes"
+          :label="__('Notes')"
+          :value="$wallet->notes ?? ''"
+        />
       </div>
 
       <div class="uk-margin">
