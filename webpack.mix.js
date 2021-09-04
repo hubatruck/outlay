@@ -45,6 +45,9 @@ mix
     // Compile Sass
     .sass('resources/scss/app.scss', 'public/css')
 
+    /// Lightweight print style
+    .sass('resources/scss/print.scss', 'public/css')
+
 // .copy('resources/img', 'public/img')
 // .copy('resources/fonts', 'public/fonts')
 

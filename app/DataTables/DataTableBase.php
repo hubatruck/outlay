@@ -4,10 +4,12 @@ namespace App\DataTables;
 
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Exception;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View;
-use JetBrains\PhpStorm\ArrayShape;
 use Yajra\DataTables\DataTableAbstract;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Html\Button;
@@ -78,8 +80,9 @@ abstract class DataTableBase extends DataTable
         if ($reqDateRange) {
             $format = globalDateFormat() . ' H:i:s';
 
-            [$from, $to] = explode(' - ', $reqDateRange);
-            if (!$from || !$to) {
+            try {
+                [$from, $to] = explode(' - ', $reqDateRange);
+            } catch (Exception) {
                 $to = $from = $reqDateRange;
             }
 
@@ -155,7 +158,6 @@ abstract class DataTableBase extends DataTable
      *
      * @return string[]
      */
-    #[ArrayShape(['date_range' => "string"])]
     protected function dateRangeHandler(): array
     {
         return ['date_range' => '$("#' . self::DATE_RANGE_ID . '").val()'];
@@ -179,5 +181,67 @@ abstract class DataTableBase extends DataTable
     protected function actionsColumn(): Column
     {
         return Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false)->printable(false)->exportable(false);
+    }
+
+    /**
+     * Get decorated data as defined in datatables ajax response.
+     * Overwrites the base class's function, by printing only the
+     * current page visible in the datatable.
+     *
+     * @return array
+     */
+    protected function getAjaxResponseData(): array
+    {
+        $response = app()->call([$this, 'ajax']);
+        $data = $response->getData(true);
+
+        return $data['data'];
+    }
+
+    /**
+     * Get mapped columns versus final decorated output.
+     * Overwrites the base function, by displaying the columns in the order
+     * set by the user in the datatable UI.
+     *
+     * @return array
+     */
+    protected function getDataForPrint(): array
+    {
+        $columns = $this->orderColumnsInRequestOrder($this->printColumns());
+
+        return $this->mapResponseToColumns($columns, 'printable');
+    }
+
+    /**
+     * Orders the table columns based on the request
+     *
+     * @param Collection $columns
+     * @return Collection
+     */
+    private function orderColumnsInRequestOrder(Collection $columns): Collection
+    {
+        $order = array_flip(Arr::pluck($this->request->get('columns'), 'data'));
+        $newColumns = array_fill(0, sizeof($columns), null);
+
+        foreach ($columns->all() as $column) {
+            $key = $column->data;
+            $index = $order[$key];
+            $newColumns[$index] = $column;
+        }
+
+        return collect($newColumns);
+    }
+
+    /**
+     * Get mapped columns versus final decorated output.
+     * Overwrites the base function, by displaying the columns in the order
+     * set by the user in the datatable UI.
+     * @return array
+     */
+    protected function getDataForExport(): array
+    {
+        $columns = $this->orderColumnsInRequestOrder($this->exportColumns());
+
+        return $this->mapResponseToColumns($columns, 'exportable');
     }
 }

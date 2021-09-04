@@ -16,7 +16,6 @@
     };
 
     const _getVisibleColumns = function () {
-
         const visible_columns = [];
         $.each(DataTable.settings[0].aoColumns, function (key, col) {
             if (col.bVisible) {
@@ -56,7 +55,7 @@
                         const a = document.createElement("a");
                         // safari doesn't support this yet
                         if (typeof a.download === 'undefined') {
-                            window.location = downloadUrl;
+                            window.open(downloadUrl, '_blank');
                         } else {
                             a.href = downloadUrl;
                             a.download = filename;
@@ -64,7 +63,7 @@
                             a.click();
                         }
                     } else {
-                        window.location = downloadUrl;
+                        window.open(downloadUrl, '_blank');
                     }
 
                     setTimeout(function () {
@@ -118,7 +117,7 @@
         },
 
         action: function (e, dt, button, config) {
-            window.location = _buildUrl(dt, 'excel');
+            window.open(_buildUrl(dt, 'excel'), '_blank');
         }
     };
 
@@ -172,7 +171,7 @@
         },
 
         action: function (e, dt, button, config) {
-            window.location = _buildUrl(dt, 'csv');
+            window.open(_buildUrl(dt, 'csv'), '_blank');
         }
     };
 
@@ -214,7 +213,7 @@
         },
 
         action: function (e, dt, button, config) {
-            window.location = _buildUrl(dt, 'pdf');
+            window.open(_buildUrl(dt, 'pdf'), '_blank');
         }
     };
 
@@ -241,7 +240,7 @@
         },
 
         action: function (e, dt, button, config) {
-            window.location = _buildUrl(dt, 'print');
+            window.open(_buildUrl(dt, 'print'), '_blank');
         }
     };
 

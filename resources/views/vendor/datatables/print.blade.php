@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Print Table</title>
+  <title>{{ config('app.name') }} | {{ __('Export') }} - {{ now() }}</title>
   <meta charset="UTF-8">
   <meta name=description content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}"/>
+  <link rel="stylesheet" href="{{ mix('css/print.css') }}"/>
   <style>
     body {
       margin: 20px
@@ -34,5 +33,13 @@
     </tr>
   @endforeach
 </table>
+<script>
+  window.onload = () => {
+    window.print();
+    setTimeout(() => {
+      window.close()
+    }, 0);
+  }
+</script>
 </body>
 </html>
