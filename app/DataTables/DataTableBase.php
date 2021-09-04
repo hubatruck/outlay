@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View;
 use JetBrains\PhpStorm\ArrayShape;
 use Yajra\DataTables\DataTableAbstract;
@@ -179,5 +181,54 @@ abstract class DataTableBase extends DataTable
     protected function actionsColumn(): Column
     {
         return Column::make('actions')->title(__('Actions'))->orderable(false)->searchable(false)->printable(false)->exportable(false);
+    }
+
+    /**
+     * Get decorated data as defined in datatables ajax response.
+     * Overwrites the base class's function, by printing only the
+     * current page visible in the datatable.
+     *
+     * @return array
+     */
+    protected function getAjaxResponseData(): array
+    {
+        $response = app()->call([$this, 'ajax']);
+        $data = $response->getData(true);
+
+        return $data['data'];
+    }
+
+    /**
+     * Get mapped columns versus final decorated output.
+     * Overwrites the base function, by displaying the columns in the order
+     * set by the user in the datatable.
+     *
+     * @return array
+     */
+    protected function getDataForPrint(): array
+    {
+        $columns = $this->orderColumnsInRequestOrder();
+
+        return $this->mapResponseToColumns($columns, 'printable');
+    }
+
+    /**
+     * Orders the table columns based on the request
+     *
+     * @return Collection
+     */
+    private function orderColumnsInRequestOrder(): Collection
+    {
+        $columns = $this->printColumns();
+        $order = array_flip(Arr::pluck($this->request->get('columns'), 'data'));
+        $newColumns = array_fill(0, sizeof($columns), null);
+
+        foreach ($columns->all() as $column) {
+            $key = $column->data;
+            $index = $order[$key];
+            $newColumns[$index] = $column;
+        }
+
+        return collect($newColumns);
     }
 }
