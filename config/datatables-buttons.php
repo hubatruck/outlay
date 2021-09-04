@@ -49,6 +49,7 @@ return [
             'margin-right' => '0',
             'margin-top' => '10mm',
             'margin-bottom' => '10mm',
+            'user-style-sheet' => base_path('public/css/print.css'),
         ],
         'orientation' => 'landscape',
     ],
