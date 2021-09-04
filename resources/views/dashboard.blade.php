@@ -4,12 +4,6 @@
   <x-page-title>{{ __('Dashboard') }}</x-page-title>
 
   <div class="uk-card-body">
-    @if(config('app.debug'))
-      <a
-        class="uk-button uk-button-large uk-button-danger uk-margin-medium"
-        href="{{ route('debug')  }}"
-      > DEBUG User </a>
-    @endif
     <div class="uk-grid-match uk-child-width-expand@l" uk-grid>
       <div>
         <div class="uk-card uk-card-default uk-card-hover">

@@ -20,12 +20,6 @@
     <div class="uk-card uk-card-default @if ($hasTransactions || $hasTransfers)uk-margin-medium-bottom @endif">
       <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
       <div class="uk-card-body uk-button-group">
-        @if(config('app.debug'))
-          <a class="uk-button uk-button-danger uk-button-large uk-margin-medium"
-             href="{{ route('wallet.view.debug', ['id' => $wallet->id])  }}"
-          > DEBUG Wallet </a><br>
-        @endif
-
         <x-buttons.quick-create :wallet="$wallet" :targetType="'transaction'"/>
         <x-buttons.quick-create :wallet="$wallet" targetType="transfer" destinationParam='from_wallet'>
           <x-slot name="dropdownContent">

@@ -5,9 +5,6 @@ use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\Wallet\ChartController;
 use App\Http\Controllers\Wallet\WalletController;
-use App\Models\Transaction;
-use App\Models\Transfer;
-use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -35,12 +32,6 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    if (config('app.debug')) {
-        Route::get('debug', function () {
-            return view('debug');
-        })->name('debug');
-    }
-
     Route::prefix('wallets')->group(function () {
         Route::get('/', function () {
             $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
@@ -59,13 +50,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');
             Route::get('toggle_hidden', [WalletController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
-
-            if (config('app.debug')) {
-                Route::get('debug', function ($id) {
-                    $wallet = Wallet::findOrFail($id);
-                    return view('wallet.debug', ['wallet' => $wallet]);
-                })->name('wallet.view.debug');
-            }
         });
     });
 
@@ -79,13 +63,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('edit', [TransactionController::class, 'editView'])->name('transaction.view.update');
             Route::post('edit', [TransactionController::class, 'updateTransaction'])->name('transaction.data.update');
             Route::get('delete', [TransactionController::class, 'deleteTransaction'])->name('transaction.data.delete');
-
-            if (config('app.debug')) {
-                Route::get('debug', function ($id) {
-                    $transaction = Transaction::findOrFail($id);
-                    return view('transaction.debug', ['transaction' => $transaction]);
-                })->name('transaction.view.debug');
-            }
         });
     });
 
@@ -94,13 +71,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('create', [TransferController::class, 'createView'])->name('transfer.view.create');
         Route::post('create', [TransferController::class, 'storeTransfer'])->name('transfer.data.create');
-
-        Route::prefix('{id}')->group(function () {
-            Route::get('debug', function ($id) {
-                $transfer = Transfer::findOrFail($id);
-                return view('transfer.debug', ['transfer' => $transfer]);
-            })->name('transfer.view.debug');
-        });
     });
 });
 
