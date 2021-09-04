@@ -61,6 +61,7 @@
     "Outgoing transfer": "Kimentő utalás",
     "Password": "Jelszó",
     "Please be careful when selecting the destination wallet. Sending sums to wallets that have a name next to them and marked 'External' is irreversible, as those belong to other users.": "Kérlek óvatosan válaszd ki a cél tárcát. Olyan tárcára való utalás, melynek név van zárójelben és 'Külső' kulcsszó mellette, nem visszafordítható.",
+    "Printing": "Nyomtatás",
     "Profile": "Profil",
     "Reactivate": "Újraaktiválás",
     "Received": "Kapott",
