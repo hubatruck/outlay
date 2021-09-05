@@ -1,1 +1,1 @@
-<div class="theme-toggle"></div>
+<div class="theme-toggle uk-text-large"></div>
