@@ -24,8 +24,14 @@ function changeTheme(themeFn, themeName) {
 }
 
 $(window).ready(() => {
-    const theme = loadTheme();
+    let theme;
+    if (hasSavedTheme()) {
+        theme = loadTheme();
+    } else {
+        DarkReader.auto(config);
+    }
     onThemeChange(theme);
+
     container.click(() => {
         onThemeChange();
     });
@@ -44,6 +50,10 @@ function saveTheme(theme) {
 
 function loadTheme() {
     return localStorage.getItem(THEMES._STORAGE_KEY) || THEMES.DEFAULT();
+}
+
+function hasSavedTheme() {
+    return localStorage.getItem(THEMES._STORAGE_KEY) !== null;
 }
 
 function nextThemeName(current) {
