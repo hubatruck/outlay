@@ -229,7 +229,28 @@ abstract class DataTableBase extends DataTable
             $newColumns[$index] = $column;
         }
 
-        return collect($newColumns);
+        return collect($this->onlyVisibleColumns($newColumns));
+    }
+
+    /**
+     * Filters columns, so only the visible ones are rendered.
+     * Make sure that the columns are in the user's defined order (done with colReorder).
+     *
+     * @param $columns
+     * @return array
+     */
+    private function onlyVisibleColumns($columns): array
+    {
+        $shownColumns = [];
+        $show = Arr::pluck($this->request->get('columns'), 'show');
+
+        foreach ($columns as $key => $value) {
+            if ($show[$key] === 'true') {
+                $shownColumns[] = $value;
+            }
+        }
+
+        return $shownColumns;
     }
 
     /**

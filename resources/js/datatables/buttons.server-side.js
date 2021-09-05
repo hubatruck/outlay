@@ -79,13 +79,18 @@
     const _buildUrl = function (dt, action) {
         const url = dt.ajax.url() || '';
         const params = dt.ajax.params();
+        const colVisibility = {
+            columns: dt.columns().visible().toArray().map((value) => {
+                return {show: value};
+            })
+        };
         params.action = action;
 
+        const append = $.param(params) + '&' + $.param(colVisibility);
         if (url.indexOf('?') > -1) {
-            return url + '&' + $.param(params);
+            return url + '&' + append;
         }
-
-        return url + '?' + $.param(params);
+        return url + '?' + append;
     };
 
     const _handleCollection = function (event, dt, button, config) {
