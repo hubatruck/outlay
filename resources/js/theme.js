@@ -18,7 +18,11 @@ const themeMethods = {
 }
 
 function changeTheme(themeFn, themeName) {
-    themeFn();
+    if (themeFn.length) {
+        themeFn(config);
+    } else {
+        themeFn();
+    }
     saveTheme(themeName)
     container.html(nextThemeContent(themeName).ui);
 }
