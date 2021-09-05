@@ -5,7 +5,7 @@ const THEMES = {
     LIGHT: 'Light',
     _STORAGE_KEY: 'dr-theme',
     DEFAULT: function () {
-        return THEMES.DARK;
+        return THEMES.LIGHT;
     }
 }
 const themeMethods = {
