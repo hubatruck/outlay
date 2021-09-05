@@ -12,6 +12,11 @@
     <div class="uk-navbar-right">
       <ul class="uk-navbar-nav">
         <li>
+          <a>
+            <x-dark-mode-toggle/>
+          </a>
+        </li>
+        <li>
           <a href="#"><span uk-icon="grid"></span></a>
           <div class="uk-navbar-dropdown uk-width-medium">
             <ul class="uk-nav uk-navbar-dropdown-nav">
