@@ -22,6 +22,7 @@
         "sass-loader": "^8.0.2"
     },
     "dependencies": {
+        "darkreader": "^4.9.34",
         "flatpickr": "^4.6.9",
         "jquery": "^3.5.0",
         "js-dom-router": "^1.0.0",

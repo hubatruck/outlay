@@ -11,6 +11,8 @@ try {
 
     require('flatpickr');
     require('flatpickr/dist/l10n/hu');
+
+    window.DarkReader = require('darkreader');
 } catch (e) {
     console.error('Error loading module:', e);
 }
