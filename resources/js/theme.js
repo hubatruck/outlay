@@ -1,18 +1,18 @@
 const container = $('.theme-toggle');
 const config = {brightness: 100};
 const THEMES = {
-    DARK: 'Dark',
-    LIGHT: 'Light',
+    DARK: {name: 'Dark', ui: '🌒'},
+    LIGHT: {name: 'Light', ui: '🌅'},
     _STORAGE_KEY: 'dr-theme',
     DEFAULT: function () {
         return THEMES.LIGHT;
     }
 }
 const themeMethods = {
-    [THEMES.LIGHT]: function () {
+    [THEMES.LIGHT.name]: function () {
         changeTheme(DarkReader.disable, THEMES.LIGHT);
     },
-    [THEMES.DARK]: function () {
+    [THEMES.DARK.name]: function () {
         changeTheme(DarkReader.enable, THEMES.DARK);
     },
 }
@@ -20,7 +20,7 @@ const themeMethods = {
 function changeTheme(themeFn, themeName) {
     themeFn();
     saveTheme(themeName)
-    container.html(nextThemeName(themeName));
+    container.html(nextThemeContent(themeName).ui);
 }
 
 $(window).ready(() => {
@@ -41,21 +41,21 @@ function onThemeChange(theme = undefined) {
     if (theme === undefined) {
         theme = DarkReader.isEnabled() ? THEMES.LIGHT : THEMES.DARK;
     }
-    themeMethods[theme]();
+    themeMethods[theme.name]();
 }
 
 function saveTheme(theme) {
-    localStorage.setItem(THEMES._STORAGE_KEY, theme);
+    localStorage.setItem(THEMES._STORAGE_KEY, JSON.stringify(theme));
 }
 
 function loadTheme() {
-    return localStorage.getItem(THEMES._STORAGE_KEY) || THEMES.DEFAULT();
+    return JSON.parse(localStorage.getItem(THEMES._STORAGE_KEY) || THEMES.DEFAULT());
 }
 
 function hasSavedTheme() {
     return localStorage.getItem(THEMES._STORAGE_KEY) !== null;
 }
 
-function nextThemeName(current) {
+function nextThemeContent(current) {
     return current === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK;
 }
