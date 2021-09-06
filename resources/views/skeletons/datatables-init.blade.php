@@ -29,7 +29,7 @@ function () {
     $('#dtc-date-range').flatpickr({
         mode: 'range',
         altInput: true,
-        altInputClass: 'uk-input uk-form-small',
+        altInputClass: 'uk-input',
         wrap: true,
         locale: {
             firstDayOfWeek: 1,

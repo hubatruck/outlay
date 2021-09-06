@@ -47,7 +47,7 @@
     /* Default class modification */
     $.extend(DataTable.ext.classes, {
         sWrapper: "dataTables_wrapper uk-form dt-uikit",
-        sFilterInput: "uk-form-small uk-input",
+        sFilterInput: "uk-input",
         sLengthSelect: "uk-form-small uk-select uk-form-width-xsmall",
         sProcessing: "dataTables_processing uk-label uk-label-warning uk-padding-small uk-position-center"
     });
