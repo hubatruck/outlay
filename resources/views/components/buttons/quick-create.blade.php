@@ -1,6 +1,6 @@
-<div class="uk-inline {{ $class ?? '' }}">
+<div class="uk-display-inline {{ $class ?? '' }}">
   <a
-    class="uk-button @unless(isset($notPrimary))uk-button-primary @endunless @if($wallet->deleted_at)uk-link-muted @endif"
+    class="uk-button @unless(isset($notPrimary))uk-button-primary @endunless @if($wallet->deleted_at)uk-link-muted @endif uk-width-1-1"
     href="{{ $wallet->deleted_at ? '#' : route($targetType . '.view.create', [$destinationParam ?? 'wallet_id' => $wallet->id]) }}"
     @if($wallet->deleted_at)
     uk-tooltip="{{ __('This wallet cannot be used for new :target creation until reactivated.', ['target' => __($targetType)]) }}"
