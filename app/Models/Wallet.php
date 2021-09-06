@@ -90,9 +90,11 @@ class Wallet extends Model
      */
     public static function everyPublicWallet(): Collection
     {
+        $userID = Auth::user()->id;
         return Auth::user()->wallets()
             ->orWhere('is_public', '=', 1)
-            ->get();
+            ->get()
+            ->sortBy(fn($wallet) => $wallet->user_id !== $userID);
     }
 
     /**
