@@ -9,7 +9,7 @@ function () {
         '</div>';
 
     /// column footer search boxes
-    api.columns().every(function () {
+    api.columns().every(function() {
         const column = this;
         if (!column.dataSrc().match(/date/) && !column.dataSrc().match(/action/)) {
             const input = document.createElement("input");
@@ -18,19 +18,11 @@ function () {
             $(input)
                 .addClass("uk-input uk-form-small")
                 .appendTo($(column.footer()).empty())
-                .on('change', function () {
+                .on('change', () => {
                     column.search($(this).val(), false, false, true).draw();
                 });
         }
     });
-    /// reset footer search boxes on 'reset' button
-    //        api.on('stateLoaded.dt', (e, settings,data)=>{
-    //            api.columns().every(function (colIdx) {
-    //                  input.value = this.state().columns[column.index()].search.search;
-    //                var colSearch = this.state().columns[colIdx].search;
-    //                $('input', this.columns(colIdx).footer()).val(colSearch.search);
-    //            });
-    //        });
 
     $('#dtc-filters').append(pickerTemplate);
     flatpickr.localize(flatpickr.l10ns.hu);
@@ -42,7 +34,7 @@ function () {
         locale: {
             firstDayOfWeek: 1,
         },
-        onClose: function (selectedDates, dateStr) {
+        onClose: (selectedDates, dateStr) => {
             if (previousRange !== dateStr) {
                 previousRange = dateStr;
                 api.draw()
