@@ -118,20 +118,22 @@ if (!function_exists('globalDateFormat')) {
 if (!function_exists('walletNameWithOwner')) {
     /**
      * Format wallet name, by adding the owner's name in parentheses (if it's the case)
-     *
+     * The style for an external wallet is: owner name (?External wallet): wallet name
      * @param Wallet $wallet
      * @param bool $flagExternal Mark wallet as external
      * @return string
      */
     function walletNameWithOwner(Wallet $wallet, bool $flagExternal = false): string
     {
-        $name = $wallet->name;
+        $name = '';
         if (!Auth::user()->owns($wallet)) {
-            $name .= ' (' . $wallet->user->name . ')';
+            $name = $wallet->user->name;
             if ($flagExternal) {
-                $name .= ' - ' . __('External wallet');
+                $name .= ' (' . __('External wallet') . ')';
             }
+            $name .= ': ';
         }
+        $name .= $wallet->name;
         return $name;
     }
 }
