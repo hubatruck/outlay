@@ -16,6 +16,20 @@
         {{ __('Current balance') }}:
         <div class="uk-text-bolder uk-inline @if($cb < 0) uk-text-danger @else uk-text-success @endif">{{ $cb }}</div>
       </div>
+      <div>
+        {{ __('The wallet is currently') }}
+        <span class="uk-text-bold">{{ __($wallet->is_public ? 'public' : 'private') }}</span>.
+        @if($wallet->is_public)
+          {{ __('Other users can send funds to this wallet.') }}
+        @else
+          {{ __('It\'s only available for your own usage, others can send funds to it.') }}
+        @endif
+      </div>
+      <div>
+        @if($wallet->deleted_at !== null)
+          {{ __('This wallet is currently hidden. It is still visible everywhere, but you cannot use it for creating new transactions or transfers (read-only).') }}
+        @endif
+      </div>
     </div>
     <div class="uk-card uk-card-default @if ($hasTransactions || $hasTransfers)uk-margin-medium-bottom @endif">
       <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
