@@ -4,7 +4,7 @@ function () {
     const pickerTemplate =
         '{{ __('Filter dates') }}:' +
         '<div id="dtc-date-range" class="uk-inline uk-width-1-1 uk-form-controls">' +
-        '   <a id="dtc-reset" class="uk-form-icon uk-form-icon-flip" uk-icon="home" uk-tooltip="{{ __('Reset range') }}" data-clear></a>' +
+        '   <a id="dtc-reset" class="uk-form-icon uk-form-icon-flip" uk-icon="trash" uk-tooltip="{{ __('Reset range') }}" data-clear></a>' +
         '   <input id="{{ $dateRangeID }}" type="text" placeholder="{{ __('Select the date range to be shown') }}" data-input>' +
         '</div>';
 
