@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $name
  * @property string|null $notes
  * @property float $balance
- * @property int $is_card
+ * @property int $is_public
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -47,7 +47,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Wallet whereCreatedAt($value)
  * @method static Builder|Wallet whereDeletedAt($value)
  * @method static Builder|Wallet whereId($value)
- * @method static Builder|Wallet whereIsCard($value)
+ * @method static Builder|Wallet whereIsPublic($value)
  * @method static Builder|Wallet whereName($value)
  * @method static Builder|Wallet whereNotes($value)
  * @method static Builder|Wallet whereUpdatedAt($value)
@@ -64,7 +64,7 @@ class Wallet extends Model
      * Fields that are fillable for the model
      * @var string
      */
-    protected $fillable = ['user_id', 'name', 'balance', 'notes', 'is_card'];
+    protected $fillable = ['user_id', 'name', 'balance', 'notes', 'is_public'];
 
     /**
      * Check if the provided wallet is wallet or if the user owns the wallet

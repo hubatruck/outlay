@@ -46,11 +46,11 @@
         <div class="uk-form-controls uk-form-controls-text">
           <label>
             <input
-              id="is_card"
+              id="is_public"
               class="uk-checkbox"
-              name="is_card"
+              name="is_public"
               type="checkbox"
-              {{ old('is_card', isset($wallet) && $wallet->is_card ? 'checked' : '') }}
+              {{ old('is_public', isset($wallet) && $wallet->is_public ? 'checked' : '') }}
             >
             {{ __('Wallet represents credit card') }}
           </label>

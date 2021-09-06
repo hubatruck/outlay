@@ -29,7 +29,7 @@
             <td>{{ $wallet->name }}</td>
             <td
               class="{{ $cb < 0 ? 'uk-text-danger' : 'uk-text-success' }}">{{ $cb }}</td>
-            <td>{{ $wallet->is_card ? __('yes') : __('no') }}</td>
+            <td>{{ $wallet->is_public ? __('Public') : __('Private') }}</td>
             <td>{{ isset($wallet->deleted_at) ? __('hidden') : __('active') }}
           </tr>
         @endforeach

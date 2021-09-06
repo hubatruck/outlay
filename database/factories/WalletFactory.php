@@ -25,7 +25,7 @@ class WalletFactory extends Factory
             'name' => $this->faker->word(),
             'user_id' => 1,
             'balance' => $this->faker->numberBetween(-1000, 1000),
-            'is_card' => $this->faker->boolean,
+            'is_public' => $this->faker->boolean,
         ];
     }
 }
