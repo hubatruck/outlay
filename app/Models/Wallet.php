@@ -84,7 +84,20 @@ class Wallet extends Model
     }
 
     /**
+     * Get every public wallet + all the wallets belonging to the user
+     *
+     * @return Collection
+     */
+    public static function everyPublicWallet(): Collection
+    {
+        return Auth::user()->wallets()
+            ->orWhere('is_public', '=', 1)
+            ->get();
+    }
+
+    /**
      * Get the user who owns this wallet
+     *
      * @return BelongsTo
      */
     public function user(): BelongsTo

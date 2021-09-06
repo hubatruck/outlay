@@ -32,7 +32,7 @@
           fieldName="to_wallet_id"
           :selectedWalletID="$selected_to_wallet_id"
           :label="__('Destination wallet')"
-          :wallets="\App\Models\Wallet::withTrashed()->get()"
+          :wallets="\App\Models\Wallet::everyPublicWallet()"
           :addOwnerName="true"
         />
       </div>
