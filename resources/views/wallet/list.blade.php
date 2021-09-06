@@ -12,7 +12,7 @@
           <th id="actions" class="uk-table-shrink uk-table-middle">{{ __('Actions') }}</th>
           <th id="name" class="uk-table-expand">{{ __('Name') }}</th>
           <th id="balance">{{ __('Current balance') }}</th>
-          <th id="credit_card">{{ __('Credit card') }}</th>
+          <th id="publicity">{{ __('Publicity status') }}</th>
           <th id="status">{{ __('Status') }}</th>
         </tr>
         </thead>

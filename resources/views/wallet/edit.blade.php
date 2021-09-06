@@ -52,7 +52,7 @@
               type="checkbox"
               {{ old('is_public', isset($wallet) && $wallet->is_public ? 'checked' : '') }}
             >
-            {{ __('Wallet represents credit card') }}
+            {{ __('Make wallet publicly available') }}
           </label>
         </div>
       </div>
