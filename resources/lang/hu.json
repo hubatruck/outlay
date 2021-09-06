@@ -44,6 +44,7 @@
     "Filter individual columns using the input boxes found at the bottom of the table": "Egyénileg szűrheted az oszlopokat a tábla alján található kereső dobozokkal",
     "From": "Honnan",
     "Hi": "Hello",
+    "Hidden": "Elrejtve",
     "hidden": "elrejtve",
     "Hide": "Elrejt",
     "Hold down <code>SHIFT</code>, while clicking on column headers to sort by multiple columns at the same time": "Tartsd lenyomva a <code>SHIFT</code> gombot, miközben a fejlécekre kattintasz, hogy több oszlop alapján rendezd az adatokat ugyanabban az időben",

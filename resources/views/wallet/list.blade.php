@@ -13,7 +13,7 @@
           <th id="name" class="uk-table-expand">{{ __('Name') }}</th>
           <th id="balance">{{ __('Current balance') }}</th>
           <th id="publicity">{{ __('Publicity status') }}</th>
-          <th id="status">{{ __('Status') }}</th>
+          <th id="usability">{{ __('Usability status') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
             <td
               class="{{ $cb < 0 ? 'uk-text-danger' : 'uk-text-success' }}">{{ $cb }}</td>
             <td>{{ $wallet->is_public ? __('Public') : __('Private') }}</td>
-            <td>{{ isset($wallet->deleted_at) ? __('hidden') : __('active') }}
+            <td>{{ isset($wallet->deleted_at) ? __('Hidden') : __('Active') }}
           </tr>
         @endforeach
         </tbody>
