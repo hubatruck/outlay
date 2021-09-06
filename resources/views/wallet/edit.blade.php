@@ -53,6 +53,10 @@
               {{ old('is_public', isset($wallet) && $wallet->is_public ? 'checked' : '') }}
             >
             {{ __('Make wallet publicly available') }}
+            <span
+              uk-icon="question"
+              uk-tooltip="{{ __('If checked, other users can send funds to this wallet.') }}"
+            />
           </label>
         </div>
       </div>
