@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Transaction\TransactionController;
+use App\Http\Controllers\Transaction\TransactionDataController;
+use App\Http\Controllers\Transaction\TransactionViewController;
 use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\Wallet\ChartController;
 use App\Http\Controllers\Wallet\WalletDataController;
@@ -52,15 +53,15 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('transactions')->group(function () {
-        Route::get('/', [TransactionController::class, 'index'])->name('transaction.view.all');
+        Route::get('/', [TransactionViewController::class, 'listView'])->name('transaction.view.all');
 
-        Route::get('create', [TransactionController::class, 'createView'])->name('transaction.view.create');
-        Route::post('create', [TransactionController::class, 'storeTransaction'])->name('transaction.data.create');
+        Route::get('create', [TransactionViewController::class, 'createView'])->name('transaction.view.create');
+        Route::post('create', [TransactionDataController::class, 'storeTransaction'])->name('transaction.data.create');
 
         Route::prefix('{id}')->group(function () {
-            Route::get('edit', [TransactionController::class, 'editView'])->name('transaction.view.update');
-            Route::post('edit', [TransactionController::class, 'updateTransaction'])->name('transaction.data.update');
-            Route::get('delete', [TransactionController::class, 'deleteTransaction'])->name('transaction.data.delete');
+            Route::get('edit', [TransactionViewController::class, 'editView'])->name('transaction.view.update');
+            Route::post('edit', [TransactionDataController::class, 'updateTransaction'])->name('transaction.data.update');
+            Route::get('delete', [TransactionDataController::class, 'deleteTransaction'])->name('transaction.data.delete');
         });
     });
 
