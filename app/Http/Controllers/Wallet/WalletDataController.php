@@ -5,80 +5,15 @@ namespace App\Http\Controllers\Wallet;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Wallet;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
-class WalletController extends Controller
+/**
+ * This controller handles wallet modifying related requests
+ */
+class WalletDataController extends Controller
 {
-    /**
-     * Editor view name
-     *
-     * @var string
-     */
-    private string $editorViewName = 'wallet/edit';
-
-    /**
-     * List all wallets view
-     *
-     * @return Factory|\Illuminate\Contracts\View\View|Application
-     */
-    public function index(): Factory|\Illuminate\Contracts\View\View|Application
-    {
-        $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
-        return view('wallet.list', compact('wallets'));
-    }
-
-    /**
-     * Show the view for editing wallet
-     *
-     * @return View
-     */
-    public function createView(): View
-    {
-        return view($this->editorViewName);
-    }
-
-    /**
-     * Show the view for editing wallet
-     *
-     * @param string $id
-     * @return \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
-     */
-    public function editView(string $id): \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
-    {
-        $wallet = Wallet::withTrashed()->find($id);
-
-        $permissionCheck = Wallet::check($wallet);
-        return $permissionCheck ?: view($this->editorViewName, compact('wallet'));
-    }
-
-    /**
-     * Show details page for wallet, if user owns it
-     *
-     * @param string $id
-     * @return \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
-     */
-    public function detailsView(string $id): \Illuminate\Contracts\View\View|Factory|RedirectResponse|Application
-    {
-        $wallet = Wallet::withTrashed()->findOrFail($id);
-        if (!Auth::user()->owns($wallet)) {
-            return WalletFeedback::viewError();
-        }
-
-        $activity = (int) $wallet->hasTransfers() + (int) $wallet->hasTransactions();
-        if ($activity === 1) {
-            addSessionMsg(WalletFeedback::partialActivity(), true);
-        } else if ($activity === 0) {
-            addSessionMsg(WalletFeedback::noActivity(), true);
-        }
-
-        return view('wallet.details', compact('wallet'));
-    }
-
     /**
      * Save a new wallet
      *

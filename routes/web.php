@@ -4,7 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\Wallet\ChartController;
-use App\Http\Controllers\Wallet\WalletController;
+use App\Http\Controllers\Wallet\WalletDataController;
+use App\Http\Controllers\Wallet\WalletViewController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -33,20 +34,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('wallets')->group(function () {
-        Route::get('/', [WalletController::class, 'index'])->name('wallet.view.all');
+        Route::get('/', [WalletViewController::class, 'listView'])->name('wallet.view.all');
 
-        Route::get('create', [WalletController::class, 'createView'])->name('wallet.view.create');
-        Route::post('create', [WalletController::class, 'storeWallet'])->name('wallet.data.create');
+        Route::get('create', [WalletViewController::class, 'createView'])->name('wallet.view.create');
+        Route::post('create', [WalletDataController::class, 'storeWallet'])->name('wallet.data.create');
 
         Route::prefix('{id}')->group(function () {
-            Route::get('edit', [WalletController::class, 'editView'])->name('wallet.view.update');
-            Route::post('edit', [WalletController::class, 'updateWallet'])->name('wallet.data.update');
+            Route::get('edit', [WalletViewController::class, 'editView'])->name('wallet.view.update');
+            Route::post('edit', [WalletDataController::class, 'updateWallet'])->name('wallet.data.update');
 
-            Route::get('details', [WalletController::class, 'detailsView'])->name('wallet.view.details');
+            Route::get('details', [WalletViewController::class, 'detailsView'])->name('wallet.view.details');
             Route::get('charts', [ChartController::class, 'getFor'])->name('wallet.view.charts');
 
-            Route::get('delete', [WalletController::class, 'deleteWallet'])->name('wallet.manage.delete');
-            Route::get('toggle_hidden', [WalletController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
+            Route::get('delete', [WalletDataController::class, 'deleteWallet'])->name('wallet.manage.delete');
+            Route::get('toggle_hidden', [WalletDataController::class, 'toggleHidden'])->name('wallet.manage.toggle_hidden');
         });
     });
 
