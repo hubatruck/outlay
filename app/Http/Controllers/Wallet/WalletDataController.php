@@ -20,7 +20,7 @@ class WalletDataController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function storeWallet(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $newWalletData = $this->validateRequest($request);
         $newWalletData['user_id'] = Auth::user()->id;
@@ -56,7 +56,7 @@ class WalletDataController extends Controller
      * @param string $id
      * @return RedirectResponse
      */
-    public function updateWallet(Request $request, string $id): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
         $validated = $this->validateRequest($request, false);
 
@@ -78,7 +78,7 @@ class WalletDataController extends Controller
      * @param string $id
      * @return RedirectResponse
      */
-    public function deleteWallet(string $id): RedirectResponse
+    public function delete(string $id): RedirectResponse
     {
         $wallet = Wallet::withTrashed()->find($id);
 

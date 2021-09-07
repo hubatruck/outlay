@@ -28,7 +28,7 @@ class WalletViewController extends Controller
      *
      * @return Factory|View|Application
      */
-    public function listView(): Factory|View|Application
+    public function list(): Factory|View|Application
     {
         $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
         return view('wallet.list', compact('wallets'));
@@ -39,7 +39,7 @@ class WalletViewController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function createView(): View
+    public function create(): View
     {
         return view($this->editorViewName);
     }
@@ -50,7 +50,7 @@ class WalletViewController extends Controller
      * @param string $id
      * @return View|Factory|RedirectResponse|Application
      */
-    public function editView(string $id): View|Factory|RedirectResponse|Application
+    public function edit(string $id): View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->find($id);
 
@@ -64,7 +64,7 @@ class WalletViewController extends Controller
      * @param string $id
      * @return View|Factory|RedirectResponse|Application
      */
-    public function detailsView(string $id): View|Factory|RedirectResponse|Application
+    public function details(string $id): View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->findOrFail($id);
         if (!Auth::user()->owns($wallet)) {

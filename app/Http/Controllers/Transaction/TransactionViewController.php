@@ -28,7 +28,7 @@ class TransactionViewController extends Controller
      * @param TransactionsDataTable $dataTable
      * @return mixed
      */
-    public function listView(TransactionsDataTable $dataTable): mixed
+    public function list(TransactionsDataTable $dataTable): mixed
     {
         if (!Auth::user()->hasWallet()) {
             addSessionMsg(TransactionFeedback::noWalletMsg(), true);
@@ -44,7 +44,7 @@ class TransactionViewController extends Controller
      * @param Request $request
      * @return View|Factory|RedirectResponse|Application
      */
-    public function createView(Request $request): View|Factory|RedirectResponse|Application
+    public function create(Request $request): View|Factory|RedirectResponse|Application
     {
         /// pre-select the wallet, if there is intent
         $wallet_id = $request->get('wallet_id');
@@ -70,7 +70,7 @@ class TransactionViewController extends Controller
      * @param string $id
      * @return View|Factory|RedirectResponse|Application
      */
-    public function editView(string $id): View|Factory|RedirectResponse|Application
+    public function edit(string $id): View|Factory|RedirectResponse|Application
     {
         if (!Auth::user()->hasWallet()) {
             return WalletFeedback::noWalletError();

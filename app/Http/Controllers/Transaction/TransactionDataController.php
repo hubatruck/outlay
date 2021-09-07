@@ -24,7 +24,7 @@ class TransactionDataController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function storeTransaction(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $newTransactionData = $this->validateRequest($request);
         Transaction::create($newTransactionData);
@@ -67,7 +67,7 @@ class TransactionDataController extends Controller
      * @param string $id
      * @return RedirectResponse
      */
-    public function updateTransaction(Request $request, string $id): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
         $oldTransaction = Transaction::find($id);
         $permissionCheck = Transaction::checkStatus($oldTransaction);
@@ -95,7 +95,7 @@ class TransactionDataController extends Controller
      * @param string $id
      * @return RedirectResponse
      */
-    public function deleteTransaction(string $id): RedirectResponse
+    public function delete(string $id): RedirectResponse
     {
         $transaction = Transaction::find($id);
 

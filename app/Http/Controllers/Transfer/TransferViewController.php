@@ -25,7 +25,7 @@ class TransferViewController extends Controller
      * @param TransfersDataTable $dataTable
      * @return mixed
      */
-    public function listView(TransfersDataTable $dataTable): mixed
+    public function list(TransfersDataTable $dataTable): mixed
     {
         if (!Auth::user()->hasWallet()) {
             addSessionMsg(TransferFeedback::noWalletMsg(), true);
@@ -42,7 +42,7 @@ class TransferViewController extends Controller
      * @param Request $request
      * @return View|Factory|RedirectResponse|Application
      */
-    public function createView(Request $request): View|Factory|RedirectResponse|Application
+    public function create(Request $request): View|Factory|RedirectResponse|Application
     {
         $fromWalletID = $request->get('from_wallet');
         $toWalletID = $request->get('to_wallet');

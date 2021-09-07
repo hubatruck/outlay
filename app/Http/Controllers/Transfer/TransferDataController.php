@@ -22,7 +22,7 @@ class TransferDataController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function storeTransfer(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $transfer = $this->validateRequest($request);
         Transfer::create($transfer);
