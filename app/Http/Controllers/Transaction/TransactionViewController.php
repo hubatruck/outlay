@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Auth;
  */
 class TransactionViewController extends Controller
 {
-    private string $editViewName = 'transaction/edit';
-
     /**
      * Show all transactions for the user
      *
@@ -59,7 +57,7 @@ class TransactionViewController extends Controller
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
-        return view($this->editViewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
+        return view('transaction.create', ['selected_wallet_id' => $request->wallet_id ?? '-1']);
     }
 
     /**
@@ -80,6 +78,6 @@ class TransactionViewController extends Controller
 
         $permissionCheck = Transaction::checkStatus($transaction);
 
-        return $permissionCheck ?? view($this->editViewName, compact('transaction'));
+        return $permissionCheck ?? view('transaction.edit', compact('transaction'));
     }
 }
