@@ -24,25 +24,6 @@
       </div>
 
       <div class="uk-margin">
-        <label for="balance" class="uk-form-label">{{ __('Balance') }}</label>
-        <div class="uk-form controls">
-          <input
-            id="balance"
-            class="uk-input @error('balance')uk-form-danger @enderror"
-            name="balance"
-            type="number"
-            value="{{ old('balance', isset($wallet) ? $wallet->balance : 0) }}"
-            step="0.01"
-          />
-        </div>
-        @error('balance')
-        <span class="uk-text-danger uk-text-small">
-          <strong>{{ $message }}</strong>
-        </span>
-        @enderror
-      </div>
-
-      <div class="uk-margin">
         <div class="uk-form-controls uk-form-controls-text">
           <label>
             <input

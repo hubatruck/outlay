@@ -41,7 +41,6 @@ class WalletDataController extends Controller
         $data = $request->validate([
             'name' => 'required|max:255',
             'notes' => 'nullable|string',
-            'balance' => ($isNewModelInstance ? '' : 'nullable|') . 'numeric|max:999999.99',
             'is_public' => 'nullable',
         ]);
 

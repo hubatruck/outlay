@@ -154,7 +154,6 @@ return [
 
     'attributes' => [
         'amount' => 'Az érték',
-        'balance' => 'Az egyenleg',
         'name' => 'A név',
         'notes' => 'A jegyzetek',
         'scope' => 'A cél',
