@@ -13,7 +13,7 @@
       </ul>
       <ul class="uk-switcher">
         <li uk-grid>
-          <div class="uk-margin">
+          <div class="uk-width-2-3@s">
             <x-forms.text-input
               fieldName="scope"
               :label="__('Scope')"
@@ -21,7 +21,7 @@
             />
           </div>
 
-          <div class="uk-margin">
+          <div class="uk-width-1-3@s">
             <x-forms.amount-input :value="$transaction->amount ?? 0"/>
           </div>
         </li>
