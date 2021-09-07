@@ -7,32 +7,42 @@
       :action="isset($transaction) ? route('transaction.data.update', ['id' => $transaction->id]) : route('transaction.data.create')"
       :cancelURL="previousUrlOr(route('transaction.view.all'))"
     >
-      <div class="uk-margin">
-        <x-forms.text-input
-          fieldName="scope"
-          :label="__('Scope')"
-          :value="$transaction->scope ?? ''"
-        />
-      </div>
+      <ul uk-tab>
+        <li class="uk-active"><a href="">{{ __('Items') }}</a></li>
+        <li><a href="">{{ __('Payment details') }}</a></li>
+      </ul>
+      <ul class="uk-switcher">
+        <li uk-grid>
+          <div class="uk-margin">
+            <x-forms.text-input
+              fieldName="scope"
+              :label="__('Scope')"
+              :value="$transaction->scope ?? ''"
+            />
+          </div>
 
-      <div class="uk-margin">
-        <x-forms.amount-input :value="$transaction->amount ?? 0"/>
-      </div>
+          <div class="uk-margin">
+            <x-forms.amount-input :value="$transaction->amount ?? 0"/>
+          </div>
+        </li>
 
-      <div class="uk-margin">
-        <x-forms.transaction-wallet-select :transaction="$transaction ?? null"/>
-      </div>
+        <li>
+          <div class="uk-margin">
+            <x-forms.transaction-wallet-select :transaction="$transaction ?? null"/>
+          </div>
 
-      <div class="uk-margin">
-        <x-forms.transaction-type-select :transaction="$transaction ?? null"/>
-      </div>
+          <div class="uk-margin">
+            <x-forms.transaction-type-select :transaction="$transaction ?? null"/>
+          </div>
 
-      <div class="uk-margin">
-        <x-forms.date-picker
-          fieldName="transaction_date"
-          :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
-        />
-      </div>
+          <div class="uk-margin">
+            <x-forms.date-picker
+              fieldName="transaction_date"
+              :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
+            />
+          </div>
+        </li>
+      </ul>
     </x-forms.skeleton>
   </div>
 
