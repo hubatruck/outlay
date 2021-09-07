@@ -18,7 +18,8 @@
 }
 
 .ukc-button-group {
-    * {
+    > * {
+        margin: 1px;
         flex: 1 1 auto;
     }
 }

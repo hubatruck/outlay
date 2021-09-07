@@ -111,7 +111,7 @@
         }
     }
 
-    const baseButtonClass = 'uk-button uk-button-default uk-width-1-1@s uk-width-auto@s';
+    const baseButtonClass = 'uk-button uk-button-default uk-width-1-1@s';
     const visibleToggleColClass = 'uk-button-primary';
 
     DataTable.ext.buttons.excel = {

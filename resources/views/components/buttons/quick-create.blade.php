@@ -1,4 +1,4 @@
-<div class="uk-display-inline {{ $class ?? '' }}">
+<div class="@unless(isset($notPrimary))uk-display-inline @endunless {{ $class ?? '' }}">
   <a
     class="uk-button @unless(isset($notPrimary))uk-button-primary @endunless @if($wallet->deleted_at)uk-link-muted @endif uk-width-1-1"
     href="{{ $wallet->deleted_at ? '#' : route($targetType . '.view.create', [$destinationParam ?? 'wallet_id' => $wallet->id]) }}"

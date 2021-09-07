@@ -54,9 +54,13 @@
 
     /* This wrapper is needed for the dropdowns to work correctly */
     $.extend(DataTable.Buttons.defaults.dom, {
+        container: {
+            tag: 'div',
+            className: 'uk-grid'
+        },
         buttonContainer: {
             tag: 'div',
-            className: 'dt-button-wrapper uk-display-inline'
+            className: 'dt-button-wrapper uk-width-1-2@s uk-width-auto@m'
         }
     })
 
