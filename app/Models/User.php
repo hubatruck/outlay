@@ -88,6 +88,25 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get previous transaction date created by the user.
+     * This function is used to determine the prefilled date for transaction
+     * creation. If the user made transactions today, those date will be used,
+     * otherwise today's date.
+     *
+     * @return Carbon
+     */
+    public function previousTransactionDate(): Carbon
+    {
+        $lastTransaction = $this->transactions()->latest()->first();
+        $response = now();
+        if ($lastTransaction && $this->hasMadeTransactionsToday($lastTransaction)) {
+            $response = $lastTransaction->transaction_date;
+        }
+
+        return $response;
+    }
+
+    /**
      * Transactions belonging to the user
      *
      * @return HasManyThrough
@@ -99,25 +118,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Get previous transaction date created by the user.
-     * This function is used to determine the prefilled date for transaction
-     * creation. If the user made transactions today, those date will be used,
-     * otherwise today's date.
-     *
-     * @return Carbon
-     */
-    public function previousTransactionDate(): Carbon
-    {
-        $lastTransaction = $this->transactions->last();
-        $response = now();
-        if ($lastTransaction && $this->hasMadeTransactionsToday($lastTransaction)) {
-            $response = $lastTransaction->transaction_date;
-        }
-
-        return $response;
-    }
-
-    /**
      * Check if the user made any transactions today
      *
      * @param Transaction $lastTransaction
@@ -125,7 +125,7 @@ class User extends Authenticatable
      */
     private function hasMadeTransactionsToday(Transaction $lastTransaction): bool
     {
-        return Carbon::parse($lastTransaction->created_at)->format(globalDateFormat()) === now()->format(globalDateFormat());
+        return Carbon::parse($lastTransaction->updated_at)->format(globalDateFormat()) === now()->format(globalDateFormat());
     }
 
     /**
