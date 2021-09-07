@@ -3,7 +3,8 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Transaction\TransactionDataController;
 use App\Http\Controllers\Transaction\TransactionViewController;
-use App\Http\Controllers\Transfer\TransferController;
+use App\Http\Controllers\Transfer\TransferDataController;
+use App\Http\Controllers\Transfer\TransferViewController;
 use App\Http\Controllers\Wallet\ChartController;
 use App\Http\Controllers\Wallet\WalletDataController;
 use App\Http\Controllers\Wallet\WalletViewController;
@@ -66,10 +67,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('transfers')->group(function () {
-        Route::get('/', [TransferController::class, 'index'])->name('transfer.view.all');
+        Route::get('/', [TransferViewController::class, 'listView'])->name('transfer.view.all');
 
-        Route::get('create', [TransferController::class, 'createView'])->name('transfer.view.create');
-        Route::post('create', [TransferController::class, 'storeTransfer'])->name('transfer.data.create');
+        Route::get('create', [TransferViewController::class, 'createView'])->name('transfer.view.create');
+        Route::post('create', [TransferDataController::class, 'storeTransfer'])->name('transfer.data.create');
     });
 });
 
