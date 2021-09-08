@@ -10,7 +10,19 @@
       class="uk-form uk-form-stacked"
     >
       @csrf
-      <ul uk-tab>
+
+      <div
+        id="has-errors"
+        class="uk-flex uk-width-1-1"
+        @unless ($errors->any())
+        style="display: none"
+        @endunless
+      >
+        <span class="uk-alert uk-alert-danger uk-text-bold uk-width-1-1">
+          {{ __('Some input fields are invalid. Please check them before submitting.') }}
+        </span>
+      </div>
+      <ul class="ukc-tab-header" uk-tab="animation:uk-animation-scale-down, uk-animation-scale-up">
         <li class="uk-active"><a href="">{{ __('Items') }}</a></li>
         <li><a href="">{{ __('Payment details') }}</a></li>
       </ul>
@@ -66,7 +78,9 @@
 @push('scripts')
   <script>
     const container = $('#transaction-items');
-    $('#new-row-button').click(() => {
+    $('#new-row-button').click((event) => {
+      event.preventDefault();
+
       const newItem = container.children().last().clone();
       const closeIcon = newItem.children().children('span').last();
       if (closeIcon.html() === '') {
@@ -79,6 +93,27 @@
     $(container).on("click", ".remove-row", function (e) { //user click on remove text
       e.preventDefault();
       $(this).parent('div').parent('div').remove();
-    })
+    });
+
+    $(':submit').click((event) => {
+      event.preventDefault();
+      const inputs = $('.transaction-item').find('input');
+
+      let hasErrors = false;
+      inputs.each((index, item) => {
+        if (!item.checkValidity()) {
+          item.classList += ' uk-form-danger uk-alert-danger';
+          hasErrors = true;
+        }
+      });
+
+      if (hasErrors) {
+        $('#has-errors').show();
+        UIkit.tab('.ukc-tab-header').show(0);
+        return;
+      }
+
+      $('form').submit();
+    });
   </script>
 @endpush

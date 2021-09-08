@@ -1,4 +1,4 @@
-<div class="uk-grid">
+<div class="uk-grid transaction-item">
   <div class="uk-width-2-3@s">
     <x-forms.text-input
       fieldName="scope[]"
