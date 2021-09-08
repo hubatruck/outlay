@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('create', [TransactionViewController::class, 'create'])->name('transaction.view.create');
         Route::post('create', [TransactionDataController::class, 'store'])->name('transaction.data.create');
+        Route::post('create', [TransactionDataController::class, 'testStore'])->name('transaction.data.test-create');
 
         Route::prefix('{id}')->group(function () {
             Route::get('edit', [TransactionViewController::class, 'edit'])->name('transaction.view.update');

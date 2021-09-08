@@ -6,9 +6,11 @@
 </label>
 <div class="uk-form-controls">
   <input
+    @unless (isset($asArray))
     id="amount"
+    @endunless
     class="uk-input @error('amount') uk-form-danger @enderror"
-    name="amount"
+    name="{{ isset($asArray) ? 'amount[]' : 'amount' }}"
     type="number"
     value="{{ old('amount', $value ?? 0) }}"
     step="0.01"

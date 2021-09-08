@@ -18,6 +18,49 @@ use Illuminate\Validation\Rule;
  */
 class TransactionDataController extends Controller
 {
+    public function testStore(Request $request): RedirectResponse
+    {
+        $validatedData = $this->testValidateRequest($request);
+
+        $sharedProps = array_filter($validatedData, static function ($value) {
+            return !is_array($value);
+        });
+
+        $newTransactions = [];
+        foreach ($validatedData['scope'] as $key => $scope) {
+            $newTransactions[] = array_merge([
+                'scope' => $scope,
+                'amount' => $validatedData['amount'][$key],
+            ], $sharedProps);
+        }
+
+        Transaction::insert($newTransactions);
+        return TransactionFeedback::success();
+    }
+
+    public function testValidateRequest(Request $request, bool $walletMustBeActive = true): array
+    {
+        $walletRules = ['bail'];
+        if ($walletMustBeActive) {
+            $walletRules[] = new UserOwnsWalletRule();
+            $walletRules[] = new WalletIsActiveRule();
+            $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
+        }
+
+        return $request->validate([
+            'scope' => 'required|array|min:1',
+            'scope.*' => 'required|string|max:255',
+            'amount' => 'required|array|min:1',
+            'amount.*' => 'required|numeric|min:0.01|max:999999.99',
+            'wallet_id' => $walletRules,
+            'transaction_type_id' => [
+                'required',
+                Rule::in(TransactionType::all()->pluck('id')->toArray()),
+            ],
+            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
+        ]);
+    }
+
     /**
      * Store a transaction in the database
      *
