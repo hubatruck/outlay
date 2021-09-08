@@ -9,7 +9,7 @@
     @unless (isset($asArray))
     id="amount"
     @endunless
-    class="uk-input @error('amount') uk-form-danger @enderror"
+    class="uk-input @error($errorField ?? 'amount') uk-form-danger @enderror"
     name="{{ isset($asArray) ? 'amount[]' : 'amount' }}"
     type="number"
     value="{{ !isset($asArray) ? old('amount', $value ?? 0) : ($value ?? 0) }}"

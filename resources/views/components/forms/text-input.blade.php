@@ -6,7 +6,7 @@
     @unless ($errorField)
     id="{{ $fieldName }}"
     @endunless
-    class="uk-input @error('scope')uk-form-danger @enderror"
+    class="uk-input @error($errorField ?? $fieldName)uk-form-danger @enderror"
     name="{{ $fieldName }}"
     type="text"
     value="{{ old($fieldName, $value ?? '') }}"
