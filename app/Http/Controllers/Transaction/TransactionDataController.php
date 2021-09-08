@@ -39,7 +39,7 @@ class TransactionDataController extends Controller
         }
 
         Transaction::insert($newTransactions);
-        return TransactionFeedback::success();
+        return TransactionFeedback::success('created', sizeof($newTransactions));
     }
 
     public function testValidateRequest(Request $request, bool $walletMustBeActive = true): array

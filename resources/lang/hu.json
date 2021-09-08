@@ -104,7 +104,7 @@
     "This wallet cannot be used for new :target creation until reactivated.": "Ez a tárca nem használható új :target létrehozására amíg nem kerül újraaktiválásra.",
     "This wallet is currently hidden. It is still visible everywhere, but you cannot use it for creating new transactions or transfers (read-only).": "Ez a tárca jelenleg rejtett. Még mindig elérhető megtekintésre, csak nem használható új tranzakciók és átutalások létrehozására (írásvédett).",
     "To": "Hova",
-    "Transaction :action successfully.": "Tranzakció sikeresen :action.",
+    "Transaction :action successfully.|Transactions :action successfully.": "Tranzakció sikeresen :action.|Tranzakciók sikeresen :action.",
     "Transaction amounts by type": "Tranzakciók értéke típus szerint",
     "Transaction charts": "Tranzakció grafikonok",
     "Transaction creation": "Tranzakciók létrehozása",

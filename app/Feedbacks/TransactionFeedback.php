@@ -14,15 +14,16 @@ class TransactionFeedback
      * Redirect user with success message
      *
      * @param string $performedAction
+     * @param int $itemCount Count of new transactions
      * @return RedirectResponse
      */
-    public static function success(string $performedAction = 'created'): RedirectResponse
+    public static function success(string $performedAction = 'created', int $itemCount = 1): RedirectResponse
     {
         addSessionMsg([
-            'content' => __(
-                'Transaction :action successfully.', [
-                    'action' => __($performedAction),
-                ]
+            'content' => trans_choice(
+                'Transaction :action successfully.|Transactions :action successfully.',
+                $itemCount,
+                ['action' => __($performedAction),]
             ),
             'type' => 'success',
         ]);
