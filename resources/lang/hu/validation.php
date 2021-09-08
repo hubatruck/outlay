@@ -154,9 +154,11 @@ return [
 
     'attributes' => [
         'amount' => 'Az érték',
+        'amount.*' => 'Az érték',
         'name' => 'A név',
         'notes' => 'A jegyzetek',
         'scope' => 'A cél',
+        'scope.*' => 'A cél',
         'transaction_date' => 'A tranzakció dátum',
         'transaction_type_id' => 'A tranzakció típus',
         'wallet_id' => 'A tárca',

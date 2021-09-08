@@ -17,19 +17,11 @@
       <ul class="uk-switcher">
         <li uk-grid>
           <div class="uk-width-1-1" id="transaction-items">
-            <div class="uk-grid">
-              <div class="uk-width-2-3@s">
-                <x-forms.text-input
-                  fieldName="scope[]"
-                  :label="__('Scope')"
-                />
-              </div>
-
-              <div class="uk-width-1-3@s uk-inline">
-                <x-forms.amount-input asArray="true"/>
-                <span class="remove-row"></span>
-              </div>
-            </div>
+            @forelse(old('scope') ?? [] as $stepper)
+              <x-forms.transaction-item :index="$loop->index"/>
+            @empty
+              <x-forms.transaction-item/>
+            @endforelse
           </div>
           <div class="uk-text-danger uk-width-1-1">{{ __('Fields marked with * are required.') }}</div>
           <div class="uk-width-1-1">

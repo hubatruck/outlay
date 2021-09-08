@@ -3,7 +3,9 @@
 </label>
 <div class="uk-form-controls">
   <input
+    @unless ($errorField)
     id="{{ $fieldName }}"
+    @endunless
     class="uk-input @error('scope')uk-form-danger @enderror"
     name="{{ $fieldName }}"
     type="text"
@@ -11,8 +13,8 @@
     required
   />
 </div>
-@error($fieldName)
-<span class="uk-text-danger uk-text-small">
+@error($errorField ?? $fieldName)
+<span class="uk-text-danger uk-text-small uk-display-block">
   <strong>{{ $message }}</strong>
 </span>
 @enderror
