@@ -68,10 +68,10 @@
     const container = $('#transaction-items');
     $('#new-row-button').click(() => {
       const newItem = container.children().last().clone();
-      const closeIcon = newItem.children().children('span')[0];
-      if (closeIcon.innerHTML === undefined || closeIcon.innerHTML === '') {
+      const closeIcon = newItem.children().children('span').last();
+      if (closeIcon.html() === '') {
         UIkit.icon(closeIcon, {icon: 'trash'});
-        closeIcon.innerHTML += "{{ __('Delete this row') }}";
+        closeIcon.html("{{ __('Delete this row') }}");
       }
       newItem.appendTo(container);
     });
