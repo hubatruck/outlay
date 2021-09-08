@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\TransactionType;
 use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletIsActiveRule;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,10 +28,13 @@ class TransactionDataController extends Controller
         });
 
         $newTransactions = [];
+        $now = Carbon::now()->toDateTimeString();
         foreach ($validatedData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
                 'amount' => $validatedData['amount'][$key],
+                'created_at' => $now,
+                'updated_at' => $now,
             ], $sharedProps);
         }
 
