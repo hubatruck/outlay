@@ -16,6 +16,7 @@
     step="0.01"
     min="0.01"
     max="999999.99"
+    required
   />
 </div>
 @error($errorField ?? 'amount')
