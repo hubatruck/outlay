@@ -11,9 +11,11 @@
     disabled
     @endif
   >
-    <option @if(!isset($transaction)) selected @endif disabled hidden value="">
-      {{ __('Select...') }}
-    </option>
+    @if(!isset($transaction['wallet_id']))
+      <option selected disabled hidden value="">
+        {{ __('Select...') }}
+      </option>
+    @endif
     @foreach(Auth::user()->wallets as $wallet)
       @if ($wallet->deleted_at === null
           || (isset($transaction['wallet_id']) && $transaction['wallet_id'] === $wallet->id))
