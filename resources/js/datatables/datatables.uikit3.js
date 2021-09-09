@@ -34,7 +34,6 @@
     'use strict';
     const DataTable = $.fn.dataTable;
 
-
     /* Set the defaults for DataTables initialisation */
     $.extend(true, DataTable.defaults, {
         dom:

@@ -33,7 +33,6 @@
                   </div>
                 </div>
 
-
                 <div class="uk-margin uk-width-large">
                   <label class="uk-form-label">{{ __('Email') }}</label>
 

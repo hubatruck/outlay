@@ -24,4 +24,3 @@ $-zf-font-stack: (
 @function font-stack($stack, $map: $-zf-font-stack) {
     @return map-safe-get($map, $stack);
 }
-

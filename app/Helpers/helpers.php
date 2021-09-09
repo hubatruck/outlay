@@ -87,7 +87,6 @@ if (!function_exists('defaultChartRange')) {
     }
 }
 
-
 if (!function_exists('defaultChartRangeAsFlatpickrValue')) {
     /**
      * Get the defaultChartRange() function's value as Flatpickr parseable

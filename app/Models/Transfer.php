@@ -114,7 +114,6 @@ class Transfer extends Model
             ->whereDate('transfer_date', '<=', $range->last());
     }
 
-
     /**
      * Sum incoming and outgoing transaction amounts
      *

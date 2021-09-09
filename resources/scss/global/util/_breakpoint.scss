@@ -282,7 +282,6 @@ $breakpoint-classes: (small medium large) !default;
         @return $map;
     }
 
-
     // Check if the breakpoint name exists globally
     @if not map-has-key($breakpoints, $value) {
         @if type-of($value) == 'number' {
