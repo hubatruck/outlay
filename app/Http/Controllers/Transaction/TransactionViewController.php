@@ -95,6 +95,18 @@ class TransactionViewController extends Controller
     }
 
     /**
+     * Overview view for the transaction
+     *
+     * @param Request $request
+     * @return Factory|View|Application
+     */
+    public function createOverview(Request $request): Factory|View|Application
+    {
+        $transaction = $this->loadPartialTransactionData($request);
+        return view('transaction.create.overview', compact('transaction'));
+    }
+
+    /**
      * Show the view for editing a movie
      *
      * see also: https://stackoverflow.com/a/59745972

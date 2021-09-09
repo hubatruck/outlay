@@ -63,7 +63,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('items', [TransactionViewController::class, 'createItems'])->name('transaction.view.create.items');
             Route::post('items', [TransactionDataController::class, 'storeItems'])->name('transaction.data.create.items');
             Route::get('payment', [TransactionViewController::class, 'createPayment'])->name('transaction.view.create.payment');
-            Route::post('payment', [TransactionDataController::class, 'store'])->name('transaction.data.create.payment');
+            Route::post('payment', [TransactionDataController::class, 'storePayment'])->name('transaction.data.create.payment');
+            Route::get('overview', [TransactionViewController::class, 'createOverview'])->name('transaction.view.create.overview');
+            Route::post('overview', [TransactionDataController::class, 'store'])->name('transaction.data.create.overview');
         });
 
         Route::prefix('{id}')->group(function () {

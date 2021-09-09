@@ -5,6 +5,7 @@
   <div class="uk-card-body">
     <x-forms.skeleton
       :action="route('transaction.data.create.payment')"
+      submitLabel="Next step"
       :cancelURL="route('transaction.view.all')"
     >
       <div
