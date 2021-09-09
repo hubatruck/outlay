@@ -7,7 +7,6 @@ use App\Feedbacks\TransactionFeedback;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use App\Models\Wallet;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -42,22 +41,36 @@ class TransactionViewController extends Controller
      * @param Request $request
      * @return View|Factory|RedirectResponse|Application
      */
-    public function create(Request $request): View|Factory|RedirectResponse|Application
+    public function createItems(Request $request): View|Factory|RedirectResponse|Application
     {
         /// pre-select the wallet, if there is intent
-        $wallet_id = $request->get('wallet_id');
-        if ($wallet_id !== null) {
-            $wallet = Wallet::find($wallet_id);
-
-            if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
-                return WalletFeedback::quickCreateError('transaction');
-            }
-        }
+//        $wallet_id = $request->get('wallet_id');
+//        if ($wallet_id !== null) {
+//            $wallet = Wallet::find($wallet_id);
+//
+//            if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
+//                return WalletFeedback::quickCreateError('transaction');
+//            }
+//        }
 
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
-        return view('transaction.create', ['selected_wallet_id' => $request->wallet_id ?? '-1']);
+
+        $transaction = $request->session()->get('transaction');
+        return view('transaction.create.items', compact('transaction'));
+    }
+
+    /**
+     * Payment view for the transaction
+     *
+     * @param Request $request
+     * @return Factory|View|Application
+     */
+    public function createPayment(Request $request): Factory|View|Application
+    {
+        $transaction = $request->session()->get('transaction');
+        return view('transaction.create.payment', compact('transaction'));
     }
 
     /**

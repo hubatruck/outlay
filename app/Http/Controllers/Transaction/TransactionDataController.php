@@ -19,9 +19,51 @@ use Illuminate\Validation\Rule;
  */
 class TransactionDataController extends Controller
 {
-    public function testStore(Request $request): RedirectResponse
+    /**
+     * Stores the items (in the session) for a transaction
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeItems(Request $request): RedirectResponse
     {
-        $validatedData = $this->testValidateRequest($request);
+        $validatedItems = $this->validateItems($request);
+        if (!$request->session()->has('transaction')) {
+            $transactionData = $validatedItems;
+        } else {
+            $transactionData = array_merge($request->session()->get('transaction'), $validatedItems);
+        }
+
+        $request->session()->put('transaction', $transactionData);
+
+        return redirect()->route('transaction.view.create.payment');
+    }
+
+    /**
+     * Validate transaction items
+     *
+     * @param Request $request
+     * @return array
+     */
+    private function validateItems(Request $request): array
+    {
+        return $request->validate([
+            'scope' => 'required|array|min:1',
+            'scope.*' => 'required|string|max:255',
+            'amount' => 'required|array|min:1',
+            'amount.*' => 'required|numeric|min:0.01|max:999999.99',
+        ]);
+    }
+
+    /**
+     * Store the transaction(s) in the database
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $validatedData = $this->validatePayment($request);
 
         $sharedProps = array_filter($validatedData, static function ($value) {
             return !is_array($value);
@@ -29,10 +71,12 @@ class TransactionDataController extends Controller
 
         $newTransactions = [];
         $now = Carbon::now()->toDateTimeString();
-        foreach ($validatedData['scope'] as $key => $scope) {
+
+        $partialTransactionData = $request->session()->get('transaction');
+        foreach ($partialTransactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
-                'amount' => $validatedData['amount'][$key],
+                'amount' => $partialTransactionData['amount'][$key],
                 'created_at' => $now,
                 'updated_at' => $now,
             ], $sharedProps);
@@ -42,7 +86,14 @@ class TransactionDataController extends Controller
         return TransactionFeedback::success('created', sizeof($newTransactions));
     }
 
-    public function testValidateRequest(Request $request, bool $walletMustBeActive = true): array
+    /**
+     * Validate payment details for a transaction
+     *
+     * @param Request $request
+     * @param bool $walletMustBeActive
+     * @return array
+     */
+    public function validatePayment(Request $request, bool $walletMustBeActive = true): array
     {
         $walletRules = ['bail'];
         if ($walletMustBeActive) {
@@ -52,10 +103,6 @@ class TransactionDataController extends Controller
         }
 
         return $request->validate([
-            'scope' => 'required|array|min:1',
-            'scope.*' => 'required|string|max:255',
-            'amount' => 'required|array|min:1',
-            'amount.*' => 'required|numeric|min:0.01|max:999999.99',
             'wallet_id' => $walletRules,
             'transaction_type_id' => [
                 'required',
@@ -71,7 +118,7 @@ class TransactionDataController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function _store(Request $request): RedirectResponse
     {
         $newTransactionData = $this->validateRequest($request);
         Transaction::create($newTransactionData);
