@@ -59,6 +59,22 @@ class TransactionFeedback
     }
 
     /**
+     * The user hasn't provided any items (amount+scope) for the transaction
+     * Type: Error
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public static function noItemError(): Application|RedirectResponse|Redirector
+    {
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Please add at least one item to the transaction, before submitting it.'),
+            'type' => 'danger',
+        ]);
+
+        return redirect(route('transaction.view.create.items'));
+    }
+
+    /**
      * Alert for cases when the user does not have a wallet
      *
      * @return array

@@ -73,6 +73,11 @@ class TransactionDataController extends Controller
         $now = Carbon::now()->toDateTimeString();
 
         $partialTransactionData = $request->session()->get('transaction');
+        if (empty($partialTransactionData['scope']) || empty($partialTransactionData['amount'])) {
+            $request->session()->put('transaction', $validatedData);
+            return TransactionFeedback::noItemError();
+        }
+
         foreach ($partialTransactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
