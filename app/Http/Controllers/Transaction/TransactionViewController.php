@@ -57,8 +57,29 @@ class TransactionViewController extends Controller
             return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
 
-        $transaction = $request->session()->get('transaction');
+        $transaction = $this->loadPartialTransactionData($request);
         return view('transaction.create.items', compact('transaction'));
+    }
+
+    /**
+     * Load the stored form data, if it is present, and we are coming from a create page
+     *
+     * @param Request $request
+     * @param bool $doUrlCheck Check the source of the navigation and only allow transaction/create/* routes
+     * @return array
+     */
+    private function loadPartialTransactionData(Request $request, bool $doUrlCheck = true): array
+    {
+        $prevURL = $request->session()->previousUrl();
+        $data = [];
+
+        if (!$doUrlCheck || $prevURL === route('transaction.view.create.payment') || $prevURL === $request->url()) {
+            $data = $request->session()->get('transaction') ?? [];
+        } else {
+            $request->session()->forget('transaction');
+        }
+
+        return $data;
     }
 
     /**
@@ -69,7 +90,7 @@ class TransactionViewController extends Controller
      */
     public function createPayment(Request $request): Factory|View|Application
     {
-        $transaction = $request->session()->get('transaction');
+        $transaction = $this->loadPartialTransactionData($request, false);
         return view('transaction.create.payment', compact('transaction'));
     }
 
