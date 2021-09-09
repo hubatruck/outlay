@@ -8,13 +8,13 @@
     name="transaction_type_id"
     required
   >
-    <option @if(!isset($transaction)) selected @endif disabled hidden value="">
+    <option @if(!isset($transaction['transaction_type_id'])) selected @endif disabled hidden value="">
       {{ __('Select...') }}
     </option>
     @foreach(\App\Models\TransactionType::all() as $tt)
       <option
         value="{{ $tt->id }}"
-        @if(isset($transaction) && $transaction->transactionType->id === $tt->id)
+        @if(isset($transaction['transaction_type_id']) && $transaction['transaction_type_id'] === $tt->id)
         selected
         @endif
         @if(old('transaction_type_id') && (string)$tt->id === old('transaction_type_id'))

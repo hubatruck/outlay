@@ -20,17 +20,17 @@
       </div>
 
       <div class="uk-margin">
-        <x-forms.transaction-wallet-select/>
+        <x-forms.transaction-wallet-select :transaction="$transaction ?? null"/>
       </div>
 
       <div class="uk-margin">
-        <x-forms.transaction-type-select/>
+        <x-forms.transaction-type-select :transaction="$transaction ?? null"/>
       </div>
 
       <div class="uk-margin">
         <x-forms.date-picker
           fieldName="transaction_date"
-          :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
+          :defaultValue="$transaction['transaction_date'] ?? Auth::user()->previousTransactionDate()"
         />
       </div>
 
