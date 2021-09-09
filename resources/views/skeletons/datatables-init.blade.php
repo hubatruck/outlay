@@ -19,7 +19,7 @@ function () {
                 .addClass("uk-input uk-form-small")
                 .appendTo($(column.footer()).empty())
                 .on('change', () => {
-                    column.search($(this).val(), false, false, true).draw();
+                    column.search($(input).val(), false, false, true).draw();
                 });
         }
     });
