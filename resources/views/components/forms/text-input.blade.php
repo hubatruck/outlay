@@ -3,7 +3,7 @@
 </label>
 <div class="uk-form-controls">
   <input
-    @unless ($errorField)
+    @unless (isset($errorField))
     id="{{ $fieldName }}"
     @endunless
     class="uk-input @error($errorField ?? $fieldName)uk-form-danger @enderror"
