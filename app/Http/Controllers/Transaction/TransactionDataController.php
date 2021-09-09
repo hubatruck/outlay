@@ -83,6 +83,7 @@ class TransactionDataController extends Controller
         }
 
         Transaction::insert($newTransactions);
+        $request->session()->forget(keys: 'transaction');
         return TransactionFeedback::success('created', sizeof($newTransactions));
     }
 
