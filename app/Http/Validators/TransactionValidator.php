@@ -76,19 +76,23 @@ class TransactionValidator
             $rules = self::paymentValidatorRules($checkActiveWallet);
         }
 
+        $scopeItemRule = 'required|string|max:255';
+        $amountItemRule = 'required|numeric|min:0.01|max:999999.99';
         if ($type === self::EVERYTHING_NO_ACTIVE_WALLET || $type === self::EVERYTHING_REG) {
             $rules = array_merge($rules, [
-                'scope' => 'required|max:255',
-                'amount' => 'numeric|min:0.01|max:999999.99',
+                'scope' => $scopeItemRule,
+                'amount' => $amountItemRule,
             ]);
         }
 
         if ($type === self::EVERYTHING_WITH_ITEMS || $type === self::ONLY_ITEM_ARR) {
             $rules = array_merge($rules, [
                 'scope' => 'required|array|min:1',
-                'scope.*' => 'required|string|max:255',
+                'scope.0' => $scopeItemRule,
+                'scope.*' => $scopeItemRule,
                 'amount' => 'required|array|min:1',
-                'amount.*' => 'required|numeric|min:0.01|max:999999.99',
+                'amount.0' => $amountItemRule,
+                'amount.*' => $amountItemRule,
             ]);
         }
 
