@@ -62,7 +62,8 @@ class TransactionViewController extends Controller
     }
 
     /**
-     * Load the stored form data, if it is present, and we are coming from a create page
+     * Load the stored form data, if it is present, and we are coming from a create page.
+     * If there is an error with the form, we load that data instead.
      *
      * @param Request $request
      * @param bool $doUrlCheck Check the source of the navigation and only allow transaction/create/* routes
@@ -71,12 +72,17 @@ class TransactionViewController extends Controller
     private function loadPartialTransactionData(Request $request, bool $doUrlCheck = true): array
     {
         $prevURL = $request->session()->previousUrl();
-        $data = [];
+        $hasErrors = $request->session()->has('errors');
+        $data = $hasErrors ? old() : [];
 
-        if (!$doUrlCheck || $prevURL === route('transaction.view.create.payment') || $prevURL === $request->url()) {
-            $data = $request->session()->get('transaction') ?? [];
+        if ($data === []) {
+            if (!$doUrlCheck || $prevURL === route('transaction.view.create.payment') || $prevURL === $request->url()) {
+                $data = $hasErrors ? old() : $request->session()->get('transaction') ?? [];
+            } else {
+                $request->session()->forget('transaction');
+            }
         } else {
-            $request->session()->forget('transaction');
+            unset($data['_token']);
         }
 
         return $data;
