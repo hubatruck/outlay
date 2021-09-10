@@ -67,11 +67,27 @@ class TransactionFeedback
     public static function noItemError(): Application|RedirectResponse|Redirector
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Please add at least one item to the transaction, before submitting it.'),
+            'content' => __('Error') . ': ' . __('Please add at least one item to the transaction before going to the next step.'),
             'type' => 'danger',
         ]);
 
         return redirect(route('transaction.view.create.items'));
+    }
+
+    /**
+     * The user hasn't provided any payment details for the transaction
+     * Type: Error
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public static function noPayment(): Application|RedirectResponse|Redirector
+    {
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Please fill out the payment details before going to the next step.'),
+            'type' => 'danger',
+        ]);
+
+        return redirect(route('transaction.view.create.payment'));
     }
 
     /**
