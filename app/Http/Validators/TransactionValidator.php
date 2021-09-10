@@ -48,6 +48,27 @@ class TransactionValidator
      */
     public static function validate(Request|array $requestOrData, int $type, bool $doRedirect = true): array|MessageBag
     {
+        $rules = self::getRulesFor($type);
+
+        if ($doRedirect) {
+            return $requestOrData->validate($rules);
+        }
+
+        $fields = ($requestOrData instanceof Request) ? $requestOrData->all() : $requestOrData;
+        $validator = Validator::make($fields, $rules);
+        $errors = $validator->errors();
+
+        return $errors->all() === [] ? $requestOrData : $errors;
+    }
+
+    /**
+     * Get validation rules for a specific validation type
+     *
+     * @param int $type
+     * @return array
+     */
+    public static function getRulesFor(int $type): array
+    {
         $rules = [];
 
         $checkActiveWallet = ($type !== self::EVERYTHING_NO_ACTIVE_WALLET);
@@ -71,13 +92,7 @@ class TransactionValidator
             ]);
         }
 
-        if ($doRedirect) {
-            return $requestOrData->validate($rules);
-        }
-
-        $fields = ($requestOrData instanceof Request) ? $requestOrData->all() : $requestOrData;
-        $validator = Validator::make($fields, $rules);
-        return $validator->errors();
+        return $rules;
     }
 
     /**
