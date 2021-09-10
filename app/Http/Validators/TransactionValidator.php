@@ -7,7 +7,9 @@ use App\Rules\UserOwnsWalletRule;
 use App\Rules\WalletIsActiveRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Rule;
+use Validator;
 
 class TransactionValidator
 {
@@ -39,11 +41,12 @@ class TransactionValidator
     /**
      * Validate the request's data
      *
-     * @param Request $request
+     * @param Request|array $requestOrData
      * @param int $type
-     * @return array
+     * @param bool $doRedirect
+     * @return array|MessageBag
      */
-    public static function validate(Request $request, int $type): array
+    public static function validate(Request|array $requestOrData, int $type, bool $doRedirect = true): array|MessageBag
     {
         $rules = [];
 
@@ -68,7 +71,13 @@ class TransactionValidator
             ]);
         }
 
-        return $request->validate($rules);
+        if ($doRedirect) {
+            return $requestOrData->validate($rules);
+        }
+
+        $fields = ($requestOrData instanceof Request) ? $requestOrData->all() : $requestOrData;
+        $validator = Validator::make($fields, $rules);
+        return $validator->errors();
     }
 
     /**
