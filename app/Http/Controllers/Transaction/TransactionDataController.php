@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Feedbacks\TransactionFeedback;
 use App\Http\Controllers\Controller;
+use App\Http\Validators\TransactionValidator;
 use App\Models\Transaction;
-use App\Models\TransactionType;
-use App\Rules\UserOwnsWalletRule;
-use App\Rules\WalletIsActiveRule;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 /**
  * This controller handles wallet modifying related requests
@@ -27,20 +24,26 @@ class TransactionDataController extends Controller
      */
     public function storeItems(Request $request): RedirectResponse
     {
-        return $this->partialDataStore($request, 'validateItems', 'transaction.view.create.payment');
+        return $this->partialDataStore(
+            $request,
+            TransactionValidator::ONLY_ITEM_ARR,
+            'transaction.view.create.payment'
+        );
     }
 
     /**
      * Store partial transaction data in the session
      *
      * @param Request $request
-     * @param string $validator
+     * @param int $validationType
      * @param string $redirectRoute
      * @return RedirectResponse
+     * @see TransactionValidator for more info
      */
-    private function partialDataStore(Request $request, string $validator, string $redirectRoute): RedirectResponse
+    private function partialDataStore(Request $request, int $validationType, string $redirectRoute): RedirectResponse
     {
-        $validatedData = $this->$validator($request);
+        $validatedData = TransactionValidator::validate($request, $validationType);
+
         if (!$request->session()->has('transaction')) {
             $partialData = $validatedData;
         } else {
@@ -59,7 +62,11 @@ class TransactionDataController extends Controller
      */
     public function storePayment(Request $request): RedirectResponse
     {
-        return $this->partialDataStore($request, 'validatePayment', 'transaction.view.create.overview');
+        return $this->partialDataStore(
+            $request,
+            TransactionValidator::ONLY_PAYMENT,
+            'transaction.view.create.overview'
+        );
     }
 
     /**
@@ -70,7 +77,7 @@ class TransactionDataController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validatedData = $this->validatePayment($request);
+        $validatedData = TransactionValidator::validate($request, TransactionValidator::EVERYTHING_WITH_ITEMS);
 
         $sharedProps = array_filter($validatedData, static function ($value) {
             return !is_array($value);
@@ -100,48 +107,6 @@ class TransactionDataController extends Controller
     }
 
     /**
-     * Store a transaction in the database
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function _store(Request $request): RedirectResponse
-    {
-        $newTransactionData = $this->validateRequest($request);
-        Transaction::create($newTransactionData);
-
-        return TransactionFeedback::success();
-    }
-
-    /**
-     * Validate request data
-     *
-     * @param Request $request
-     * @param bool $walletMustBeActive
-     * @return array
-     */
-    public function validateRequest(Request $request, bool $walletMustBeActive = true): array
-    {
-        $walletRules = ['bail'];
-        if ($walletMustBeActive) {
-            $walletRules[] = new UserOwnsWalletRule();
-            $walletRules[] = new WalletIsActiveRule();
-            $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
-        }
-
-        return $request->validate([
-            'wallet_id' => $walletRules,
-            'scope' => 'required|max:255',
-            'amount' => 'numeric|min:0.01|max:999999.99',
-            'transaction_type_id' => [
-                'required',
-                Rule::in(TransactionType::all()->pluck('id')->toArray()),
-            ],
-            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
-        ]);
-    }
-
-    /**
      * Update a transaction
      *
      * @param Request $request
@@ -157,8 +122,10 @@ class TransactionDataController extends Controller
         }
 
         $wallet_id = $request->get('wallet_id');
-        $walletMustBeActive = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id);
-        $validated = $this->validateRequest($request, $walletMustBeActive);
+        $validationType = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id)
+            ? TransactionValidator::EVERYTHING_REG
+            : TransactionValidator::EVERYTHING_NO_ACTIVE_WALLET;
+        $validated = TransactionValidator::validate($request, $validationType);
 
         $updatedTransaction = new Transaction($validated);
         if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {
@@ -187,47 +154,5 @@ class TransactionDataController extends Controller
 
         $transaction->delete();
         return TransactionFeedback::success('removed');
-    }
-
-    /**
-     * Validate transaction items
-     *
-     * @param Request $request
-     * @return array
-     */
-    private function validateItems(Request $request): array
-    {
-        return $request->validate([
-            'scope' => 'required|array|min:1',
-            'scope.*' => 'required|string|max:255',
-            'amount' => 'required|array|min:1',
-            'amount.*' => 'required|numeric|min:0.01|max:999999.99',
-        ]);
-    }
-
-    /**
-     * Validate payment details for a transaction
-     *
-     * @param Request $request
-     * @param bool $walletMustBeActive
-     * @return array
-     */
-    private function validatePayment(Request $request, bool $walletMustBeActive = true): array
-    {
-        $walletRules = ['bail'];
-        if ($walletMustBeActive) {
-            $walletRules[] = new UserOwnsWalletRule();
-            $walletRules[] = new WalletIsActiveRule();
-            $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
-        }
-
-        return $request->validate([
-            'wallet_id' => $walletRules,
-            'transaction_type_id' => [
-                'required',
-                Rule::in(TransactionType::all()->pluck('id')->toArray()),
-            ],
-            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
-        ]);
     }
 }
