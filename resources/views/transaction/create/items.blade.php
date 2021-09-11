@@ -49,7 +49,14 @@
         UIkit.icon(closeIcon, {icon: 'trash'});
         closeIcon.html("{{ __('Delete this row') }}");
       }
+
+      const inputs = newItem.find('input');
+      const scopeInput = inputs.first();
+      scopeInput.val('');
+      inputs.last().val();
+
       newItem.appendTo(container);
+      scopeInput.focus();
     });
 
     $(container).on("click", ".remove-row", function (e) { //user click on remove text
