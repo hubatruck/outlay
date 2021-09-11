@@ -3,8 +3,8 @@
     <x-forms.text-input
       fieldName="scope[]"
       :label="__('Scope')"
-      :value="isset($transaction) ? $transaction['scope'][$index] ?? '' : ''"
-      :errorField="'scope.' . ($index ?? '-1')"
+      :value="isset($transaction['scope']) ? $transaction['scope'][$index] ?? '' : ''"
+      :errorField="'scope.' . ($index ?? '0')"
     />
   </div>
 
@@ -12,7 +12,7 @@
     <x-forms.amount-input
       asArray="true"
       :value="isset($transaction['amount']) ? $transaction['amount'][$index] ?? '' : ''"
-      :errorField="'amount.' . ($index ?? '-1')"
+      :errorField="'amount.' . ($index ?? '0')"
     />
 
     @if(isset($index) && $index>0)
