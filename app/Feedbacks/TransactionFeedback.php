@@ -64,10 +64,10 @@ class TransactionFeedback
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public static function noItemError(): Application|RedirectResponse|Redirector
+    public static function checkItemError(): Application|RedirectResponse|Redirector
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Please add at least one item to the transaction before going to the next step.'),
+            'content' => __('Error') . ': ' . __('Please add at least one correct item to the transaction before proceeding further.'),
             'type' => 'danger',
         ]);
 
@@ -80,10 +80,10 @@ class TransactionFeedback
      *
      * @return Application|RedirectResponse|Redirector
      */
-    public static function noPayment(): Application|RedirectResponse|Redirector
+    public static function checkPaymentError(): Application|RedirectResponse|Redirector
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Please fill out the payment details before going to the next step.'),
+            'content' => __('Error') . ': ' . __('Please fill out the payment details correctly before proceeding further.'),
             'type' => 'danger',
         ]);
 
