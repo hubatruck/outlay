@@ -28,7 +28,7 @@
         @endforelse
       </div>
       <div class="uk-width-1-1 uk-margin-small-top">
-        <a href="#" class="uk-button uk-button-primary" id="new-row-button">
+        <a href="#" class="uk-button uk-button-default" id="new-row-button">
           <span uk-icon="plus"></span>
           {{ __('Add a row') }}
         </a>
@@ -42,26 +42,33 @@
     const container = $('#transaction-items');
     $('#new-row-button').click((event) => {
       event.preventDefault();
-
       const newItem = container.children().last().clone();
-      const closeIcon = newItem.children().children('span').last();
-      if (closeIcon.html() === '') {
-        UIkit.icon(closeIcon, {icon: 'trash'});
-        closeIcon.html("{{ __('Delete this row') }}");
-      }
-
       const inputs = newItem.find('input');
-      const scopeInput = inputs.first();
-      scopeInput.val('');
-      inputs.last().val();
+
+      initInputElement(inputs.first());
+      initInputElement(inputs.last());
+      initRemoveButton(newItem.find('span').last());
 
       newItem.appendTo(container);
-      scopeInput.focus();
+      inputs.first().focus();
     });
 
-    $(container).on("click", ".remove-row", function (e) { //user click on remove text
+    $(container).on("click", ".remove-row", function (e) { /// user click on remove text
       e.preventDefault();
       $(this).parent('div').parent('div').remove();
     });
+
+    function initInputElement(element) {
+      element.parent().siblings('.uk-text-danger').remove(); /// error field
+      element.removeClass('uk-form-danger'); /// error styling
+      element.val('');
+    }
+
+    function initRemoveButton(element) {
+      if (element.html() === '') {
+        UIkit.icon(element, {icon: 'trash'});
+        element.html("{{ __('Delete this row') }}");
+      }
+    }
   </script>
 @endpush
