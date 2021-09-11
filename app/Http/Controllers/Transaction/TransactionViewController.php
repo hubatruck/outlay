@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Str;
 
 /**
  * This controller handles wallet view related requests
@@ -75,8 +76,8 @@ class TransactionViewController extends Controller
         $hasErrors = $request->session()->has('errors');
         $data = $hasErrors ? old() : [];
 
-        if ($data === []) {
-            if (!$doUrlCheck || $prevURL === route('transaction.view.create.payment') || $prevURL === $request->url()) {
+        if ($data === [] || ((sizeof($data) === 1) && isset($data['_token']))) {
+            if (!$doUrlCheck || Str::is(url()->to('/') . '/transactions/create/*', $prevURL)) {
                 $data = $hasErrors ? old() : $request->session()->get('transaction') ?? [];
             } else {
                 $request->session()->forget('transaction');
