@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Feedbacks\TransactionFeedback;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionMultiStoreRequest;
 use App\Http\Validators\TransactionValidator;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -72,30 +77,24 @@ class TransactionDataController extends Controller
     /**
      * Store the transaction(s) in the database
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param TransactionMultiStoreRequest $request
+     * @return Factory|View|Redirector|Application|RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(TransactionMultiStoreRequest $request): Factory|View|Redirector|Application|RedirectResponse
     {
-        $validatedData = TransactionValidator::validate($request, TransactionValidator::EVERYTHING_WITH_ITEMS);
-
-        $sharedProps = array_filter($validatedData, static function ($value) {
+        /// Note: Data is already validated
+        $transactionData = $request->all();
+        $sharedProps = array_filter($transactionData, static function ($value) {
             return !is_array($value);
         });
 
         $newTransactions = [];
         $now = Carbon::now()->toDateTimeString();
 
-        $partialTransactionData = $request->session()->get('transaction');
-        if (empty($partialTransactionData['scope']) || empty($partialTransactionData['amount'])) {
-            $request->session()->put('transaction', $validatedData);
-            return TransactionFeedback::noItemError();
-        }
-
-        foreach ($partialTransactionData['scope'] as $key => $scope) {
+        foreach ($transactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
-                'amount' => $partialTransactionData['amount'][$key],
+                'amount' => $transactionData['amount'][$key],
                 'created_at' => $now,
                 'updated_at' => $now,
             ], $sharedProps);
