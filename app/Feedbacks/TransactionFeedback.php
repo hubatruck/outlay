@@ -67,7 +67,7 @@ class TransactionFeedback
     public static function checkItemError(): Application|RedirectResponse|Redirector
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Please add at least one correct item to the transaction before proceeding further.'),
+            'content' => __('Error') . ': ' . __('Please add at least one correct item to the transaction.'),
             'type' => 'danger',
         ]);
 
@@ -83,7 +83,7 @@ class TransactionFeedback
     public static function checkPaymentError(): Application|RedirectResponse|Redirector
     {
         addSessionMsg([
-            'content' => __('Error') . ': ' . __('Please fill out the payment details correctly before proceeding further.'),
+            'content' => __('Error') . ': ' . __('Please fill out the payment details correctly.'),
             'type' => 'danger',
         ]);
 
