@@ -3,6 +3,6 @@
     {{ __('Transactions') }}
   </x-slot>
   <x-slot name="createLink">
-    route('transaction.view.create')
+    {{ route('transaction.view.create') }}
   </x-slot>
 </x-datatable>
