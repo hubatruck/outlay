@@ -46,11 +46,11 @@
             <td>{{ walletNameWithOwner(\App\Models\Wallet::all()->find($transaction['wallet_id'])) }}</td>
           </tr>
           <tr>
-            <td>{{ __('Transaction type') }}:</td>
+            <td>{{ __('Type') }}:</td>
             <td>{{ __(\App\Models\TransactionType::findOrFail($transaction['transaction_type_id'])->name) }}</td>
           </tr>
           <tr>
-            <td>{{ __('Transaction date') }}:</td>
+            <td>{{ __('Date') }}:</td>
             <td>{{ $transaction['transaction_date'] }}</td>
           </tr>
           </tbody>
