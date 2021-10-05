@@ -68,6 +68,23 @@
       <hr>
 
       <x-buttons.submit-form/>
+      <button type="button" class="uk-button uk-button-danger cancel-transaction">{{ __('Cancel') }}</button>
     </form>
   </div>
 @endsection
+
+@push('scripts')
+  <script>
+    $('.cancel-transaction').click(() => {
+      UIkit.modal.confirm('{{ __('All entered data will be lost. Proceed?') }}', {
+        labels: {
+          ok: '{{ __('yes') }}',
+          cancel: '{{ __('no') }}'
+        }
+      }).then(function () {
+        window.location.replace('{{ route('transaction.view.all') }}');
+      }, () => {
+      });
+    });
+  </script>
+@endpush
