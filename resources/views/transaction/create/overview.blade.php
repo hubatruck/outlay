@@ -25,6 +25,10 @@
           @endforeach
           </tbody>
         </table>
+        <div class="uk-margin-small-bottom">
+          {{ __('Total value') }}:
+          <span class="uk-text-bold">{{ array_sum($transaction['amount']) }}</span>
+        </div>
       @else
         <x-transaction-overview-error
           provideThis="at least one transaction item"
