@@ -1,5 +1,8 @@
 <?php
 
+const ATTR_AMOUNT = 'Az érték';
+const ATTR_SCOPE = 'A cél';
+
 return [
 
     /*
@@ -153,10 +156,14 @@ return [
     */
 
     'attributes' => [
-        'amount' => 'Az érték',
+        'amount' => ATTR_AMOUNT,
+        'amount.0' => ATTR_AMOUNT,
+        'amount.*' => ATTR_AMOUNT,
         'name' => 'A név',
         'notes' => 'A jegyzetek',
-        'scope' => 'A cél',
+        'scope' => ATTR_SCOPE,
+        'scope.0' => ATTR_SCOPE,
+        'scope.*' => ATTR_SCOPE,
         'transaction_date' => 'A tranzakció dátum',
         'transaction_type_id' => 'A tranzakció típus',
         'wallet_id' => 'A tárca',

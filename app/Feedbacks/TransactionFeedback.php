@@ -14,15 +14,16 @@ class TransactionFeedback
      * Redirect user with success message
      *
      * @param string $performedAction
+     * @param int $itemCount Count of new transactions
      * @return RedirectResponse
      */
-    public static function success(string $performedAction = 'created'): RedirectResponse
+    public static function success(string $performedAction = 'created', int $itemCount = 1): RedirectResponse
     {
         addSessionMsg([
-            'content' => __(
-                'Transaction :action successfully.', [
-                    'action' => __($performedAction),
-                ]
+            'content' => trans_choice(
+                'Transaction :action successfully.|Transactions :action successfully.',
+                $itemCount,
+                ['action' => __($performedAction),]
             ),
             'type' => 'success',
         ]);
@@ -55,6 +56,38 @@ class TransactionFeedback
             'type' => 'danger',
         ]);
         return redirect(route(self::TRANSACTION_VIEW_ALL));
+    }
+
+    /**
+     * The user hasn't provided any items (amount+scope) for the transaction
+     * Type: Error
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public static function checkItemError(): Application|RedirectResponse|Redirector
+    {
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Please add at least one correct item to the transaction.'),
+            'type' => 'danger',
+        ]);
+
+        return redirect(route('transaction.view.create.items'));
+    }
+
+    /**
+     * The user hasn't provided any payment details for the transaction
+     * Type: Error
+     *
+     * @return Application|RedirectResponse|Redirector
+     */
+    public static function checkPaymentError(): Application|RedirectResponse|Redirector
+    {
+        addSessionMsg([
+            'content' => __('Error') . ': ' . __('Please fill out the payment details correctly.'),
+            'type' => 'danger',
+        ]);
+
+        return redirect(route('transaction.view.create.payment'));
     }
 
     /**

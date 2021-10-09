@@ -12,7 +12,7 @@
 
   <div class="uk-margin-small-top">
     <button type="submit" class="uk-button uk-button-primary">
-      {{ __('Send') }}
+      {{ __($submitLabel ?? 'Send') }}
     </button>
     <x-buttons.cancel-edit
       :url="$cancelURL ?? '#'"

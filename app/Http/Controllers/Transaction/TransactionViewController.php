@@ -7,21 +7,19 @@ use App\Feedbacks\TransactionFeedback;
 use App\Feedbacks\WalletFeedback;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use App\Models\Wallet;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Str;
 
 /**
  * This controller handles wallet view related requests
  */
 class TransactionViewController extends Controller
 {
-    private string $editViewName = 'transaction/edit';
-
     /**
      * Show all transactions for the user
      *
@@ -44,22 +42,75 @@ class TransactionViewController extends Controller
      * @param Request $request
      * @return View|Factory|RedirectResponse|Application
      */
-    public function create(Request $request): View|Factory|RedirectResponse|Application
+    public function createItems(Request $request): View|Factory|RedirectResponse|Application
     {
         /// pre-select the wallet, if there is intent
-        $wallet_id = $request->get('wallet_id');
-        if ($wallet_id !== null) {
-            $wallet = Wallet::find($wallet_id);
-
-            if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
-                return WalletFeedback::quickCreateError('transaction');
-            }
-        }
+//        $wallet_id = $request->get('wallet_id');
+//        if ($wallet_id !== null) {
+//            $wallet = Wallet::find($wallet_id);
+//
+//            if ($wallet === null || $wallet->trashed() || !Auth::user()->owns($wallet)) {
+//                return WalletFeedback::quickCreateError('transaction');
+//            }
+//        }
 
         if (!Auth::user()->hasAnyActiveWallet()) {
             return WalletFeedback::noWalletError(Auth::user()->hasWallet() ? 'active' : '');
         }
-        return view($this->editViewName, ['selected_wallet_id' => $request->wallet_id ?? '-1']);
+
+        $transaction = $this->loadPartialTransactionData($request);
+        return view('transaction.create.items', compact('transaction'));
+    }
+
+    /**
+     * Load the stored form data, if it is present, and we are coming from a create page.
+     * If there is an error with the form, we load that data instead.
+     *
+     * @param Request $request
+     * @param bool $doUrlCheck Check the source of the navigation and only allow transaction/create/* routes
+     * @return array
+     */
+    private function loadPartialTransactionData(Request $request, bool $doUrlCheck = true): array
+    {
+        $prevURL = $request->session()->previousUrl();
+        $hasErrors = $request->session()->has('errors');
+        $data = $hasErrors ? old() : [];
+
+        if ($data === [] || ((sizeof($data) === 1) && isset($data['_token']))) {
+            if (!$doUrlCheck || Str::is(url()->to('/') . '/transactions/create/*', $prevURL)) {
+                $data = $hasErrors ? old() : $request->session()->get('transaction') ?? [];
+            } else {
+                $request->session()->forget('transaction');
+            }
+        } else {
+            unset($data['_token']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Payment view for the transaction
+     *
+     * @param Request $request
+     * @return Factory|View|Application
+     */
+    public function createPayment(Request $request): Factory|View|Application
+    {
+        $transaction = $this->loadPartialTransactionData($request, false);
+        return view('transaction.create.payment', compact('transaction'));
+    }
+
+    /**
+     * Overview view for the transaction
+     *
+     * @param Request $request
+     * @return Factory|View|Application
+     */
+    public function createOverview(Request $request): Factory|View|Application
+    {
+        $transaction = $this->loadPartialTransactionData($request);
+        return view('transaction.create.overview', compact('transaction'));
     }
 
     /**
@@ -80,6 +131,6 @@ class TransactionViewController extends Controller
 
         $permissionCheck = Transaction::checkStatus($transaction);
 
-        return $permissionCheck ?? view($this->editViewName, compact('transaction'));
+        return $permissionCheck ?? view('transaction.edit', compact('transaction'));
     }
 }

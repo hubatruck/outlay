@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Feedbacks\TransactionFeedback;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionMultiStoreRequest;
+use App\Http\Validators\TransactionValidator;
 use App\Models\Transaction;
-use App\Models\TransactionType;
-use App\Rules\UserOwnsWalletRule;
-use App\Rules\WalletIsActiveRule;
+use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 /**
  * This controller handles wallet modifying related requests
@@ -19,45 +22,87 @@ use Illuminate\Validation\Rule;
 class TransactionDataController extends Controller
 {
     /**
-     * Store a transaction in the database
+     * Stores the items (in the session) for a transaction
      *
      * @param Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function storeItems(Request $request): RedirectResponse
     {
-        $newTransactionData = $this->validateRequest($request);
-        Transaction::create($newTransactionData);
-
-        return TransactionFeedback::success();
+        return $this->partialDataStore(
+            $request,
+            TransactionValidator::ONLY_ITEM_ARR,
+            'transaction.view.create.payment'
+        );
     }
 
     /**
-     * Validate request data
+     * Store partial transaction data in the session
      *
      * @param Request $request
-     * @param bool $walletMustBeActive
-     * @return array
+     * @param int $validationType
+     * @param string $redirectRoute
+     * @return RedirectResponse
+     * @see TransactionValidator for more info
      */
-    public function validateRequest(Request $request, bool $walletMustBeActive = true): array
+    private function partialDataStore(Request $request, int $validationType, string $redirectRoute): RedirectResponse
     {
-        $walletRules = ['bail'];
-        if ($walletMustBeActive) {
-            $walletRules[] = new UserOwnsWalletRule();
-            $walletRules[] = new WalletIsActiveRule();
-            $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
+        $validatedData = TransactionValidator::validate($request, $validationType);
+
+        if (!$request->session()->has('transaction')) {
+            $partialData = $validatedData;
+        } else {
+            $partialData = array_merge($request->session()->get('transaction'), $validatedData);
+        }
+        $request->session()->put('transaction', $partialData);
+
+        return redirect()->route($redirectRoute);
+    }
+
+    /**
+     * Store the payment details of the transaction
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storePayment(Request $request): RedirectResponse
+    {
+        return $this->partialDataStore(
+            $request,
+            TransactionValidator::ONLY_PAYMENT,
+            'transaction.view.create.overview'
+        );
+    }
+
+    /**
+     * Store the transaction(s) in the database
+     *
+     * @param TransactionMultiStoreRequest $request
+     * @return Factory|View|Redirector|Application|RedirectResponse
+     */
+    public function store(TransactionMultiStoreRequest $request): Factory|View|Redirector|Application|RedirectResponse
+    {
+        /// Note: Data is already validated
+        $transactionData = $request->all();
+        $sharedProps = array_filter($transactionData, static function ($value) {
+            return !is_array($value);
+        });
+
+        $newTransactions = [];
+        $now = Carbon::now()->toDateTimeString();
+
+        foreach ($transactionData['scope'] as $key => $scope) {
+            $newTransactions[] = array_merge([
+                'scope' => $scope,
+                'amount' => $transactionData['amount'][$key],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ], $sharedProps);
         }
 
-        return $request->validate([
-            'wallet_id' => $walletRules,
-            'scope' => 'required|max:255',
-            'amount' => 'numeric|min:0.01|max:999999.99',
-            'transaction_type_id' => [
-                'required',
-                Rule::in(TransactionType::all()->pluck('id')->toArray()),
-            ],
-            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
-        ]);
+        Transaction::insert($newTransactions);
+        $request->session()->forget(keys: 'transaction');
+        return TransactionFeedback::success('created', sizeof($newTransactions));
     }
 
     /**
@@ -76,8 +121,10 @@ class TransactionDataController extends Controller
         }
 
         $wallet_id = $request->get('wallet_id');
-        $walletMustBeActive = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id);
-        $validated = $this->validateRequest($request, $walletMustBeActive);
+        $validationType = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id)
+            ? TransactionValidator::EVERYTHING_REG
+            : TransactionValidator::EVERYTHING_NO_ACTIVE_WALLET;
+        $validated = TransactionValidator::validate($request, $validationType);
 
         $updatedTransaction = new Transaction($validated);
         if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {

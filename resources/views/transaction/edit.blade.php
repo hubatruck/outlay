@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-  <x-page-title>{{ isset($transaction) ? __(':action transaction', ['action'=> __('Edit')]) : __(':action transaction', ['action' => __('Create')]) }}</x-page-title>
+  <x-page-title>{{ __(':action transaction', ['action'=> __('Edit')]) }}</x-page-title>
   <div class="uk-card-body">
     <x-forms.skeleton
-      :action="isset($transaction) ? route('transaction.data.update', ['id' => $transaction->id]) : route('transaction.data.create')"
+      :action="route('transaction.data.update', ['id' => $transaction->id])"
       :cancelURL="previousUrlOr(route('transaction.view.all'))"
     >
       <div class="uk-margin">
@@ -30,10 +30,9 @@
       <div class="uk-margin">
         <x-forms.date-picker
           fieldName="transaction_date"
-          :defaultValue="$transaction->transaction_date ?? Auth::user()->previousTransactionDate()"
+          :defaultValue="$transaction->transaction_date"
         />
       </div>
     </x-forms.skeleton>
   </div>
-
 @endsection

@@ -3,16 +3,18 @@
 </label>
 <div class="uk-form-controls">
   <input
+    @unless (isset($errorField))
     id="{{ $fieldName }}"
-    class="uk-input @error('scope')uk-form-danger @enderror"
+    @endunless
+    class="uk-input @error($errorField ?? $fieldName)uk-form-danger @enderror"
     name="{{ $fieldName }}"
     type="text"
     value="{{ old($fieldName, $value ?? '') }}"
     required
   />
 </div>
-@error($fieldName)
-<span class="uk-text-danger uk-text-small">
+@error($errorField ?? $fieldName)
+<span class="uk-text-danger uk-text-small uk-display-block">
   <strong>{{ $message }}</strong>
 </span>
 @enderror
