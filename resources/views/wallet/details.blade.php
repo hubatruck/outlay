@@ -31,7 +31,7 @@
         @endif
       </div>
     </div>
-    <div class="uk-card uk-card-default @if ($hasTransactions || $hasTransfers)uk-margin-medium-bottom @endif">
+    <div class="uk-card uk-card-default uk-margin-medium-bottom">
       <div class="uk-card-header"><h4 class="uk-h4">{{ __('Manage wallet') }}</h4></div>
       <div class="uk-card-body uk-flex uk-flex-wrap ukc-button-group">
         <x-buttons.quick-create :wallet="$wallet" :targetType="'transaction'"/>
@@ -91,15 +91,11 @@
       </div>
     </div>
 
-    @if ($hasTransactions || $hasTransfers)
-      <x-forms.chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
-      <div id="charts"></div>
-    @endif
+    <x-forms.chart-range-picker :chartContainer="'#charts'" :walletID="$wallet->id"/>
+    <div id="charts"></div>
   </div>
 @endsection
 
-@if ($hasTransactions || $hasTransfers)
-  @push('scripts')
-    <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-  @endpush
-@endif
+@push('scripts')
+  <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
+@endpush

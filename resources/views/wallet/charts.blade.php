@@ -1,66 +1,50 @@
-@php
-  $hasTransactions = $wallet->hasTransactions();
-  $hasTransfers = $wallet->hasTransfers()
-@endphp
-@if ($hasTransactions || $hasTransfers)
-  <div class="uk-card uk-card-default uk-child-width-1-1">
-    <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Balance chart') }}</h4>
-    </div>
-    <div class="uk-card-body">
-      <div class="uk-width-1-1">
-        {!! $balanceDailyChart->container() !!}
-      </div>
+<div class="uk-card uk-card-default uk-child-width-1-1">
+  <div class="uk-card-header">
+    <h4 class="uk-h4">{{  __('Balance chart') }}</h4>
+  </div>
+  <div class="uk-card-body">
+    <div class="uk-width-1-1">
+      {!! $balanceDailyChart->container() !!}
     </div>
   </div>
-@endif
+</div>
 
-@if ($hasTransactions)
-  <div class="uk-card uk-card-default uk-child-width-1-1">
-    <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Transaction charts') }}</h4>
+<div class="uk-card uk-card-default uk-child-width-1-1">
+  <div class="uk-card-header">
+    <h4 class="uk-h4">{{  __('Transaction charts') }}</h4>
+  </div>
+  <div class="uk-card-body uk-child-width-1-2@l">
+    <div class="uk-width-1-1@l">
+      {!! $transactionDailyChart->container() !!}
     </div>
-    <div class="uk-card-body uk-child-width-1-2@l">
-      <div class="uk-width-1-1@l">
-        {!! $transactionDailyChart->container() !!}
+    <div>
+      {!! $transactionTypeChart->container() !!}
+    </div>
+  </div>
+</div>
+
+<div class="uk-card uk-card-default uk-child-width-1-1">
+  <div class="uk-card-header">
+    <h4 class="uk-h4">{{  __('Transfer charts') }}</h4>
+  </div>
+  <div class="uk-card-body uk-child-width-1-2@l">
+    <div class="uk-width-1-1">
+      {!! $transferDailyChart->container() !!}
+    </div>
+    <div class="uk-width-1-1 uk-child-width-1-2@l" uk-grid>
+      <div>
+        {!! $transferTypeChart->container() !!}
       </div>
       <div>
-        {!! $transactionTypeChart->container() !!}
+        {!! $transferWalletChart->container() !!}
       </div>
     </div>
   </div>
-@endif
+</div>
 
-@if($hasTransfers)
-  <div class="uk-card uk-card-default uk-child-width-1-1">
-    <div class="uk-card-header">
-      <h4 class="uk-h4">{{  __('Transfer charts') }}</h4>
-    </div>
-    <div class="uk-card-body uk-child-width-1-2@l">
-      <div class="uk-width-1-1">
-        {!! $transferDailyChart->container() !!}
-      </div>
-      <div class="uk-width-1-1 uk-child-width-1-2@l" uk-grid>
-        <div>
-          {!! $transferTypeChart->container() !!}
-        </div>
-        <div>
-          {!! $transferWalletChart->container() !!}
-        </div>
-      </div>
-    </div>
-  </div>
-@endif
-
-@if ($hasTransactions || $hasTransfers)
-  {{ $balanceDailyChart->script() }}
-@endif
-@if ($hasTransactions)
-  {{ $transactionDailyChart->script() }}
-  {{ $transactionTypeChart->script() }}
-@endif
-@if ($hasTransfers)
-  {{ $transferDailyChart->script() }}
-  {{ $transferTypeChart->script() }}
-  {{ $transferWalletChart->script() }}
-@endif
+{{ $balanceDailyChart->script() }}
+{{ $transactionDailyChart->script() }}
+{{ $transactionTypeChart->script() }}
+{{ $transferDailyChart->script() }}
+{{ $transferTypeChart->script() }}
+{{ $transferWalletChart->script() }}
