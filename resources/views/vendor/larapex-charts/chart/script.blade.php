@@ -48,6 +48,11 @@
     @else
     stroke: {curve: 'smooth'},
     @endif
+    noData: {
+      text: '{{ __('No data available for this date interval') }}',
+      align: 'center',
+      verticalAlign: 'middle',
+    }
   };
 
   const chart_{!! $chart->id() !!} = new ApexCharts(

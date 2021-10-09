@@ -15,8 +15,11 @@ class TransfersByTypeChart extends BaseChart
             ->pluck('daily_amount')->sum();
         $transferOut = $this->filterTransfers($wallet->outgoingTransfers())
             ->pluck('daily_amount')->sum();
-        $data = ChartDataHandler::from([$transferIn, $transferOut]);
-
+        if ($transferOut > 0 || $transferIn > 0) {
+            $data = ChartDataHandler::from([$transferIn, $transferOut]);
+        } else {
+            $data = ChartDataHandler::from([]);
+        }
         return $this->chart->pieChart()
             ->setTitle(__('Transferred amounts by type'))
             ->addData($data->reduceDPAndGet())
