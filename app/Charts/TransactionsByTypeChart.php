@@ -16,11 +16,17 @@ class TransactionsByTypeChart extends BaseChart
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
         $baseQuery = $this->getTransactionBaseQuery($wallet->id)
             ->selectRaw('transaction_type_id as type, sum(amount) as amount')
-            ->groupBy('type');
+            ->groupBy('type')
+            ->orderBy('type');
 
         /// Workaround in case when the wallet has got only expenses, but no income
         $data = $baseQuery->pluck('amount')->toArray();
-        if (!$wallet->incomingTransfers()->exists()) {
+        if (
+            !$wallet->transactions()
+                ->where('transaction_type_id', '=', TransactionType::INCOME)
+                ->betweenDateRange($this->range)
+                ->exists()
+        ) {
             $data = [0, $data[0]];
         }
         $data = ChartDataHandler::from($data);
