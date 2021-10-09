@@ -21,7 +21,7 @@ class TransactionsByTypeChart extends BaseChart
 
         /// Workaround in case when the wallet has got only expenses, but no income
         $data = $baseQuery->pluck('amount')->toArray();
-        if (
+        if (!empty($data) &&
             !$wallet->transactions()
                 ->where('transaction_type_id', '=', TransactionType::INCOME)
                 ->betweenDateRange($this->range)
