@@ -32,6 +32,15 @@
           <span uk-icon="plus"></span>
           {{ __('Add a row') }}
         </a>
+        <input
+          id="new-row-count"
+          class="uk-input uk-form-width-small"
+          type="number"
+          value="1"
+          step="1"
+          min="1"
+          max="100"
+        >
       </div>
     </x-forms.skeleton>
   </div>
@@ -42,6 +51,23 @@
     const container = $('#transaction-items');
     $('#new-row-button').click((event) => {
       event.preventDefault();
+      let count = parseInt($('#new-row-count').val());
+      if (!count || isNaN(count)) {
+        count = 1;
+      }
+      count = Math.min(Math.max(1, count), 100);
+
+      for (let i = 1; i <= count; i++) {
+        pushNewItemToList();
+      }
+    });
+
+    $(container).on("click", ".remove-row", function (e) { /// user click on remove text
+      e.preventDefault();
+      $(this).parent('div').parent('div').remove();
+    });
+
+    function pushNewItemToList() {
       const newItem = container.children().last().clone();
       const inputs = newItem.find('input');
 
@@ -51,12 +77,7 @@
 
       newItem.appendTo(container);
       inputs.first().focus();
-    });
-
-    $(container).on("click", ".remove-row", function (e) { /// user click on remove text
-      e.preventDefault();
-      $(this).parent('div').parent('div').remove();
-    });
+    }
 
     function initInputElement(element) {
       element.parent().siblings('.uk-text-danger').remove(); /// error field
