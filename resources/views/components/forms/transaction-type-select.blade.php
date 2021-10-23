@@ -14,7 +14,7 @@
     @foreach(\App\Models\TransactionType::all() as $tt)
       <option
         value="{{ $tt->id }}"
-        @if(isset($transaction['transaction_type_id']) && $transaction['transaction_type_id'] === $tt->id)
+        @if($shouldSelectType($tt))
         selected
         @endif
         @if(old('transaction_type_id') && (string)$tt->id === old('transaction_type_id'))
