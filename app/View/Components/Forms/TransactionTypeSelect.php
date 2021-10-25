@@ -34,7 +34,7 @@ class TransactionTypeSelect extends Component
 
     public function isSessionSelectedType(TransactionType $transactionType): bool
     {
-        $sessionVariable = session('transaction')['transaction_type_id'];
+        $sessionVariable = session('transaction')['transaction_type_id'] ?? null;
         return $sessionVariable !== null && (string) $transactionType->id === $sessionVariable;
     }
 

@@ -44,7 +44,7 @@ class TransactionWalletSelect extends Component
 
     private function isWalletInSession(Wallet $wallet): bool
     {
-        $sessionVariable = session('transaction')['wallet_id'];
+        $sessionVariable = session('transaction')['wallet_id'] ?? null;
         return isset($sessionVariable) && (string) $wallet->id === $sessionVariable;
     }
 
