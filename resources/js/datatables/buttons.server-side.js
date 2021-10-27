@@ -97,7 +97,7 @@
         event.stopPropagation();
         if (!config._collection.parents('body').length) {
             const collection = config._collection[0];
-            collection.className += ' uk-card uk-card-body uk-card-default uk-padding-small dt-uk-collection';
+            collection.className += ' uk-card uk-card-body uk-card-default uk-padding-small uk-width-1-3@m uk-width-2-3 dt-uk-collection';
 
             const targetContainer = button.parent();
             targetContainer.append(collection);

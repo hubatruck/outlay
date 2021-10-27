@@ -59,7 +59,7 @@
         },
         buttonContainer: {
             tag: 'div',
-            className: 'dt-button-wrapper uk-width-1-2@s uk-width-auto@m'
+            className: 'dt-button-wrapper uk-width-auto@m'
         }
     })
 
