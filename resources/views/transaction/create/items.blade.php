@@ -58,7 +58,9 @@
       count = Math.min(Math.max(1, count), 100);
 
       for (let i = 1; i <= count; i++) {
-        pushNewItemToList();
+        setTimeout(() => {
+          pushNewItemToList();
+        }, 0);
       }
     });
 
