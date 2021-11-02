@@ -7,6 +7,7 @@
     class="uk-select @error('transaction_type_id') uk-form-danger @enderror"
     name="transaction_type_id"
     required
+    autocomplete="off"
   >
     <option @if(!isset($transaction['transaction_type_id'])) selected @endif disabled hidden value="">
       {{ __('Select...') }}

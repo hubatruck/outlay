@@ -29,7 +29,7 @@ class TransactionWalletSelect extends Component
 
     private function isTransactionWallet(Wallet $wallet): bool
     {
-        return isset($this->transaction['wallet_id']) && $this->transaction['wallet_id'] === $wallet->id;
+        return isset($this->transaction['wallet_id']) && (string) $this->transaction['wallet_id'] === (string) $wallet->id;
     }
 
     public function shouldSetAsSelected(Wallet $wallet): bool

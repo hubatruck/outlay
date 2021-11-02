@@ -29,13 +29,13 @@ class TransactionTypeSelect extends Component
 
     public function isSetType(TransactionType $transactionType): bool
     {
-        return isset($this->transaction['transaction_type_id']) && (string) $transactionType->id === $this->transaction['transaction_type_id'];
+        return isset($this->transaction['transaction_type_id']) && (string) $transactionType->id === (string) $this->transaction['transaction_type_id'];
     }
 
     public function isSessionSelectedType(TransactionType $transactionType): bool
     {
         $sessionVariable = session('transaction')['transaction_type_id'] ?? null;
-        return $sessionVariable !== null && (string) $transactionType->id === $sessionVariable;
+        return $sessionVariable !== null && (string) $transactionType->id === (string) $sessionVariable;
     }
 
     /**
