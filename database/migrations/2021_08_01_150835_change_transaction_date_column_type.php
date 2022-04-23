@@ -13,7 +13,7 @@ class ChangeTransactionDateColumnType extends Migration
      */
     public function up(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
+        Schema::table('transactions', static function (Blueprint $table) {
             $table->dateTime('transaction_date')->default('CURRENT_TIMESTAMP')->change();
         });
     }
@@ -25,7 +25,7 @@ class ChangeTransactionDateColumnType extends Migration
      */
     public function down(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
+        Schema::table('transactions', static function (Blueprint $table) {
             $table->date('transaction_date')->after('transaction_type_id')->default(null)->nullable(true)->change();
         });
     }

@@ -13,7 +13,7 @@ class RenameIsCardWalletPropertyToIsPublicFor extends Migration
      */
     public function up(): void
     {
-        Schema::table('wallets', function (Blueprint $table) {
+        Schema::table('wallets', static function (Blueprint $table) {
             $table->renameColumn('is_card', 'is_public');
         });
     }
@@ -25,7 +25,7 @@ class RenameIsCardWalletPropertyToIsPublicFor extends Migration
      */
     public function down(): void
     {
-        Schema::table('wallets', function (Blueprint $table) {
+        Schema::table('wallets', static function (Blueprint $table) {
             $table->renameColumn('is_public', 'is_card');
         });
     }

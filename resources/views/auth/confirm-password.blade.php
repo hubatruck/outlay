@@ -21,11 +21,11 @@
                 @csrf
 
                 <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Password') }}</label>
+                  <label class="uk-form-label" for="password">{{ __('Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                    <input type="password" name="password" required autocomplete="current-password"/>
+                    <input type="password" name="password" id="password" required autocomplete="current-password"/>
                   </div>
                 </div>
 

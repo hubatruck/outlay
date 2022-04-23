@@ -77,13 +77,14 @@ class Transaction extends Model
      */
     public static function checkStatus(Transaction $transaction = null): ?RedirectResponse
     {
+        $response = null;
         if ($transaction === null || $transaction->wallet === null) {
-            return TransactionFeedback::existError();
+            $response = TransactionFeedback::existError();
         }
         if (!Auth::user()->owns($transaction)) {
-            return TransactionFeedback::editError();
+            $response = TransactionFeedback::editError();
         }
-        return null;
+        return $response;
     }
 
     /**

@@ -13,7 +13,7 @@ class RemoveWalletBalanceColumn extends Migration
      */
     public function up(): void
     {
-        Schema::table('wallets', function (Blueprint $table) {
+        Schema::table('wallets', static function (Blueprint $table) {
             $table->dropColumn('balance');
         });
     }
@@ -25,8 +25,8 @@ class RemoveWalletBalanceColumn extends Migration
      */
     public function down(): void
     {
-        Schema::table('wallets', function (Blueprint $table) {
-            $table->float('balance', 8, 2)->after('notes')->default(0);
+        Schema::table('wallets', static function (Blueprint $table) {
+            $table->float('balance')->after('notes')->default(0);
         });
     }
 }

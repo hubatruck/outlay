@@ -120,7 +120,7 @@ class ChartDataHandler
     public function reduceDataPrecision(): ChartDataHandler
     {
         $this->data = array_map(function ($item) {
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 foreach (['in', 'out'] as $key) {
                     $item[$key] = reducePrecision($item[$key], $this->dataPrecision);
                 }

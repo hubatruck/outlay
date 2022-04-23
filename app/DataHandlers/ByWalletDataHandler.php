@@ -28,7 +28,7 @@ class ByWalletDataHandler extends ChartDataHandler
 
         foreach ($outgoing as $out) {
             $key = self::formatWalletName($out->toWallet);
-            if (array_key_exists($key['name'], $data)) {
+            if (\array_key_exists($key['name'], $data)) {
                 $data[$key['name']]['out'] = $out->amount;
             } else {
                 $data[$key['name']] = [

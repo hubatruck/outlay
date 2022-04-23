@@ -28,7 +28,7 @@ Auth::routes([
     'confirm' => false,
 ]);
 
-Route::get('/', function () {
+Route::get('/', static function () {
     return redirect('/dashboard');
 });
 
@@ -57,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [TransactionViewController::class, 'list'])->name('transaction.view.all');
 
         Route::prefix('create')->group(function () {
-            Route::get('/', function () {
+            Route::get('/', static function () {
                 return redirect(route('transaction.view.create.items'));
             })->name('transaction.view.create');
             Route::get('items', [TransactionViewController::class, 'createItems'])->name('transaction.view.create.items');

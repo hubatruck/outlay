@@ -24,19 +24,19 @@ class FortifyUIServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::loginView(function () {
+        Fortify::loginView(static function () {
             return view('auth.login');
         });
 
-        Fortify::registerView(function () {
+        Fortify::registerView(static function () {
             return view('auth.register');
         });
 
-        Fortify::requestPasswordResetLinkView(function () {
+        Fortify::requestPasswordResetLinkView(static function () {
             return view('auth.forgot-password');
         });
 
-        Fortify::resetPasswordView(function ($request) {
+        Fortify::resetPasswordView(static function ($request) {
             return view('auth.reset-password', ['request' => $request]);
         });
 

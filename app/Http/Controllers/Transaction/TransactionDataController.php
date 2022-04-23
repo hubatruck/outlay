@@ -49,10 +49,10 @@ class TransactionDataController extends Controller
     {
         $validatedData = TransactionValidator::validate($request, $validationType);
 
-        if (!$request->session()->has('transaction')) {
-            $partialData = $validatedData;
-        } else {
+        if ($request->session()->has('transaction')) {
             $partialData = array_merge($request->session()->get('transaction'), $validatedData);
+        } else {
+            $partialData = $validatedData;
         }
         $request->session()->put('transaction', $partialData);
 
@@ -85,7 +85,7 @@ class TransactionDataController extends Controller
         /// Note: Data is already validated
         $transactionData = $request->all();
         $sharedProps = array_filter($transactionData, static function ($value) {
-            return !is_array($value);
+            return !\is_array($value);
         });
 
         $newTransactions = [];
@@ -114,26 +114,30 @@ class TransactionDataController extends Controller
      */
     public function update(Request $request, string $id): RedirectResponse
     {
+        $response = null;
+
         $oldTransaction = Transaction::find($id);
         $permissionCheck = Transaction::checkStatus($oldTransaction);
         if ($permissionCheck !== null) {
-            return $permissionCheck;
+            $response = $permissionCheck;
+        } else {
+            $wallet_id = $request->get('wallet_id');
+            $validationType = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id)
+                ? TransactionValidator::EVERYTHING_REG
+                : TransactionValidator::EVERYTHING_NO_ACTIVE_WALLET;
+            $validated = TransactionValidator::validate($request, $validationType);
+
+            $updatedTransaction = new Transaction($validated);
+            if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {
+                $response = TransactionFeedback::editError();
+            } else {
+                $oldTransaction->fill($updatedTransaction->attributesToArray());
+                $oldTransaction->save();
+                $response = TransactionFeedback::success('updated');
+            }
         }
 
-        $wallet_id = $request->get('wallet_id');
-        $validationType = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id)
-            ? TransactionValidator::EVERYTHING_REG
-            : TransactionValidator::EVERYTHING_NO_ACTIVE_WALLET;
-        $validated = TransactionValidator::validate($request, $validationType);
-
-        $updatedTransaction = new Transaction($validated);
-        if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {
-            return TransactionFeedback::editError();
-        }
-
-        $oldTransaction->fill($updatedTransaction->attributesToArray());
-        $oldTransaction->save();
-        return TransactionFeedback::success('updated');
+        return $response;
     }
 
     /**

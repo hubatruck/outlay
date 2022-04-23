@@ -83,7 +83,8 @@ abstract class DataTableBase extends DataTable
             try {
                 [$from, $to] = explode(' - ', $reqDateRange);
             } catch (Exception) {
-                $to = $from = $reqDateRange;
+                $from = $reqDateRange;
+                $to = $reqDateRange;
             }
 
             try {

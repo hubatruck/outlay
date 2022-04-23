@@ -24,21 +24,26 @@
                 @method('PUT')
 
                 <div class="uk-margin uk-width-large">
-                  <label class="uk-form-label">{{ __('Name') }}</label>
+                  <label class="uk-form-label" for="name">{{ __('Name') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: user"></span>
-                    <input type="text" name="name" value="{{ old('name') ?? auth()->user()->name }}" required autofocus
-                           autocomplete="name"/>
+                    <input
+                      type="text" name="name" id="name" value="{{ old('name') ?? auth()->user()->name }}" required
+                      autofocus autocomplete="name"
+                    />
                   </div>
                 </div>
 
                 <div class="uk-margin uk-width-large">
-                  <label class="uk-form-label">{{ __('Email') }}</label>
+                  <label class="uk-form-label" for="email">{{ __('Email') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                    <input type="email" name="email" value="{{ old('email') ?? auth()->user()->email }}" required/>
+                    <input
+                      type="email" name="email" id="email" value="{{ old('email') ?? auth()->user()->email }}"
+                      required
+                    />
                   </div>
                 </div>
               </form>

@@ -13,7 +13,7 @@ class CreateTransfersTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('transfers', function (Blueprint $table) {
+        Schema::create('transfers', static function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('from_wallet_id');
             $table->foreign('from_wallet_id')->references('id')->on('wallets');

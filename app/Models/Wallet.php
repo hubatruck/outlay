@@ -72,13 +72,14 @@ class Wallet extends Model
      */
     public static function check(Wallet $wallet = null): ?RedirectResponse
     {
+        $response = null;
         if ($wallet === null) {
-            return WalletFeedback::existError();
+            $response = WalletFeedback::existError();
         }
         if (!Auth::user()->owns($wallet)) {
-            return WalletFeedback::editError();
+            $response = WalletFeedback::editError();
         }
-        return null;
+        return $response;
     }
 
     /**

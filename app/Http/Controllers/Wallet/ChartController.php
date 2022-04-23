@@ -14,6 +14,8 @@ use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Carbon\Exceptions\InvalidFormatException;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,8 +62,9 @@ class ChartController extends Controller
                 try {
                     $rawRange[0] = Carbon::parse($rawRange[0])->startOfDay();
                     $rawRange[1] = $rawRange[0]->endOfDay();
-                } catch (CarbonExceptions\InvalidFormatException) {
-                    $rawRange[0] = $rawRange[1] = currentDayOfTheMonth();
+                } catch (InvalidFormatException) {
+                    $rawRange[1] = currentDayOfTheMonth();
+                    $rawRange[0] = $rawRange[1];
                 }
             }
 

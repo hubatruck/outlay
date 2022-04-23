@@ -21,29 +21,29 @@
                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
                 <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Email') }}</label>
+                  <label class="uk-form-label" for="name">{{ __('Email') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: mail"></span>
-                    <input type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus/>
+                    <input type="email" name="email" id="name" value="{{ old('email', $request->email) }}" required autofocus/>
                   </div>
                 </div>
 
                 <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Password') }}</label>
+                  <label class="uk-form-label" for="password">{{ __('Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                    <input type="password" name="password" required autocomplete="new-password"/>
+                    <input type="password" name="password" id="password" required autocomplete="new-password"/>
                   </div>
                 </div>
 
                 <div class="uk-margin">
-                  <label class="uk-form-label">{{ __('Confirm Password') }}</label>
+                  <label class="uk-form-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: check"></span>
-                    <input type="password" name="password_confirmation" required autocomplete="new-password"/>
+                    <input type="password" name="password_confirmation" id="password_confirmation" required autocomplete="new-password"/>
                   </div>
                 </div>
 

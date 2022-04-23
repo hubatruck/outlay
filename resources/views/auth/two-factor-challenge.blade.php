@@ -24,11 +24,11 @@
                   </div>
 
                   <div class="uk-margin">
-                    <label class="uk-form-label">{{ __('Code') }}</label>
+                    <label class="uk-form-label" for="code">{{ __('Code') }}</label>
 
                     <div class="uk-inline uk-width-1-1">
                       <span class="uk-form-icon" uk-icon="icon: phone"></span>
-                      <input type="text" name="code" autofocus autocomplete="one-time-code"/>
+                      <input type="text" name="code" id="code" autofocus autocomplete="one-time-code"/>
                     </div>
                   </div>
                 </div>
@@ -41,11 +41,11 @@
                   </div>
 
                   <div class="uk-margin">
-                    <label class="uk-form-label">{{ __('Recovery Code') }}</label>
+                    <label class="uk-form-label" for="recovery_code">{{ __('Recovery Code') }}</label>
 
                     <div class="uk-inline uk-width-1-1">
                       <span class="uk-form-icon" uk-icon="icon: list"></span>
-                      <input type="text" name="recovery_code" autocomplete="one-time-code"/>
+                      <input type="text" name="recovery_code" id="recovery_code" autocomplete="one-time-code"/>
                     </div>
                   </div>
                 </div>

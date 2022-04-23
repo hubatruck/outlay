@@ -1,5 +1,5 @@
 /**
- * Classes for non-chart components (ie. loading, errors)
+ * Classes for non-chart components (i.e. loading, errors)
  * @type {string}
  */
 const nonChartClasses = 'uk-text-center uk-margin-xlarge-top uk-margin-xlarge-bottom';

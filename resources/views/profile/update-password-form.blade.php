@@ -29,33 +29,36 @@
                 @method('PUT')
 
                 <div class="uk-margin uk-width-large">
-                  <label class="uk-form-label">{{ __('Current Password') }}</label>
+                  <label class="uk-form-label" for="current_password">{{ __('Current Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: unlock"></span>
                     <input
-                      class="uk-input" type="password" name="current_password" required
+                      class="uk-input" type="password" name="current_password" id="current_password" required
                       autocomplete="current-password"
                     />
                   </div>
                 </div>
 
                 <div class="uk-margin uk-width-large">
-                  <label class="uk-form-label">{{ __('Password') }}</label>
+                  <label class="uk-form-label" for="password">{{ __('Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                    <input class="uk-input" type="password" name="password" required autocomplete="new-password"/>
+                    <input
+                      class="uk-input" type="password" name="password" id="password" required
+                      autocomplete="new-password"
+                    />
                   </div>
                 </div>
 
                 <div class="uk-margin uk-width-large">
-                  <label class="uk-form-label">{{ __('Confirm Password') }}</label>
+                  <label class="uk-form-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
 
                   <div class="uk-inline uk-width-1-1">
                     <span class="uk-form-icon" uk-icon="icon: check"></span>
                     <input
-                      class="uk-input" type="password" name="password_confirmation" required
+                      class="uk-input" type="password" name="password_confirmation" id="password_confirmation" required
                       autocomplete="new-password"
                     />
                   </div>

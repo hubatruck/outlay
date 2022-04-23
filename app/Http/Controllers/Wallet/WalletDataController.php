@@ -79,22 +79,24 @@ class WalletDataController extends Controller
      */
     public function delete(string $id): RedirectResponse
     {
+        $response = null;
         $wallet = Wallet::withTrashed()->find($id);
 
         $permissionCheck = Wallet::check($wallet);
         if ($permissionCheck !== null) {
-            return $permissionCheck;
+            $response = $permissionCheck;
+        } else {
+            $hasTransactions = $wallet->hasTransactions();
+            if ($hasTransactions || $wallet->hasTransfers()) {
+                $response = $hasTransactions
+                    ? WalletFeedback::hasTransactionsError($wallet)
+                    : WalletFeedback::hasTransfersError($wallet);
+            } else {
+                $wallet->forceDelete();
+                $response = WalletFeedback::success('deleted');
+            }
         }
-
-        $hasTransactions = $wallet->hasTransactions();
-        if ($hasTransactions || $wallet->hasTransfers()) {
-            return $hasTransactions
-                ? WalletFeedback::hasTransactionsError($wallet)
-                : WalletFeedback::hasTransfersError($wallet);
-        }
-
-        $wallet->forceDelete();
-        return WalletFeedback::success('deleted');
+        return $response;
     }
 
     /**

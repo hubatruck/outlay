@@ -44,26 +44,29 @@ class TransferViewController extends Controller
      */
     public function create(Request $request): View|Factory|RedirectResponse|Application
     {
+        $response = null;
+
         $fromWalletID = $request->get('from_wallet');
         $toWalletID = $request->get('to_wallet');
         $fromWalletCheck = $this->quickCreateWalletCheck($fromWalletID);
         $toWalletCheck = $this->quickCreateWalletCheck($toWalletID, false);
-        if ($toWalletCheck || $fromWalletCheck) {
-            return $toWalletCheck ?? $fromWalletCheck;
-        }
 
-        if (!Auth::user()->hasAnyActiveWallet()) {
-            return WalletFeedback::noWalletError(
+        if ($toWalletCheck || $fromWalletCheck) {
+            $response = $toWalletCheck ?? $fromWalletCheck;
+        } else if (Auth::user()->hasAnyActiveWallet()) {
+            addSessionMsg(TransferFeedback::warnIrreversibleTransfer(), true);
+            $response = view('transfer.create', [
+                'selected_from_wallet_id' => $fromWalletID ?? '-1',
+                'selected_to_wallet_id' => $toWalletID ?? '-1',
+            ]);
+        } else {
+            $response = WalletFeedback::noWalletError(
                 Auth::user()->hasWallet() ? 'active' : '',
                 route('transfer.view.all')
             );
         }
 
-        addSessionMsg(TransferFeedback::warnIrreversibleTransfer(), true);
-        return view('transfer.create', [
-            'selected_from_wallet_id' => $fromWalletID ?? '-1',
-            'selected_to_wallet_id' => $toWalletID ?? '-1',
-        ]);
+        return $response;
     }
 
     /**
@@ -79,7 +82,7 @@ class TransferViewController extends Controller
             $wallet = Wallet::find($walletID);
 
             $ownership = $checkOwner && !Auth::user()->owns($wallet);
-            if ($wallet === null || $wallet->trashed() || $ownership) {
+            if ($wallet === null || $ownership || $wallet->trashed()) {
                 return WalletFeedback::quickCreateError('transfer');
             }
         }

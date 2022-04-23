@@ -40,10 +40,10 @@
       @if(isset($transaction['wallet_id'], $transaction['transaction_type_id'], $transaction['transaction_date']))
         <table class="uk-table uk-table-striped uk-table-hover">
           <caption><h4>{{ __('Payment details') }}</h4></caption>
-          <thead>
-          <th id="name">{{ __('Name') }}</th>
-          <th id="value">{{ __('Selected value') }}</th>
-          </thead>
+          <tr>
+            <th id="name">{{ __('Name') }}</th>
+            <th id="value">{{ __('Selected value') }}</th>
+          </tr>
           <tbody>
           <tr>
             <td>{{ __('Wallet') }}:</td>

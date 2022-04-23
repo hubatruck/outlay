@@ -1,5 +1,5 @@
 <button class="uk-button uk-button-small uk-button-default" type="button">
-  </span>{{ __('Actions') }}
+  <span>{{ __('Actions') }}</span>
 </button>
 <div class="uk-padding-small" uk-dropdown="mode: click">
   <ul class="uk-nav uk-dropdown-nav">
