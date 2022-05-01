@@ -50,7 +50,12 @@ $ php artisan key:generate
 
 Customize the `.env` file to match your configuration.
 
-**Note:** Don't forget to set the correct database username, password and database name!
+**Note:** Don't forget to set the correct username, password and database name! The user should have all privileges on the table so that the application can work correctly.
+
+Migrate tables
+```shell
+$ php artisan migrate
+```
 
 Compile the UI files, by running Laravel Mix
 
