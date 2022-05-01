@@ -3,10 +3,9 @@
 @section('content')
   <x-page-title>{{ __('Transaction creator') }} - {{ __('Items') }}</x-page-title>
   <div class="uk-card-body">
-    <x-forms.skeleton
+    <x-forms.stepper
       :action="route('transaction.data.create.items')"
       submitLabel="Next step"
-      :cancelURL="route('transaction.view.all')"
     >
       <div
         id="has-errors"
@@ -42,7 +41,7 @@
           max="100"
         >
       </div>
-    </x-forms.skeleton>
+    </x-forms.stepper>
   </div>
 @endsection
 

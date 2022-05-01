@@ -3,8 +3,12 @@
 @section('content')
   <x-page-title>{{ __('Transaction creator') }} - {{ __('Overview') }}</x-page-title>
   <div class="uk-card-body">
-    <form action="{{ route('transaction.data.create.overview') }}" method="POST">
-      @csrf
+    <x-forms.stepper
+      :action="route('transaction.data.create.overview')"
+      submitLabel="Send"
+      :previousStep="route('transaction.view.create.items')"
+      final="true"
+    >
 
       @if (isset($transaction['scope'],$transaction['amount']))
         <table class="uk-table uk-table-striped uk-table-hover">
@@ -67,24 +71,6 @@
       <x-buttons.change :url="route('transaction.view.create.payment')"/>
       <hr>
 
-      <x-buttons.submit-form/>
-      <button type="button" class="uk-button uk-button-danger cancel-transaction">{{ __('Cancel') }}</button>
-    </form>
+    </x-forms.stepper>
   </div>
 @endsection
-
-@push('scripts')
-  <script>
-    $('.cancel-transaction').click(() => {
-      UIkit.modal.confirm('{{ __('All entered data will be lost. Proceed?') }}', {
-        labels: {
-          ok: '{{ __('yes') }}',
-          cancel: '{{ __('no') }}'
-        }
-      }).then(function () {
-        window.location.replace('{{ route('transaction.view.all') }}');
-      }, () => {
-      });
-    });
-  </script>
-@endpush

@@ -3,10 +3,10 @@
 @section('content')
   <x-page-title>{{ __('Transaction creator') }} - {{ __('Payment details') }}</x-page-title>
   <div class="uk-card-body">
-    <x-forms.skeleton
+    <x-forms.stepper
       :action="route('transaction.data.create.payment')"
       submitLabel="Next step"
-      :cancelURL="route('transaction.view.all')"
+      :previousStep="route('transaction.view.create.items')"
     >
       <div
         id="has-errors"
@@ -35,10 +35,7 @@
         />
       </div>
 
-      <a href="{{ route('transaction.view.create.items') }}" class="uk-button uk-button-primary">
-        {{ __('Previous step') }}
-      </a>
-    </x-forms.skeleton>
+    </x-forms.stepper>
   </div>
 @endsection
 
