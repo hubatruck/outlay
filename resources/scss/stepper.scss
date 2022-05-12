@@ -1,0 +1,79 @@
+// Based on https://github.com/ycs77/bootstrap-steps
+
+@import 'global/settings.scss';
+
+$iconSize: 1.5rem;
+.oys-stepper {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    overflow-x: auto;
+    padding: 0;
+
+    .oys-step {
+        flex: 1 1 0;
+
+        &:first-child {
+            margin-left: auto;
+        }
+
+        &:last-child {
+            margin-right: auto;
+
+            .oys-contents::after {
+                display: none;
+            }
+        }
+
+        &:last-of-type {
+            padding-right: 0;
+        }
+
+        box-sizing: content-box;
+
+        .oys-contents {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+
+            &::after {
+                background-color: $global-border;
+                content: "";
+                display: block;
+                height: 2px;
+                position: absolute;
+                right: calc(-50% + #{$iconSize} / 2 + 1px);
+                top: calc(#{$iconSize} / 2 + 1px);
+                width: calc(100% - #{$iconSize} - 2px);
+            }
+
+            .oys-icon {
+                align-items: center;
+                background-color: $global-muted-background;
+                border-radius: 100%;
+                border: 2px solid $global-border;
+                color: $inverse-global-inverse-color;
+                display: flex;
+                height: $iconSize;
+                justify-content: center;
+                position: relative;
+                width: $iconSize;
+                z-index: 10;
+            }
+        }
+
+        &.complete .oys-contents{
+            &::after{
+                background-color: $global-success-background;
+            }
+
+            .oys-icon{
+                background-color: $global-success-background;
+                border-color: $global-success-background;
+                color: $global-background;
+            }
+        }
+    }
+}

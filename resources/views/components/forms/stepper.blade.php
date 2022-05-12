@@ -1,3 +1,23 @@
+<ul class="oys-stepper">
+  <li class="oys-step complete">
+    <div class="oys-contents">
+      <span class="oys-icon">1</span>
+      <span class="oys-text">{{ __('Items') }}</span>
+    </div>
+  </li>
+  <li class="oys-step">
+    <div class="oys-contents">
+      <span class="oys-icon">2</span>
+      <span class="oys-text">{{ __('Payment details') }}</span>
+    </div>
+  </li>
+  <li class="oys-step">
+    <div class="oys-contents">
+      <span class="oys-icon">3</span>
+      <span class="oys-text">{{ __('Overview') }}</span>
+    </div>
+  </li>
+</ul>
 <form
   method="POST"
   action="{{ $action }}"
