@@ -26,6 +26,8 @@ Limit table height
  */
 .dataTables_scrollBody {
     max-height: 500px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     height: 100%;
 }
 
