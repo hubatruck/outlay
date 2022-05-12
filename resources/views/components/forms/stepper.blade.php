@@ -1,23 +1,21 @@
-<ul class="oys-stepper">
-  <li class="oys-step complete">
-    <div class="oys-contents">
-      <span class="oys-icon">1</span>
-      <span class="oys-text">{{ __('Items') }}</span>
-    </div>
-  </li>
-  <li class="oys-step">
-    <div class="oys-contents">
-      <span class="oys-icon">2</span>
-      <span class="oys-text">{{ __('Payment details') }}</span>
-    </div>
-  </li>
-  <li class="oys-step">
-    <div class="oys-contents">
-      <span class="oys-icon">3</span>
-      <span class="oys-text">{{ __('Overview') }}</span>
-    </div>
-  </li>
-</ul>
+@isset($steps)
+  <ul class="oys-stepper">
+    @foreach($steps as $step)
+      <li class="oys-step @if($loop->index < $complete)complete @endif">
+        <div class="oys-contents">
+        <span class="oys-icon">
+          @if($loop->index < $complete)
+            <span uk-icon="check"></span>
+          @else
+            {{ $loop->index + 1 }}
+          @endif
+        </span>
+          <span class="oys-text">{{ __($step) }}</span>
+        </div>
+      </li>
+    @endforeach
+  </ul>
+@endisset
 <form
   method="POST"
   action="{{ $action }}"
