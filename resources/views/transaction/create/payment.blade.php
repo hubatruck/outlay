@@ -3,10 +3,11 @@
 @section('content')
   <x-page-title>{{ __('Transaction creator') }} - {{ __('Payment details') }}</x-page-title>
   <div class="uk-card-body">
-    <x-forms.stepper
+    <x-forms.transaction-stepper
       :action="route('transaction.data.create.payment')"
       submitLabel="Next step"
       :previousStep="route('transaction.view.create.items')"
+      complete="1"
     >
       <div
         id="has-errors"
@@ -35,7 +36,7 @@
         />
       </div>
 
-    </x-forms.stepper>
+    </x-forms.transaction-stepper>
   </div>
 @endsection
 

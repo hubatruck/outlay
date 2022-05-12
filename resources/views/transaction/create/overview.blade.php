@@ -3,11 +3,12 @@
 @section('content')
   <x-page-title>{{ __('Transaction creator') }} - {{ __('Overview') }}</x-page-title>
   <div class="uk-card-body">
-    <x-forms.stepper
+    <x-forms.transaction-stepper
       :action="route('transaction.data.create.overview')"
       submitLabel="Send"
-      :previousStep="route('transaction.view.create.items')"
+      :previousStep="route('transaction.view.create.payment')"
       final="true"
+      complete="2"
     >
 
       @if (isset($transaction['scope'],$transaction['amount']))
@@ -71,6 +72,6 @@
       <x-buttons.change :url="route('transaction.view.create.payment')"/>
       <hr>
 
-    </x-forms.stepper>
+    </x-forms.transaction-stepper>
   </div>
 @endsection
