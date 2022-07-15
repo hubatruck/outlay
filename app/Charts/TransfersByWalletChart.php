@@ -31,11 +31,11 @@ class TransfersByWalletChart extends BaseChart
             ->setTitle(__('Transfers by wallet'))
             ->addData(
                 __('Received'),
-                Arr::pluck($data->reduceDPAndGet(), 'in')
+                Arr::pluck($data->get(), 'in')
             )
             ->addData(
                 __('Sent'),
-                Arr::pluck($data->reduceDPAndGet(), 'out')
+                Arr::pluck($data->get(), 'out')
             )
             ->setXAxis($data->keys())
             ->setColors(Arr::shuffle(self::$colors));

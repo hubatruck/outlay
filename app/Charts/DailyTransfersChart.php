@@ -43,6 +43,6 @@ class DailyTransfersChart extends BaseChart
      */
     private function getData(ChartDataHandler $cdh): array
     {
-        return $cdh->addMissingDays()->reduceDPAndGet();
+        return $cdh->addMissingDays()->get();
     }
 }

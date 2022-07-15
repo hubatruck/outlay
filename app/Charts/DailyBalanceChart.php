@@ -69,6 +69,6 @@ class DailyBalanceChart extends BaseChart
         return $transferBalance->with($transactionBalance)
             ->sumWithPreviousDays()
             ->offsetBalance($this->wallet->getBalanceBetween(null, $this->range->last()))
-            ->reduceDPAndGet();
+            ->get();
     }
 }

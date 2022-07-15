@@ -36,7 +36,7 @@ class TransactionsByTypeChart extends BaseChart
 
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))
-            ->addData($data->reduceDPAndGet())
+            ->addData($data->get())
             ->setLabels($labels->get())
             ->setColors(Arr::shuffle(self::$colors));
     }

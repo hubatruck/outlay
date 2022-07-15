@@ -22,7 +22,7 @@ class TransfersByTypeChart extends BaseChart
         }
         return $this->chart->pieChart()
             ->setTitle(__('Transferred amounts by type'))
-            ->addData($data->reduceDPAndGet())
+            ->addData($data->get())
             ->setLabels(ChartDataHandler::from(['Incoming transfer', 'Outgoing transfer'])->translate()->get())
             ->setDataLabels()
             ->setColors(Arr::shuffle(self::$colors));

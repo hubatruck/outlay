@@ -17,7 +17,7 @@ class DailyTransactionsChart extends BaseChart
         /// https://stackoverflow.com/a/24888904
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
         $baseQuery = $this->getTransactionBaseQuery($wallet->id)
-            ->selectRaw('DATE(transaction_date) as day, sum(amount) as daily_amount')
+            ->selectRaw('DATE(transaction_date) as day, sum(amount) / 100 as daily_amount')
             ->groupBy('day');
 
         $income = ChartDataHandler::from($this->getForTransactionTypeOf($baseQuery, TransactionType::INCOME)->pluck('daily_amount', 'day'))
@@ -64,6 +64,6 @@ class DailyTransactionsChart extends BaseChart
      */
     private function getData(ChartDataHandler $cdh): array
     {
-        return $cdh->addMissingDays()->reduceDPAndGet();
+        return $cdh->addMissingDays()->get();
     }
 }

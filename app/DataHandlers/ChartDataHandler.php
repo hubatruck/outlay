@@ -94,15 +94,6 @@ class ChartDataHandler
     }
 
     /**
-     * Shorter alias function for `$this->reduceDataPrecision()->get()`
-     * @return array
-     */
-    public function reduceDPAndGet(): array
-    {
-        return $this->reduceDataPrecision()->get();
-    }
-
-    /**
      * Get the data
      *
      * @return array
@@ -110,26 +101,6 @@ class ChartDataHandler
     public function get(): array
     {
         return $this->data;
-    }
-
-    /**
-     * Reduces the precision of the stored data
-     *
-     * @return $this
-     */
-    public function reduceDataPrecision(): ChartDataHandler
-    {
-        $this->data = array_map(function ($item) {
-            if (\is_array($item)) {
-                foreach (['in', 'out'] as $key) {
-                    $item[$key] = reducePrecision($item[$key], $this->dataPrecision);
-                }
-            } else {
-                $item = reducePrecision($item, $this->dataPrecision);
-            }
-            return $item;
-        }, $this->data);
-        return $this;
     }
 
     /**
