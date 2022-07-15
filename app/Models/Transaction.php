@@ -6,6 +6,7 @@ use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Database\Factories\TransactionFactory;
+use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -108,9 +109,10 @@ class Transaction extends Model
 
     /**
      * Set transaction type from DATE format to DATETIME format
-     * @param string|Carbon $value
+     * @param DateTime $value
+     * @return void
      */
-    public function setTransactionDateAttribute(Carbon|string $value): void
+    public function setTransactionDateAttribute(DateTime $value): void
     {
         $this->attributes['transaction_date'] = (Carbon::parse($value)->format(globalDateFormat()) . ' 03:00:00');
     }
