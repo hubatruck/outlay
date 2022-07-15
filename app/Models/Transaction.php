@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Amount;
 use App\Feedbacks\TransactionFeedback;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -60,6 +61,7 @@ class Transaction extends Model
 
     protected $casts = [
         'transaction_date' => 'date',
+        'amount' => Amount::class,
     ];
 
     protected $dates = [

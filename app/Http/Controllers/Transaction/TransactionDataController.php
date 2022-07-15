@@ -94,7 +94,7 @@ class TransactionDataController extends Controller
         foreach ($transactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
-                'amount' => $transactionData['amount'][$key],
+                'amount' => (integer)($transactionData['amount'][$key] * 100),
                 'created_at' => $now,
                 'updated_at' => $now,
             ], $sharedProps);

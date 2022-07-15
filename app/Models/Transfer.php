@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Amount;
 use Carbon\CarbonPeriod;
 use Database\Factories\TransferFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,6 +55,10 @@ class Transfer extends Model
 
     protected $dates = [
         'transfer_date',
+    ];
+
+    protected $casts = [
+        'amount' => Amount::class,
     ];
 
     /**
