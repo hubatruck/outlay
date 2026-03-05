@@ -18,7 +18,7 @@
         "sass-loader": "^12.6.0"
     },
     "dependencies": {
-        "darkreader": "^4.9.46",
+        "darkreader": "^4.9.117",
         "datatables.net": "^1.11.5",
         "datatables.net-buttons": "^2.2.2",
         "flatpickr": "^4.6.13",
