@@ -11,35 +11,40 @@ class DailyTransfersChart extends BaseChart
 {
     public function build(Wallet $wallet): BarChart
     {
-        $transferIn = ChartDataHandler::from(
-            $this->filterTransfers($wallet->incomingTransfers())->pluck('daily_amount', 'day'),
-            $this->range
-        );
-        $transferOut = ChartDataHandler::from(
-            $this->filterTransfers($wallet->outgoingTransfers())->pluck('daily_amount', 'day'),
-            $this->range
-        );
+        $rows = $wallet->transfers()
+            ->betweenDateRange($this->range)
+            ->selectRaw('
+                DATE(transfer_date) as day,
+                SUM(CASE WHEN to_wallet_id = ?   THEN amount ELSE 0 END) / 100 as incoming_amount,
+                SUM(CASE WHEN from_wallet_id = ? THEN amount ELSE 0 END) / 100 as outgoing_amount
+            ', [$wallet->id, $wallet->id])
+            ->groupBy('day')
+            ->orderBy('day')
+            ->get();
+
+        $incomingMap = $rows->pluck('incoming_amount', 'day');
+        $outgoingMap = $rows->pluck('outgoing_amount', 'day');
+
+        $transferIn = ChartDataHandler::from($incomingMap, $this->range);
+        $transferOut = ChartDataHandler::from($outgoingMap, $this->range);
 
         return $this->chart->barChart()
             ->setTitle(__('Daily transfers'))
             ->addData(
+                $this->getData($transferIn),
                 __('Incoming transfer'),
-                $this->getData($transferIn)
             )
             ->addData(
-                __('Outgoing transfer'),
-                $this->getData($transferOut)
+                $this->getData($transferOut),
+                __('Outgoing transfer')
             )
-            ->setXAxis($this->createAxisData())
+            ->setXAxis($this->createAxisData(), 'datetime')
             ->setColors(Arr::shuffle(self::$colors))
             ->setToolbar(true);
     }
 
     /**
      * Small function to not repeat transformation method calls on data handlers
-     *
-     * @param ChartDataHandler $cdh
-     * @return array
      */
     private function getData(ChartDataHandler $cdh): array
     {

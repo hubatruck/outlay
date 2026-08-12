@@ -1,63 +1,62 @@
+{{-- https://github.com/ArielMejiaDev/larapex-charts/blob/master/stubs/resources/views/chart/script.blade.php --}}
 <script>
-  const options_{!! $chart->id() !!} = {
-    chart: {
-      type: '{!! $chart->type() !!}',
-      height: {!! $chart->height() !!},
-      width: '{!! $chart->width() !!}',
-      toolbar: {!! $chart->toolbar() !!},
-      zoom: {!! $chart->zoom() !!},
-      fontFamily: '{!! $chart->fontFamily() !!}',
-      foreColor: '{!! $chart->foreColor() !!}'
-    },
-    plotOptions: {
-      bar: {!! $chart->horizontal() !!}
+    (function () {
+        const options_{!! $chart->id() !!} = {
+            chart: {
+                id: '{!! $chart->id() !!}',
+                type: '{!! $chart->type() !!}',
+                height: {!! $chart->height() !!},
+                width: '{!! $chart->width() !!}',
+                toolbar: {!! $chart->toolbar() !!},
+                zoom: {!! $chart->zoom() !!},
+                fontFamily: '{!! $chart->fontFamily() !!}',
+                foreColor: '{!! $chart->foreColor() !!}',
+                sparkline: {!! $chart->sparkline() !!},
+                @if($chart->stacked())
+                    stacked: {!! $chart->stacked() !!},
+                @endif
+            },
+        plotOptions: {
+        bar: {!! $chart->horizontal() !!}
     },
     colors: {!! $chart->colors() !!},
-    series: {!! $chart->dataset() !!},
-    dataLabels: {!! $chart->dataLabels() !!},
-    @if($chart->labels())
-    labels: @json($chart->labels(), JSON_THROW_ON_ERROR),
-    @endif
-    title: {
-      text: "{!! $chart->title() !!}"
+        series: {!! $chart->dataset() !!},
+            dataLabels: {!! $chart->dataLabels() !!},
+                @if($chart->labels())
+
+                    labels: {!! json_encode($chart->labels(), true) !!},
+                @endif
+        title: {
+        text: "{!! $chart->title() !!}"
     },
     subtitle: {
-      text: '{!! $chart->subtitle() !!}',
-      align: '{!! $chart->subtitlePosition() !!}'
+        text: '{!! $chart->subtitle() !!}',
+            align: '{!! $chart->subtitlePosition() !!}'
     },
-    xaxis: {
-      categories: {!! $chart->xAxis() !!},
-      @if (in_array($chart->type(), ['area', 'line', 'bar']) && !json_decode($chart->horizontal(), false, 512, JSON_THROW_ON_ERROR)->horizontal)
-      type: 'datetime',
-      labels: {
-        formatter: function (value, timestamp) {
-          const date = new Date(timestamp);
-          return date.toLocaleDateString('{{ config('app.locale') }}', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          });
-        },
-      },
-      @endif
+    xaxis: {!! $chart->xAxis() !!},
+        yaxis: {
+        labels: {
+            show: {!! json_encode($chart->showYAxisLabels(), true) !!},
+                }
     },
-    grid: {!! $chart->grid() !!},
-    markers: {!! $chart->markers() !!},
-    @if($chart->stroke())
-    stroke: {!! $chart->stroke() !!},
-    @else
-    stroke: {curve: 'smooth'},
+    @if ($chart->yAxis())
+        yaxis: {!! $chart->yAxis() !!},
     @endif
-    noData: {
-      text: '{{ __('No data available for this date interval') }}',
-      align: 'center',
-      verticalAlign: 'middle',
-    }
-  };
+        grid: {!! $chart->grid() !!},
+            markers: {!! $chart->markers() !!},
+                @if($chart->stroke())
+                    stroke: {!! $chart->stroke() !!},
+                @endif
+        legend: {
+        show: {!! $chart->showLegend() !!}
+    },
+    states: {!! json_encode($chart->states()['states']) !!}
+        };
 
-  const chart_{!! $chart->id() !!} = new ApexCharts(
-    document.querySelector("#{!! $chart->id() !!}"),
-    options_{!! $chart->id() !!}
-  );
-  chart_{!! $chart->id() !!}.render();
+    const chart_{!! $chart->id() !!} = new ApexCharts(
+        document.querySelector("#{!! $chart->id() !!}"),
+        options_{!! $chart->id() !!}
+    );
+    chart_{!! $chart->id() !!}.render();
+    }) ();
 </script>

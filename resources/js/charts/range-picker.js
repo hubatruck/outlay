@@ -19,7 +19,7 @@ let previousRange = rpConfig.defaultDateRange;
 /**
  * Range picker component
  */
-const rangePicker = $('#chart-date-range').flatpickr({
+const rangePicker = flatpickr('#chart-date-range', {
     mode: 'range',
     altInput: true,
     locale: rpConfig.locale,

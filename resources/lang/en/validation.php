@@ -152,10 +152,20 @@ return [
     */
 
     'attributes' => [
-        'wallet_id' => 'wallet',
+        'amount' => 'amount',
+        'amount.0' => 'amount',
+        'amount.*' => 'amount',
+        'name' => 'name',
+        'notes' => 'notes',
+        'scope' => 'scope',
+        'scope.0' => 'scope',
+        'scope.*' => 'scope',
+        'transaction_date' => 'transaction date',
         'transaction_type_id' => 'transaction type',
+        'wallet_id' => 'wallet',
         'to_wallet_id' => 'destination wallet',
         'from_wallet_id' => 'source wallet',
+        'transfer_date' => 'transfer date',
     ],
 
 ];

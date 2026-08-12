@@ -21,28 +21,17 @@ class DailyBalanceChart extends BaseChart
         $this->wallet = $wallet;
         return $this->chart->AreaChart()
             ->setTitle(__('Daily balance'))
-            ->addData(
-                __('Balance'),
-                $this->getData()
-            )
-            ->setXAxis($this->createAxisData())
+            ->addData($this->getData(), __('Balance'))
+            ->setXAxis($this->createAxisData(), 'datetime')
             ->setGrid(false)
             ->setColors(Arr::shuffle(self::$colors))
             ->setToolbar(true);
     }
 
-    /**
-     * Get the data for the chart
-     *
-     * @return array
-     */
-    private function getData(): array
+    private function dailySeriesForTransactions(Wallet $wallet): BalanceChartDataHandler
     {
-        /**
-         * @var BalanceChartDataHandler $transactionBalance
-         */
-        $transactionBalance = BalanceChartDataHandler::from(
-            $this->wallet->transactions()
+        return BalanceChartDataHandler::from(
+            $wallet->transactions()
                 ->betweenDateRange($this->range)
                 ->sumAmount()
                 ->selectRaw('DATE(transaction_date) as day')
@@ -51,13 +40,13 @@ class DailyBalanceChart extends BaseChart
                 ->pluck('amount', 'day'),
             $this->range
         )->addMissingDays();
+    }
 
-        /**
-         * @var BalanceChartDataHandler $transferBalance
-         */
-        $transferBalance = BalanceChartDataHandler::from(
-            $this->wallet->transfers()
-                ->sumAmount($this->wallet->id)
+    private function dailySeriesForTransfers(Wallet $wallet): BalanceChartDataHandler
+    {
+        return BalanceChartDataHandler::from(
+            $wallet->transfers()
+                ->sumAmount($wallet->id)
                 ->betweenDateRange($this->range)
                 ->selectRaw('DATE(transfer_date) as day')
                 ->groupBy('day')
@@ -65,8 +54,15 @@ class DailyBalanceChart extends BaseChart
                 ->pluck('amount', 'day'),
             $this->range
         )->addMissingDays();
+    }
 
-        return $transferBalance->with($transactionBalance)
+    private function getData(): array
+    {
+        $transactionBalance = $this->dailySeriesForTransactions($this->wallet);
+        $transferBalance = $this->dailySeriesForTransfers($this->wallet);
+
+        return $transferBalance
+            ->with($transactionBalance)
             ->sumWithPreviousDays()
             ->offsetBalance($this->wallet->getBalanceBetween(null, $this->range->last()))
             ->get();

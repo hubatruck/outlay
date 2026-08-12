@@ -1,4 +1,3 @@
-import './bootstrap';
 import './theme';
 
 /// Convert regular date inputs into flatpickr date inputs

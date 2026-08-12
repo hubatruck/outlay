@@ -16,5 +16,6 @@
 @endsection
 
 @push('scripts')
+  @vite('resources/js/datatables.js')
   {{ $dataTable->scripts() }}
 @endpush

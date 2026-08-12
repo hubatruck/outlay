@@ -110,9 +110,7 @@ class ChartDataHandler
      */
     public function translate(): ChartDataHandler
     {
-        $this->data = array_map(static function ($item) {
-            return __($item);
-        }, $this->data);
+        $this->data = array_map(static fn($item) => __($item), $this->data);
         return $this;
     }
 
@@ -128,9 +126,7 @@ class ChartDataHandler
             $this->data = $this->keysToEpoch()->data;
         }
 
-        $this->data = $this->eachDayOfTheRange(function (Carbon $date) {
-            return $this->data[$date->getTimestampMs()] ?? 0;
-        });
+        $this->data = $this->eachDayOfTheRange(fn(Carbon $date) => $this->data[$date->getTimestampMs()] ?? 0);
         return $this;
     }
 
@@ -178,9 +174,9 @@ class ChartDataHandler
      */
     public function fillWithDaysOfRange(): ChartDataHandler
     {
-        $this->data = $this->eachDayOfTheRange(function (Carbon $date) {
-            return $date->getTimestampMs();
-        });
+        $this->data = $this->eachDayOfTheRange(
+            fn($date) => $date->getTimestampMs()
+        );
         return $this;
     }
 

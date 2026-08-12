@@ -28,9 +28,7 @@ Auth::routes([
     'confirm' => false,
 ]);
 
-Route::get('/', static function () {
-    return redirect('/dashboard');
-});
+Route::get('/', fn() => redirect('/dashboard'));
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -57,9 +55,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [TransactionViewController::class, 'list'])->name('transaction.view.all');
 
         Route::prefix('create')->group(function () {
-            Route::get('/', static function () {
-                return redirect(route('transaction.view.create.items'));
-            })->name('transaction.view.create');
+            Route::get('/', static fn() => redirect(route('transaction.view.create.items')))->name('transaction.view.create');
             Route::get('items', [TransactionViewController::class, 'createItems'])->name('transaction.view.create.items');
             Route::post('items', [TransactionDataController::class, 'storeItems'])->name('transaction.data.create.items');
             Route::get('payment', [TransactionViewController::class, 'createPayment'])->name('transaction.view.create.payment');

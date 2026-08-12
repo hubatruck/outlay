@@ -2,5 +2,5 @@
   @if (isset($icon))
     <span uk-icon="{{ $icon }}"></span>
   @endif
-  {{ __($label ?? 'UNDEFINED') }}
+  {{ __($label ?? '[ERR:UNDEFINED]') }}
 </a>

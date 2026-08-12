@@ -1,8 +1,5 @@
 <?php
 
-const ATTR_AMOUNT = 'Az érték';
-const ATTR_SCOPE = 'A cél';
-
 return [
 
     /*
@@ -104,7 +101,6 @@ return [
     'prohibited_if' => ':attribute nem megengedett, ha :other jelentése :value.',
     'prohibited_unless' => ':attribute nem megengedett, kivéve, ha :other :values-ban/ben van.',
     'regex' => ':attribute formátum érvénytelen.',
-    'relatable' => ':attribute megeshet, hogy nem kapcsolódik ehhez az erőforráshoz.',
     'required' => ':attribute kötelező.',
     'required_if' => ':attribute-ra/re akkor van szükség, ha :other :value.',
     'required_unless' => ':attribute-ra/re csak akkor van szükség, ha :other :values-ban/ben van.',
@@ -156,14 +152,14 @@ return [
     */
 
     'attributes' => [
-        'amount' => ATTR_AMOUNT,
-        'amount.0' => ATTR_AMOUNT,
-        'amount.*' => ATTR_AMOUNT,
+        'amount' => 'Az érték',
+        'amount.0' => 'Az érték',
+        'amount.*' => 'Az érték',
         'name' => 'A név',
         'notes' => 'A jegyzetek',
-        'scope' => ATTR_SCOPE,
-        'scope.0' => ATTR_SCOPE,
-        'scope.*' => ATTR_SCOPE,
+        'scope' => 'A cél',
+        'scope.0' => 'A cél',
+        'scope.*' => 'A cél',
         'transaction_date' => 'A tranzakció dátum',
         'transaction_type_id' => 'A tranzakció típus',
         'wallet_id' => 'A tárca',

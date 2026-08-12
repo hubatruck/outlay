@@ -24,32 +24,18 @@ class FortifyUIServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::loginView(static function () {
-            return view('auth.login');
-        });
+        Fortify::loginView(static fn() => view('auth.login'));
 
-        Fortify::registerView(static function () {
-            return view('auth.register');
-        });
+        Fortify::registerView(static fn() => view('auth.register'));
 
-        Fortify::requestPasswordResetLinkView(static function () {
-            return view('auth.forgot-password');
-        });
+        Fortify::requestPasswordResetLinkView(static fn() => view('auth.forgot-password'));
 
-        Fortify::resetPasswordView(static function ($request) {
-            return view('auth.reset-password', ['request' => $request]);
-        });
+        Fortify::resetPasswordView(static fn($request) => view('auth.reset-password', ['request' => $request]));
 
-        // Fortify::verifyEmailView(function () {
-        //     return view('auth.verify-email');
-        // });
+        // Fortify::verifyEmailView(static fn () => view('auth.verify-email'));
 
-        // Fortify::confirmPasswordView(function () {
-        //     return view('auth.confirm-password');
-        // });
+        // Fortify::confirmPasswordView(static fn () => view('auth.confirm-password'));
 
-        // Fortify::twoFactorChallengeView(function () {
-        //     return view('auth.two-factor-challenge');
-        // });
+        // Fortify::twoFactorChallengeView(static fn () => view('auth.two-factor-challenge'));
     }
 }

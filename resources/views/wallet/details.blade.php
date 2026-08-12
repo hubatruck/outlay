@@ -7,7 +7,7 @@
 @endphp
 
 @section('content')
-  <x-page-title>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? 'ERR:UNDEFINED']) }}</x-page-title>
+  <x-page-title>{{ __('Wallet details for :wallet', ['wallet' => $wallet->name ?? '[ERR:UNDEFINED]']) }}</x-page-title>
 
   <div class="uk-card-body uk-padding-remove">
     <div class="uk-card uk-card-body">
@@ -97,5 +97,5 @@
 @endsection
 
 @push('scripts')
-  <script src="{{ @asset('vendor/larapex-charts/apexcharts.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@6"></script>
 @endpush

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,40 +11,50 @@
   <title>{{ config('app.name', 'Laravel') }}</title>
 
   <!-- Scripts -->
-  <script src="{{ mix('js/manifest.js') }}"></script>
-  <script src="{{ mix('js/vendor.js') }}"></script>
+  @vite('resources/js/bootstrap.js')
+  <script>
+    window.runWithJQuery = function (fn) {
+      if (window.jQuery) return fn();
+      const id = setInterval(() => {
+        if (window.jQuery) {
+          clearInterval(id);
+          fn();
+        }
+      }, 10);
+    };
+  </script>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}"/>
+  @vite('resources/less/app.less')
 </head>
 
 <body>
-<div id="app">
-  <x-navbar/>
+  <div id="app">
+    <x-navbar />
 
-  <x-status-alert/>
+    <x-status-alert />
 
-  <main>
-    <section class="uk-section uk-padding-small">
-      <div class="uk-container">
-        <div class="uk-flex-center uk-child-width-expand@l">
-          <div class="uk-card uk-card-default">
-            @yield('content')
+    <main>
+      <section class="uk-section uk-padding-small">
+        <div class="uk-container">
+          <div class="uk-flex-center uk-child-width-expand@l">
+            <div class="uk-card uk-card-default">
+              @yield('content')
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  @auth
-    <x-sidenav/>
-  @endauth
-</div>
+    @auth
+      <x-sidenav />
+    @endauth
+  </div>
 
-<!-- App -->
-<script src="{{ mix('js/app.js') }}"></script>
-<script src="{{ mix('js/datatables.bundle.min.js') }}"></script>
-@stack('scripts')
+  <!-- App -->
+  @vite('resources/js/app.js')
+  @stack('scripts')
 
 </body>
+
 </html>

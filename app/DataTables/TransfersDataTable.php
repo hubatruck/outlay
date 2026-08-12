@@ -23,15 +23,9 @@ class TransfersDataTable extends DataTableBase
     public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
-            ->editColumn('transfer_date', function ($row) {
-                return $row->transfer_date->translatedFormat('Y/m/d, l');
-            })
-            ->editColumn('from_wallet_name', function (Transfer $row) {
-                return $this->getWalletNameFor($row->fromWallet);
-            })
-            ->editColumn('to_wallet_name', function (Transfer $row) {
-                return $this->getWalletNameFor($row->toWallet);
-            });
+            ->editColumn('transfer_date', fn($row) => $row->transfer_date->translatedFormat('Y/m/d, l'))
+            ->editColumn('from_wallet_name', fn(Transfer $row) => $this->getWalletNameFor($row->fromWallet))
+            ->editColumn('to_wallet_name', fn(Transfer $row) => $this->getWalletNameFor($row->toWallet));
     }
 
     /**
@@ -43,7 +37,7 @@ class TransfersDataTable extends DataTableBase
      */
     private function getWalletNameFor(Wallet $wallet = null): string
     {
-        return $wallet !== null ? walletNameWithOwner($wallet) : __('[DELETED]');
+        return $wallet !== null ? walletNameWithOwner($wallet) : __('[ERR:DELETED]');
     }
 
     /**

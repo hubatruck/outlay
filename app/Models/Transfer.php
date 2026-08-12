@@ -53,12 +53,9 @@ class Transfer extends Model
         'transfer_date',
     ];
 
-    protected $dates = [
-        'transfer_date',
-    ];
-
     protected $casts = [
         'amount' => Amount::class,
+        'transfer_date' => 'datetime',
     ];
 
     /**
@@ -128,7 +125,7 @@ class Transfer extends Model
      */
     public function scopeSumAmount(Builder $query, string $walletID): Builder
     {
-        return $query->
-        selectRaw('sum(case when from_wallet_id = ? then -amount when to_wallet_id = ? then amount end) as amount', [$walletID, $walletID]);
+        return $query
+            ->selectRaw('sum(case when from_wallet_id = ? then -amount when to_wallet_id = ? then amount end) as amount', [$walletID, $walletID]);
     }
 }

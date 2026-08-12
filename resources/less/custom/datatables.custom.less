@@ -1,6 +1,3 @@
-@import 'global/settings';
-@import '~uikit/src/scss/variables';
-
 .dataTables_processing {
     z-index: 1000;
 }
@@ -8,14 +5,16 @@
 /**
 Footer styling
  */
-@media (max-width: $breakpoint-xsmall-max) {
-    .dataTables_info, .dataTables_length {
+@media (max-width: @breakpoint-xsmall-max) {
+
+    .dataTables_info,
+    .dataTables_length {
         text-align: center;
-        margin-bottom: $margin-small-margin !important;
+        margin-bottom: @margin-small-margin !important;
     }
 }
 
-@media (min-width: $breakpoint-xsmall-max) {
+@media (min-width: @breakpoint-xsmall-max) {
     .dataTables_info {
         float: right;
     }
@@ -54,7 +53,9 @@ div.DTCR_pointer {
 }
 
 .DTCR_clonedTable {
-    tr, th {
+
+    tr,
+    th {
         cursor: pointer;
     }
 }
@@ -79,21 +80,25 @@ table.fixedHeader-locked {
     }
 }
 
-$sortingClasses: '.sorting', '.sorting_asc', '.sorting_desc', '.sorting_asc_disabled', '.sorting_desc_disabled';
+@sortingClasses: sorting, sorting_asc, sorting_desc, sorting_asc_disabled, sorting_desc_disabled;
 
 table.dataTable thead {
-    & > tr {
-        & > td.sorting_asc, & > td.sorting_desc, & > td.sorting {
+    &>tr {
+
+        &>td.sorting_asc,
+        &>td.sorting_desc,
+        &>td.sorting {
             padding-right: 30px;
         }
 
-        & > th:active, & > tr:active {
+        &>th:active,
+        &>tr:active {
             outline: none;
         }
     }
 
-    @each $class in $sortingClasses {
-        #{$class} {
+    each(@sortingClasses, {
+        .@{value} {
             cursor: pointer;
             position: relative;
 
@@ -114,8 +119,7 @@ table.dataTable thead {
                 content: "↓";
             }
         }
-    }
-
+    });
 }
 
 table.dataTable thead .sorting_asc:before,
@@ -155,6 +159,7 @@ div.dataTables_scrollFoot table {
 }
 
 @media screen and (max-width: 767px) {
+
     div.dataTables_wrapper div.dataTables_length,
     div.dataTables_wrapper div.dataTables_filter,
     div.dataTables_wrapper div.dataTables_info,
@@ -163,7 +168,7 @@ div.dataTables_scrollFoot table {
     }
 }
 
-table.dataTable.uk-table-condensed > thead > tr > th {
+table.dataTable.uk-table-condensed>thead>tr>th {
     padding-right: 20px;
 }
 

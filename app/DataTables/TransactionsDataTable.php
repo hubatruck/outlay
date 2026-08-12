@@ -23,20 +23,15 @@ class TransactionsDataTable extends DataTableBase
     public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
-            ->addColumn('actions', function ($row) {
-                return View::make('components.transaction-dt-actions')->with([
+            ->addColumn('actions', fn($row) =>
+                View::make('components.transaction-dt-actions')->with([
                     'editURL' => route('transaction.view.update', ['id' => $row->transaction_id]),
                     'deleteURL' => route('transaction.data.delete', ['id' => $row->transaction_id]),
-                ]);
-            })
+                ]))
             ->rawColumns(['actions'])
             ->blacklist(['actions'])
-            ->editColumn('transaction_date', function ($row) {
-                return $row->transaction_date->translatedFormat('Y/m/d, l');
-            })
-            ->editColumn('type', function ($row) {
-                return __($row->transactionType->name);
-            });
+            ->editColumn('transaction_date', fn($row) => $row->transaction_date->translatedFormat('Y/m/d, l'))
+            ->editColumn('type', fn($row) => __($row->transactionType->name));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Charts;
 
-use App\DataHandlers\ByWalletDataHandler;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\HorizontalBar;
 use Illuminate\Support\Arr;
@@ -11,33 +10,26 @@ class TransfersByWalletChart extends BaseChart
 {
     public function build(Wallet $wallet): HorizontalBar
     {
-        $out = $wallet->outgoingTransfers()
-            ->with(['toWallet', 'toWallet.user'])
+        $start = $this->range->first()->startOfDay();
+        $endExclusive = $this->range->last()->copy()->addDay()->startOfDay();
+
+        $received = (float) ($wallet->incomingTransfers()
             ->without(['transactionType'])
-            ->betweenDateRange($this->range)
-            ->selectRaw('to_wallet_id, sum(amount) as amount')
-            ->groupBy('to_wallet_id')
-            ->get();
-        $in = $wallet->incomingTransfers()
-            ->with(['fromWallet', 'fromWallet.user'])
-            ->betweenDateRange($this->range)
+            ->whereBetween('transfer_date', [$start, $endExclusive])
+            ->selectRaw('SUM(amount) AS amount')
+            ->value('amount') ?? 0);
+
+        $sent = (float) ($wallet->outgoingTransfers()
             ->without(['transactionType'])
-            ->selectRaw('from_wallet_id, sum(amount) as amount')
-            ->groupBy('from_wallet_id')
-            ->get();
-        $data = ByWalletDataHandler::mapTransfersToWallets($in, $out);
+            ->whereBetween('transfer_date', [$start, $endExclusive])
+            ->selectRaw('SUM(amount) AS amount')
+            ->value('amount') ?? 0);
 
         return $this->chart->horizontalBarChart()
             ->setTitle(__('Transfers by wallet'))
-            ->addData(
-                __('Received'),
-                Arr::pluck($data->get(), 'in')
-            )
-            ->addData(
-                __('Sent'),
-                Arr::pluck($data->get(), 'out')
-            )
-            ->setXAxis($data->keys())
+            ->addData([$received], __('Received'))
+            ->addData([$sent], __('Sent'))
+            ->setXAxis([__('Total')])
             ->setColors(Arr::shuffle(self::$colors));
     }
 }

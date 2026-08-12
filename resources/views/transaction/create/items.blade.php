@@ -21,9 +21,9 @@
 
       <div class="uk-width-1-1" id="transaction-items">
         @forelse($transaction['scope'] ?? [] as $stepper)
-          <x-forms.transaction-item :index="$loop->index" :transaction="$transaction"/>
+          <x-forms.transaction-item :index="$loop->index" :transaction="$transaction" />
         @empty
-          <x-forms.transaction-item/>
+          <x-forms.transaction-item />
         @endforelse
       </div>
       <div class="uk-width-1-1 uk-margin-small-top">
@@ -47,25 +47,28 @@
 
 @push('scripts')
   <script>
-    const container = $('#transaction-items');
-    $('#new-row-button').click((event) => {
-      event.preventDefault();
-      let count = parseInt($('#new-row-count').val());
-      if (!count || isNaN(count)) {
-        count = 1;
-      }
-      count = Math.min(Math.max(1, count), 100);
+    let container = undefined;
+    window.runWithJQuery(() => {
+      container = $('#transaction-items');
+      $('#new-row-button').click((event) => {
+        event.preventDefault();
+        let count = parseInt($('#new-row-count').val());
+        if (!count || isNaN(count)) {
+          count = 1;
+        }
+        count = Math.min(Math.max(1, count), 100);
 
-      for (let i = 1; i <= count; i++) {
-        setTimeout(() => {
-          pushNewItemToList();
-        }, 0);
-      }
-    });
+        for (let i = 1; i <= count; i++) {
+          setTimeout(() => {
+            pushNewItemToList();
+          }, 0);
+        }
+      });
 
-    $(container).on("click", ".remove-row", function (e) { /// user click on remove text
-      e.preventDefault();
-      $(this).parent('div').parent('div').remove();
+      $(container).on("click", ".remove-row", function (e) { /// user click on remove text
+        e.preventDefault();
+        $(this).parent('div').parent('div').remove();
+      });
     });
 
     function pushNewItemToList() {
@@ -88,7 +91,7 @@
 
     function initRemoveButton(element) {
       if (element.html() === '') {
-        UIkit.icon(element, {icon: 'trash'});
+        UIkit.icon(element, { icon: 'trash' });
         element.html("{{ __('Delete this row') }}");
       }
     }

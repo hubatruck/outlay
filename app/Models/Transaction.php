@@ -141,8 +141,12 @@ class Transaction extends Model
      */
     public function scopeBetweenDateRange(Builder $query, CarbonPeriod $range): Builder
     {
-        return $query->whereDate('transaction_date', '>=', $range->first())
-            ->whereDate('transaction_date', '<=', $range->last());
+        $start = $range->first()->copy()->startOfDay();
+        $endExclusive = $range->last()->copy()->addDay()->startOfDay(); // [start, endExclusive)
+
+        return $query
+            ->where('transaction_date', '>=', $start)
+            ->where('transaction_date', '<', $endExclusive);
     }
 
     /**

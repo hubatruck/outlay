@@ -1,15 +1,15 @@
 <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
   <nav class="uk-navbar-container" uk-navbar="mode: click">
-    <div class="uk-navbar-left">
+    <div class="uk-navbar-left uk-flex-middle uk-margin-small-left">
       @auth
-        <span class="uk-margin-small-left" uk-icon="menu" uk-toggle="target: #side-menu"></span>
+        <span uk-icon="menu" uk-toggle="target: #side-menu"></span>
       @endauth
       <a class="uk-navbar-item uk-logo" href="{{ route('dashboard') }}">
         {{ config('app.name', 'Laravel') }}
       </a>
     </div>
 
-    <div class="uk-navbar-right">
+    <div class="uk-navbar-right uk-margin-small-right">
       <ul class="uk-navbar-nav">
         <li>
           <a>

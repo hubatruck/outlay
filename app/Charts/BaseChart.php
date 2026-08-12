@@ -17,8 +17,19 @@ class BaseChart
      * @var string[]
      */
     public static array $colors = [
-        '#008FFB', '#00E396', '#feb019', '#ff455f', '#775dd0', '#80effe',
-        '#0077B5', '#ff6384', '#c9cbcf', '#0057ff', '#00a9f4', '#2ccdc9', '#5e72e4',
+        '#008FFB',
+        '#00E396',
+        '#feb019',
+        '#ff455f',
+        '#775dd0',
+        '#80effe',
+        '#0077B5',
+        '#ff6384',
+        '#c9cbcf',
+        '#0057ff',
+        '#00a9f4',
+        '#2ccdc9',
+        '#5e72e4',
     ];
 
     /**
@@ -51,19 +62,12 @@ class BaseChart
     {
         return Transaction::with(['transactionType', 'wallet'])
             ->betweenDateRange($this->range)
-            ->join('wallets', 'wallet_id', '=', 'wallets.id')
-            ->join(
-                'transaction_types',
-                'transaction_type_id',
-                '=',
-                'transaction_types.id'
-            )
-            ->whereIn('wallet_id', function ($query) {
-                /// https://stackoverflow.com/a/16815955
-                $query->select('id')->from('wallets')
-                    ->where('user_id', '=', Auth::user()->id ?? -1);
-            })
-            ->where('wallet_id', '=', $walletID);
+            ->where('wallet_id', $walletID)
+            ->whereHas(
+                'wallet',
+                fn($q) => $q->where('user_id', Auth::user()->id ?? -1)
+            );
+
     }
 
     /**

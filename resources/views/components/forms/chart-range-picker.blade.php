@@ -34,5 +34,5 @@
       errorMessage: "{{ __('Uh-oh, something went wrong! Please try again later.') }}"
     }
   </script>
-  <script src="{{ mix('js/charts.bundle.min.js') }}"></script>
+  @vite('resources/js/charts/range-picker.js')
 @endpush

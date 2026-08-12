@@ -1,21 +1,23 @@
-import UIkitIcons from 'uikit/dist/js/uikit-icons';
+import $ from "jquery";
+window.$ = window.jQuery = $;
 
+import UIkitIcons from 'uikit/dist/js/uikit-icons';
+import UIkit from 'uikit';
+window.UIkit = UIkit;
 UIkit.use(UIkitIcons);
 
-try {
-    window.$ = window.jQuery = require('jquery');
-    window.UIkit = require('uikit');
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/l10n/hu';
+window.flatpickr = flatpickr;
+$.fn.flatpickr = function (options) {
+    return this.each(function () {
+        flatpickr(this, options);
+    });
+};
 
-    require('datatables.net');
-    require('datatables.net-buttons');
+import * as DarkReader from 'darkreader';
+window.DarkReader = DarkReader;
 
-    require('flatpickr');
-    require('flatpickr/dist/l10n/hu');
-
-    window.DarkReader = require('darkreader');
-} catch (e) {
-    console.error('Error loading module:', e);
-}
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

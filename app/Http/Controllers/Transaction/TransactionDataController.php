@@ -84,9 +84,7 @@ class TransactionDataController extends Controller
     {
         /// Note: Data is already validated
         $transactionData = $request->all();
-        $sharedProps = array_filter($transactionData, static function ($value) {
-            return !\is_array($value);
-        });
+        $sharedProps = array_filter($transactionData, static fn($value) => !\is_array($value));
 
         $newTransactions = [];
         $now = Carbon::now()->toDateTimeString();
@@ -94,7 +92,7 @@ class TransactionDataController extends Controller
         foreach ($transactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
-                'amount' => (integer)($transactionData['amount'][$key] * 100),
+                'amount' => (integer) ($transactionData['amount'][$key] * 100),
                 'created_at' => $now,
                 'updated_at' => $now,
             ], $sharedProps);

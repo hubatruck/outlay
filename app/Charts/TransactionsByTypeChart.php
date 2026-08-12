@@ -14,29 +14,25 @@ class TransactionsByTypeChart extends BaseChart
     {
         /// https://stackoverflow.com/a/24888904
         /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
-        $baseQuery = $this->getTransactionBaseQuery($wallet->id)
-            ->selectRaw('transaction_type_id as type, sum(amount) as amount')
-            ->groupBy('type')
-            ->orderBy('type');
+        $amountByType = $this->getTransactionBaseQuery($wallet->id)
+            ->selectRaw('transaction_type_id, SUM(amount) as amount')
+            ->whereIn('transaction_type_id', [TransactionType::INCOME, TransactionType::EXPENSE])
+            ->groupBy('transaction_type_id')
+            ->pluck('amount', 'transaction_type_id');
 
-        /// Workaround in case when the wallet has got only expenses, but no income
-        $data = $baseQuery->pluck('amount')->toArray();
-        if (!empty($data) &&
-            !$wallet->transactions()
-                ->where('transaction_type_id', '=', TransactionType::INCOME)
-                ->betweenDateRange($this->range)
-                ->exists()
-        ) {
-            $data = [0, $data[0]];
-        }
-        $data = ChartDataHandler::from($data);
+        $data = [
+            (float) ($amountByType[TransactionType::INCOME] ?? 0),
+            (float) ($amountByType[TransactionType::EXPENSE] ?? 0),
+        ];
 
-        $labels = ChartDataHandler::from(TransactionType::all()->pluck('name'))
-            ->translate();
+        $labels = ChartDataHandler::from(
+            TransactionType::all()->pluck('name')
+        )->translate();
+
 
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))
-            ->addData($data->get())
+            ->addData($data)
             ->setLabels($labels->get())
             ->setColors(Arr::shuffle(self::$colors));
     }

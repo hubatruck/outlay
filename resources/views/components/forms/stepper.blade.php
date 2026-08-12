@@ -54,15 +54,17 @@
 
 @push('scripts')
   <script>
-    $('.cancel-transaction').click(() => {
-      UIkit.modal.confirm('{{ __('All entered data will be lost. Proceed?') }}', {
-        labels: {
-          ok: '{{ __('yes') }}',
-          cancel: '{{ __('no') }}'
-        }
-      }).then(function () {
-        window.location.replace('{{ route('transaction.view.all') }}');
-      }, () => {
+    window.runWithJQuery(() => {
+      $('.cancel-transaction').click(() => {
+        UIkit.modal.confirm('{{ __('All entered data will be lost. Proceed?') }}', {
+          i18n: {
+            ok: '{{ __('yes') }}',
+            cancel: '{{ __('no') }}'
+          }
+        }).then(function () {
+          window.location.replace('{{ route('transaction.view.all') }}');
+        }, () => {
+        });
       });
     });
   </script>
