@@ -6,25 +6,19 @@ use App\Models\Transfer;
 use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ *  @extends Factory<Transfer>
+ */
 class TransferFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Transfer::class;
-
-    /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
         $wallets = Wallet::all()->pluck('id')->toArray();
         $to = $this->faker->randomElement($wallets);
-        /// https://stackoverflow.com/a/369608
+        // https://stackoverflow.com/a/369608
         $from = $this->faker->randomElement(array_diff($wallets, [$to]));
 
         return [

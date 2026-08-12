@@ -18,8 +18,6 @@ class DashboardController extends Controller
 
     /**
      * Show the application dashboard.
-     *
-     * @return Renderable
      */
     public function index(): Renderable
     {

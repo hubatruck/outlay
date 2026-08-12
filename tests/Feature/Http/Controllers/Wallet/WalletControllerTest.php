@@ -1,11 +1,8 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Wallet;
-
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -72,8 +69,8 @@ class WalletControllerTest extends TestCase
 
     /**
      * Create a wallet belonging to the provided user
-     * @param User $user
-     * @return Wallet
+     *
+     * @param  User  $user
      */
     private function createWalletFor(Model $user): Wallet
     {
@@ -115,8 +112,6 @@ class WalletControllerTest extends TestCase
 
     /**
      * Create a wallet to belonging to the passed user and get the raw attributes
-     * @param User $user
-     * @return array
      */
     private function rawWallet(User $user): array
     {
@@ -139,6 +134,7 @@ class WalletControllerTest extends TestCase
 
     /**
      * Create wallet with too long name
+     *
      * @throws Exception
      */
     public function test_save_wallet_validate_too_long_name(): void
@@ -205,6 +201,7 @@ class WalletControllerTest extends TestCase
 
     /**
      * Update wallet with too long name
+     *
      * @throws Exception
      */
     public function test_update_wallet_validate_too_long_name(): void
@@ -438,7 +435,7 @@ class WalletControllerTest extends TestCase
         $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'success']);
 
-        /// checking redirect
+        // checking redirect
         $wallet->delete();
         $response = $this->actingAs($user)
             ->from(route('login'))
@@ -469,7 +466,7 @@ class WalletControllerTest extends TestCase
         $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'success']);
 
-        /// checking redirect
+        // checking redirect
         $wallet->delete();
         $response = $this->actingAs($user)
             ->from(route('login'))
@@ -501,7 +498,7 @@ class WalletControllerTest extends TestCase
         $response->assertLocation(route('wallet.view.all'));
         $response->assertSessionHas(['status' => 'success']);
 
-        /// checking redirect
+        // checking redirect
         $wallet->delete();
         $response = $this->actingAs($user)
             ->from(route('login'))

@@ -16,9 +16,6 @@ class WalletDataController extends Controller
 {
     /**
      * Save a new wallet
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -31,10 +28,6 @@ class WalletDataController extends Controller
 
     /**
      * Validate request data
-     *
-     * @param Request $request
-     * @param bool $isNewModelInstance
-     * @return array
      */
     public function validateRequest(Request $request, bool $isNewModelInstance = true): array
     {
@@ -45,15 +38,12 @@ class WalletDataController extends Controller
         ]);
 
         $data['is_public'] = isset($data['is_public']);
+
         return $data;
     }
 
     /**
      * Update a wallet
-     *
-     * @param Request $request
-     * @param string $id
-     * @return RedirectResponse
      */
     public function update(Request $request, string $id): RedirectResponse
     {
@@ -68,14 +58,12 @@ class WalletDataController extends Controller
 
         $wallet->fill($validated);
         $wallet->save();
+
         return WalletFeedback::success('updated', route('wallet.view.details', ['id' => $id]));
     }
 
     /**
      * Delete a wallet if it does not have transactions tied to it
-     *
-     * @param string $id
-     * @return RedirectResponse
      */
     public function delete(string $id): RedirectResponse
     {
@@ -96,14 +84,12 @@ class WalletDataController extends Controller
                 $response = WalletFeedback::success('deleted');
             }
         }
+
         return $response;
     }
 
     /**
      * Toggle the trashed/active status of a wallet
-     *
-     * @param string $id
-     * @return RedirectResponse
      */
     public function toggleHidden(string $id): RedirectResponse
     {

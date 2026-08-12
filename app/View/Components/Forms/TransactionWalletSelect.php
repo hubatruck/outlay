@@ -10,11 +10,15 @@ use Illuminate\View\Component;
 
 class TransactionWalletSelect extends Component
 {
+    /**
+     * @var Transaction[]|Transaction|null
+     */
     public array|Transaction|null $transaction;
 
     /**
      * Create a new component instance.
      *
+     * @param  Transaction[]|Transaction|null  $transaction
      * @return void
      */
     public function __construct(array|Transaction|null $transaction = null)
@@ -45,13 +49,12 @@ class TransactionWalletSelect extends Component
     private function isWalletInSession(Wallet $wallet): bool
     {
         $sessionVariable = session('transaction')['wallet_id'] ?? null;
+
         return isset($sessionVariable) && (string) $wallet->id === $sessionVariable;
     }
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View|Closure|string
      */
     public function render(): View|string|Closure
     {

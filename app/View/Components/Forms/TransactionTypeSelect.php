@@ -10,11 +10,15 @@ use Illuminate\View\Component;
 
 class TransactionTypeSelect extends Component
 {
+    /**
+     * @var Transaction[]|Transaction|null
+     */
     public array|Transaction|null $transaction;
 
     /**
      * Create a new component instance.
      *
+     * @param  Transaction[]|Transaction|null  $transaction
      * @return void
      */
     public function __construct(array|Transaction|null $transaction)
@@ -35,13 +39,12 @@ class TransactionTypeSelect extends Component
     public function isSessionSelectedType(TransactionType $transactionType): bool
     {
         $sessionVariable = session('transaction')['transaction_type_id'] ?? null;
+
         return $sessionVariable !== null && (string) $transactionType->id === (string) $sessionVariable;
     }
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View|Closure|string
      */
     public function render(): View|string|Closure
     {

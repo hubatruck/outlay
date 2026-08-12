@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string|null $deleted_at
  * @property-read TransactionType $transactionType
  * @property-read Wallet $wallet
+ *
  * @method static TransactionFactory factory(...$parameters)
  * @method static Builder|Transaction betweenDateRange(CarbonPeriod $range)
  * @method static Builder|Transaction newModelQuery()
@@ -45,6 +46,7 @@ use Illuminate\Support\Facades\Auth;
  * @method static Builder|Transaction whereTransactionTypeId($value)
  * @method static Builder|Transaction whereUpdatedAt($value)
  * @method static Builder|Transaction whereWalletId($value)
+ *
  * @mixin Model
  */
 class Transaction extends Model
@@ -64,7 +66,7 @@ class Transaction extends Model
         'amount' => Amount::class,
     ];
 
-    protected $dates = [
+    protected array $dates = [
         'transaction_date',
     ];
 
@@ -74,25 +76,22 @@ class Transaction extends Model
      * - User owns the transaction
      *
      * If one of the check is failed, an appropriate error redirect is returned
-     *
-     * @param Transaction|null $transaction
-     * @return RedirectResponse|null
      */
-    public static function checkStatus(Transaction $transaction = null): ?RedirectResponse
+    public static function checkStatus(?Transaction $transaction = null): ?RedirectResponse
     {
         $response = null;
-        if ($transaction === null || $transaction->wallet === null) {
+        if ($transaction == null || $transaction->wallet == null) {
             $response = TransactionFeedback::existError();
         }
-        if (!Auth::user()->owns($transaction)) {
+        if (! Auth::user()->owns($transaction)) {
             $response = TransactionFeedback::editError();
         }
+
         return $response;
     }
 
     /**
      * Type of the transaction
-     * @return BelongsTo
      */
     public function transactionType(): BelongsTo
     {
@@ -101,7 +100,6 @@ class Transaction extends Model
 
     /**
      * Wallet that the transaction belongs to
-     * @return BelongsTo
      */
     public function wallet(): BelongsTo
     {
@@ -111,33 +109,24 @@ class Transaction extends Model
 
     /**
      * Set transaction type from DATE format to DATETIME format
-     * @param DateTime|string $value
-     * @return void
      */
     public function setTransactionDateAttribute(DateTime|string $value): void
     {
-        $this->attributes['transaction_date'] = (Carbon::parse($value)->format(globalDateFormat()) . ' 03:00:00');
+        $this->attributes['transaction_date'] = (Carbon::parse($value)->format(globalDateFormat()).' 03:00:00');
     }
 
     /**
      * Only get transactions occurred this month
-     *
-     * @param Builder $query
-     * @param null $lastDay
-     * @return Builder
      */
-    public function scopeThisMonth(Builder $query, $lastDay = null): Builder
+    public function scopeThisMonth(Builder $query, ?string $lastDay = null): Builder
     {
-        $lastDay = $lastDay ?? currentDayOfTheMonth();
+        $lastDay ??= currentDayOfTheMonth();
+
         return $this->scopeBetweenDateRange($query, CarbonPeriod::create(date('Y-m-01'), $lastDay));
     }
 
     /**
      * Return transactions occurred in a specific date range
-     *
-     * @param Builder $query
-     * @param CarbonPeriod $range
-     * @return Builder
      */
     public function scopeBetweenDateRange(Builder $query, CarbonPeriod $range): Builder
     {
@@ -151,9 +140,6 @@ class Transaction extends Model
 
     /**
      * Sum transaction amount by transaction type
-     *
-     * @param Builder $query
-     * @return Builder
      */
     public function scopeSumAmount(Builder $query): Builder
     {

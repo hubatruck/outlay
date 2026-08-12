@@ -34,15 +34,11 @@ class BaseChart
 
     /**
      * The date interval/range for the data
-     *
-     * @var CarbonPeriod
      */
     protected CarbonPeriod $range;
 
     /**
      * Chart component
-     *
-     * @var LarapexChart
      */
     protected LarapexChart $chart;
 
@@ -55,8 +51,7 @@ class BaseChart
     /**
      * Generate a base query that can be used for charts
      *
-     * @param string $walletID
-     * @return Builder
+     * @return Builder<Transaction>
      */
     protected function getTransactionBaseQuery(string $walletID): Builder
     {
@@ -65,18 +60,15 @@ class BaseChart
             ->where('wallet_id', $walletID)
             ->whereHas(
                 'wallet',
-                fn($q) => $q->where('user_id', Auth::user()->id ?? -1)
+                fn ($q) => $q->where('user_id', Auth::user()->id ?? -1)
             );
 
     }
 
     /**
      * Filter transfers, by selecting just current month's
-     *
-     * @param $transfers
-     * @return mixed
      */
-    protected function filterTransfers($transfers): mixed
+    protected function filterTransfers(Builder|Transaction $transfers): mixed
     {
         return $transfers->betweenDateRange($this->range)
             ->selectRaw('DATE(transfer_date) as day, sum(amount) / 100 as daily_amount')
@@ -85,8 +77,6 @@ class BaseChart
 
     /**
      * Generate each as label
-     *
-     * @return array
      */
     protected function createAxisData(): array
     {

@@ -17,33 +17,27 @@ class TransfersDataTable extends DataTableBase
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
-     * @return DataTableAbstract
+     * @param  mixed  $query  Results from query() method.
      */
     public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
-            ->editColumn('transfer_date', fn($row) => $row->transfer_date->translatedFormat('Y/m/d, l'))
-            ->editColumn('from_wallet_name', fn(Transfer $row) => $this->getWalletNameFor($row->fromWallet))
-            ->editColumn('to_wallet_name', fn(Transfer $row) => $this->getWalletNameFor($row->toWallet));
+            ->editColumn('transfer_date', fn ($row) => $row->transfer_date->translatedFormat('Y/m/d, l'))
+            ->editColumn('from_wallet_name', fn (Transfer $row) => $this->getWalletNameFor($row->fromWallet))
+            ->editColumn('to_wallet_name', fn (Transfer $row) => $this->getWalletNameFor($row->toWallet));
     }
 
     /**
      * Get styled name for a wallet.
      * If the user does not own the wallet, we add the wallet owner's name too.
-     *
-     * @param Wallet|null $wallet
-     * @return string
      */
-    private function getWalletNameFor(Wallet $wallet = null): string
+    private function getWalletNameFor(?Wallet $wallet = null): string
     {
         return $wallet !== null ? walletNameWithOwner($wallet) : __('[ERR:DELETED]');
     }
 
     /**
      * Get query source of dataTable
-     *
-     * @return HasMany
      */
     public function queryBase(): HasMany
     {
@@ -54,8 +48,6 @@ class TransfersDataTable extends DataTableBase
 
     /**
      * Optional method if you want to use html builder.
-     *
-     * @return Builder
      */
     public function html(): Builder
     {
@@ -68,8 +60,6 @@ class TransfersDataTable extends DataTableBase
 
     /**
      * Get columns.
-     *
-     * @return array
      */
     protected function getColumns(): array
     {
@@ -84,11 +74,9 @@ class TransfersDataTable extends DataTableBase
 
     /**
      * Get filename for export.
-     *
-     * @return string
      */
     protected function filename(): string
     {
-        return 'Transfers_' . date('YmdHis');
+        return 'Transfers_'.date('YmdHis');
     }
 }

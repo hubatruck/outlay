@@ -10,8 +10,6 @@ class TransactionMultiStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -22,20 +20,16 @@ class TransactionMultiStoreRequest extends FormRequest
      * As we actually store the data in the session, we want to load it from that,
      * instead of checking the request data.
      *
-     * @param null $key
-     * @param null $default
-     * @return array
+     * @param  null  $key
+     * @param  null  $default
      */
     public function input($key = null, $default = null): array
     {
         return $this->session()->get('transaction') ?? [];
     }
 
-
     /**
      * Get error redirect URL based on error types.
-     *
-     * @return string
      */
     protected function getRedirectUrl(): string
     {
@@ -43,6 +37,7 @@ class TransactionMultiStoreRequest extends FormRequest
         $response = $errors->hasAny(['amount', 'scope'])
             ? TransactionFeedback::checkItemError()
             : TransactionFeedback::checkPaymentError();
+
         return $response->getTargetUrl();
     }
 }

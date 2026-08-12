@@ -9,12 +9,8 @@ class BalanceChartDataHandler extends ChartDataHandler
 {
     /**
      * Creates a new instance of this class
-     *
-     * @param array|Collection|null $data
-     * @param CarbonPeriod|null $range
-     * @return BalanceChartDataHandler
      */
-    protected static function newInstance(array|Collection $data = null, CarbonPeriod $range = null): BalanceChartDataHandler
+    protected static function newInstance(array|Collection|null $data = null, ?CarbonPeriod $range = null): BalanceChartDataHandler
     {
         return new BalanceChartDataHandler($data, $range);
     }
@@ -23,7 +19,6 @@ class BalanceChartDataHandler extends ChartDataHandler
      * Join instance with another one
      * Note: Data keys should be the same.
      *
-     * @param BalanceChartDataHandler $other
      * @return $this
      */
     public function with(BalanceChartDataHandler $other): BalanceChartDataHandler
@@ -31,6 +26,7 @@ class BalanceChartDataHandler extends ChartDataHandler
         foreach ($this->data as $day => $amount) {
             $this->data[$day] += $other->data[$day];
         }
+
         return $this;
     }
 
@@ -39,7 +35,7 @@ class BalanceChartDataHandler extends ChartDataHandler
      * This is needed, because otherwise previous month's balances won't
      * be taken into account.
      *
-     * @param float $walletBalance Balance of the wallet, as of today
+     * @param  float  $walletBalance  Balance of the wallet, as of today
      * @return $this
      */
     public function offsetBalance(float $walletBalance): BalanceChartDataHandler
@@ -49,6 +45,7 @@ class BalanceChartDataHandler extends ChartDataHandler
         foreach ($this->data as &$item) {
             $item += $offset;
         }
+
         return $this;
     }
 
@@ -60,9 +57,10 @@ class BalanceChartDataHandler extends ChartDataHandler
     public function sumWithPreviousDays(): BalanceChartDataHandler
     {
         $keys = array_keys($this->data);
-        for ($i = 1; $i < sizeof($this->data); $i++) {
+        for ($i = 1; $i < count($this->data); $i++) {
             $this->data[$keys[$i]] += $this->data[$keys[$i - 1]];
         }
+
         return $this;
     }
 }

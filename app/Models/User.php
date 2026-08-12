@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Log;
  * @property-read int|null $transfers_count
  * @property-read Collection|Wallet[] $wallets
  * @property-read int|null $wallets_count
+ *
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -51,6 +52,7 @@ use Illuminate\Support\Facades\Log;
  * @method static Builder|User whereTwoFactorRecoveryCodes($value)
  * @method static Builder|User whereTwoFactorSecret($value)
  * @method static Builder|User whereUpdatedAt($value)
+ *
  * @mixin Model
  */
 class User extends Authenticatable
@@ -60,7 +62,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -71,7 +73,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -92,8 +94,6 @@ class User extends Authenticatable
      * This function is used to determine the prefilled date for transaction
      * creation. If the user made transactions today, those date will be used,
      * otherwise today's date.
-     *
-     * @return Carbon
      */
     public function previousTransactionDate(): Carbon
     {
@@ -109,7 +109,7 @@ class User extends Authenticatable
     /**
      * Transactions belonging to the user
      *
-     * @return HasManyThrough
+     * @return HasManyThrough<Transaction, Wallet, User>
      */
     public function transactions(): HasManyThrough
     {
@@ -119,9 +119,6 @@ class User extends Authenticatable
 
     /**
      * Check if the user made any transactions today
-     *
-     * @param Transaction $lastTransaction
-     * @return bool
      */
     private function hasMadeTransactionsToday(Transaction $lastTransaction): bool
     {
@@ -130,8 +127,6 @@ class User extends Authenticatable
 
     /**
      * Check if user has transactions
-     *
-     * @return bool
      */
     public function hasTransactions(): bool
     {
@@ -140,8 +135,6 @@ class User extends Authenticatable
 
     /**
      * Check if user has any active wallet
-     *
-     * @return bool
      */
     public function hasAnyActiveWallet(): bool
     {
@@ -150,8 +143,6 @@ class User extends Authenticatable
 
     /**
      * Get all active wallets for user
-     *
-     * @return Collection
      */
     public function activeWallets(): Collection
     {
@@ -161,7 +152,7 @@ class User extends Authenticatable
     /**
      * Wallets belonging to the user
      *
-     * @return HasMany
+     * @return HasMany<Wallet, User>
      */
     public function wallets(): HasMany
     {
@@ -170,8 +161,6 @@ class User extends Authenticatable
 
     /**
      * Check if user has wallet of any status
-     *
-     * @return bool
      */
     public function hasWallet(): bool
     {
@@ -180,8 +169,6 @@ class User extends Authenticatable
 
     /**
      * Check if user has transfers
-     *
-     * @return bool
      */
     public function hasTransfers(): bool
     {
@@ -191,13 +178,13 @@ class User extends Authenticatable
     /**
      * Transfers made from or to any of the user's wallets
      *
-     * @return HasMany
+     * @return HasMany<Transfer, User>
      */
     public function transfers(): HasMany
     {
         $relationship = $this->hasMany(Transfer::class, Wallet::class);
 
-        /** @var  $query Builder */
+        /** @var Builder $query */
         $query = Transfer::join('wallets as wallets_from', 'wallets_from.id', '=', 'from_wallet_id')
             ->leftJoin('wallets as wallets_to', 'wallets_to.id', '=', 'to_wallet_id')
             ->whereRaw('(wallets_to.user_id = ? or wallets_from.user_id = ?)', [$this->id, $this->id]);
@@ -205,14 +192,12 @@ class User extends Authenticatable
         $relationship->setQuery(
             $query->getQuery()
         );
+
         return $relationship;
     }
 
     /**
      * Check if the user owns a transaction or wallet
-     *
-     * @param Transaction|Wallet|null $item
-     * @return bool
      */
     public function owns(Transaction|Wallet|null $item): bool
     {
@@ -224,6 +209,7 @@ class User extends Authenticatable
         }
 
         Log::warning('Invalid argument type for ownership check.');
+
         return false;
     }
 }

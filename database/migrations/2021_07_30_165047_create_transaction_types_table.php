@@ -9,8 +9,6 @@ class CreateTransactionTypesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -27,18 +25,16 @@ class CreateTransactionTypesTable extends Migration
     private function transactionTypeCreate(string ...$types): void
     {
         foreach ($types as $type) {
-            $tType = new TransactionType();
+            $tType = new TransactionType;
             $tType->setAttribute('name', $type);
             $tType->save();
         }
     }
 
-    /// https://stackoverflow.com/a/53872157
+    // https://stackoverflow.com/a/53872157
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

@@ -23,9 +23,8 @@ class WalletExistsRule implements Rule
     /**
      * Check if the provided wallet exists
      *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     public function passes($attribute, $value): bool
     {
@@ -34,8 +33,6 @@ class WalletExistsRule implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

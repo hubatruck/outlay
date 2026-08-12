@@ -21,20 +21,18 @@ class UserOwnsWalletRule implements Rule
     /**
      * Determine if current user owns the selected wallet
      *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     public function passes($attribute, $value): bool
     {
         $wallets = Wallet::withTrashed()->find($value);
+
         return $wallets !== null && Auth::user()->owns($wallets);
     }
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

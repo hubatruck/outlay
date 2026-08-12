@@ -5,6 +5,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/less/app.less',
                 'resources/less/print.less',
                 'resources/js/bootstrap.js',
                 'resources/js/app.js',

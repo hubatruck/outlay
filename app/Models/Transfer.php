@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Wallet|null $fromWallet
  * @property-read Wallet|null $toWallet
+ *
  * @method static TransferFactory factory(...$parameters)
  * @method static Builder|Transfer betweenDateRange(CarbonPeriod $range)
  * @method static Builder|Transfer newModelQuery()
@@ -39,6 +40,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Transfer whereToWalletId($value)
  * @method static Builder|Transfer whereTransferDate($value)
  * @method static Builder|Transfer whereUpdatedAt($value)
+ *
  * @mixin Model
  */
 class Transfer extends Model
@@ -60,8 +62,6 @@ class Transfer extends Model
 
     /**
      * Destination wallet
-     *
-     * @return HasOne
      */
     public function toWallet(): HasOne
     {
@@ -71,8 +71,6 @@ class Transfer extends Model
 
     /**
      * Source wallet
-     *
-     * @return HasOne
      */
     public function fromWallet(): HasOne
     {
@@ -82,33 +80,24 @@ class Transfer extends Model
 
     /**
      * Set transfer date from DATE format to DATETIME format
-     *
-     * @param Carbon|string $value
      */
     public function setTransferDateAttribute(Carbon|string $value): void
     {
-        $this->attributes['transfer_date'] = (Carbon::parse($value)->format(globalDateFormat()) . ' 03:00:00');
+        $this->attributes['transfer_date'] = (Carbon::parse($value)->format(globalDateFormat()).' 03:00:00');
     }
 
     /**
      * Only get transfers occurred this month
-     *
-     * @param Builder $query
-     * @param null $lastDay
-     * @return Builder
      */
-    public function scopeThisMonth(Builder $query, $lastDay = null): Builder
+    public function scopeThisMonth(Builder $query, ?string $lastDay): Builder
     {
-        $lastDay = $lastDay ?? currentDayOfTheMonth();
+        $lastDay ??= currentDayOfTheMonth();
+
         return $this->scopeBetweenDateRange($query, CarbonPeriod::create(date('Y-m-01'), $lastDay));
     }
 
     /**
      * Return transfers occurred in a specific date range
-     *
-     * @param Builder $query
-     * @param CarbonPeriod $range
-     * @return Builder
      */
     public function scopeBetweenDateRange(Builder $query, CarbonPeriod $range): Builder
     {
@@ -118,10 +107,6 @@ class Transfer extends Model
 
     /**
      * Sum incoming and outgoing transaction amounts
-     *
-     * @param Builder $query
-     * @param string $walletID
-     * @return Builder
      */
     public function scopeSumAmount(Builder $query, string $walletID): Builder
     {

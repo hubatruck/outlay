@@ -6,25 +6,24 @@ use App\DataHandlers\ChartDataHandler;
 use App\Models\TransactionType;
 use App\Models\Wallet;
 use ArielMejiaDev\LarapexCharts\LineChart;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 
 class DailyTransactionsChart extends BaseChart
 {
     public function build(Wallet $wallet): LineChart
     {
-        /// https://stackoverflow.com/a/24888904
-        /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
+        // https://stackoverflow.com/a/24888904
+        // https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
         $baseQuery = $this->getTransactionBaseQuery($wallet->id)
-            ->selectRaw("
+            ->selectRaw('
                 DATE(transaction_date) AS day,
                 SUM(CASE WHEN transaction_type_id = ? THEN amount ELSE 0 END) / 100 AS income,
-                SUM(CASE WHEN transaction_type_id = ? THEN amount ELSE 0 END) / 100 AS expense",
-            [
-                TransactionType::INCOME,
-                TransactionType::EXPENSE,
-            ])
+                SUM(CASE WHEN transaction_type_id = ? THEN amount ELSE 0 END) / 100 AS expense',
+                [
+                    TransactionType::INCOME,
+                    TransactionType::EXPENSE,
+                ]
+            )
             ->groupBy('day');
 
         $rows = $baseQuery->get();
@@ -53,9 +52,6 @@ class DailyTransactionsChart extends BaseChart
 
     /**
      * Small function to not repeat transformation method calls on data sources.
-     *
-     * @param ChartDataHandler $cdh
-     * @return array
      */
     private function getData(ChartDataHandler $cdh): array
     {

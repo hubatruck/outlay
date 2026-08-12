@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Feature\Models;
-
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
@@ -25,12 +23,12 @@ class UserTest extends TestCase
         $user->refresh();
         self::assertTrue($user->hasWallet());
 
-        /// hidden wallet
+        // hidden wallet
         $wallet->delete();
         $user->refresh();
         self::assertTrue($user->hasWallet());
 
-        /// no wallet at all
+        // no wallet at all
         $wallet->forceDelete();
         $user->refresh();
         self::assertFalse($user->hasWallet());
@@ -114,10 +112,10 @@ class UserTest extends TestCase
 
         $wallet = $this->createWalletFor($user);
 
-        /// wallet that is owned by the user
+        // wallet that is owned by the user
         self::assertTrue($user->owns($wallet));
 
-        /// owned transaction
+        // owned transaction
         $transaction = Transaction::factory()->create(['wallet_id' => $wallet->id]);
         $user->refresh();
         self::assertTrue($user->owns($transaction));
@@ -133,11 +131,11 @@ class UserTest extends TestCase
 
         $user2Wallet = $this->createWalletFor($user2);
 
-        /// not their wallet
+        // not their wallet
         $user->refresh();
         self::assertFalse($user->owns($user2Wallet));
 
-        /// not their transaction
+        // not their transaction
         $user2Transaction = Transaction::factory()->create(['wallet_id' => $user2Wallet->id]);
         $user->refresh();
         self::assertFalse($user->owns($user2Transaction));
@@ -146,7 +144,8 @@ class UserTest extends TestCase
     /**
      * Test owns function with not allowed types
      */
-    public function test_owns_function_not_allowed_type():void{
+    public function test_owns_function_not_allowed_type(): void
+    {
         $user = User::factory()->create();
         $user2 = User::factory()->create();
 

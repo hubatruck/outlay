@@ -25,16 +25,13 @@ abstract class DataTableBase extends DataTable
 
     /**
      * Fields that should be handled as dates
-     *
-     * @var array
      */
     protected array $dateColumns = [];
 
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
-     * @return DataTableAbstract
+     * @param  mixed  $query  Results from query() method.
      */
     public function dataTable(mixed $query): DataTableAbstract
     {
@@ -45,8 +42,6 @@ abstract class DataTableBase extends DataTable
 
     /**
      * Apply custom filters to DB query
-     *
-     * @return HasMany|HasManyThrough
      */
     public function query(): HasManyThrough|HasMany
     {
@@ -62,15 +57,11 @@ abstract class DataTableBase extends DataTable
 
     /**
      * Query for getting data from the database
-     *
-     * @return HasManyThrough|HasMany
      */
     abstract protected function queryBase(): HasManyThrough|HasMany;
 
     /**
      * Parse data range from request
-     *
-     * @return array
      */
     private function parseDateRange(): array
     {
@@ -78,7 +69,7 @@ abstract class DataTableBase extends DataTable
         $dateRange = [];
 
         if ($reqDateRange) {
-            $format = globalDateFormat() . ' H:i:s';
+            $format = globalDateFormat().' H:i:s';
 
             try {
                 [$from, $to] = explode(' - ', $reqDateRange);
@@ -94,24 +85,23 @@ abstract class DataTableBase extends DataTable
                 $dateRange = [];
             }
         }
+
         return $dateRange;
     }
 
     /**
      * Apply between query for specified columns
      *
-     * @param $query
-     * @param array $columns
-     * @param array $range Format: ['YYYY-MM-DD HH:II:SS', 'YYYY-MM-DD HH:II:SS']
+     * @param  array  $range  Format: ['YYYY-MM-DD HH:II:SS', 'YYYY-MM-DD HH:II:SS']
      */
-    private function applyDateRange($query, array $columns, array $range): void
+    private function applyDateRange(HasMany|HasManyThrough $query, array $columns, array $range): void
     {
         foreach ($columns as $col) {
             $query->whereBetween($col, $range);
         }
     }
 
-    protected function getButtons($addCreateButton = true): array
+    protected function getButtons(bool $addCreateButton = true): array
     {
         $buttons = [
             Button::make(['extend' => 'export']),
@@ -122,6 +112,7 @@ abstract class DataTableBase extends DataTable
         if ($addCreateButton) {
             array_unshift($buttons, Button::make(['extend' => 'create', 'className' => 'btn-success text-white']));
         }
+
         return $buttons;
     }
 
@@ -131,8 +122,8 @@ abstract class DataTableBase extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax('', null, $this->dateRangeHandler())
             ->dom(
-                "<'row uk-grid'<'uk-width-1-1 uk-margin-small-bottom'B><'uk-width-1-2@s'f><'#dtc-filters.uk-width-1-2@s'>>" .
-                "<'row uk-grid dt-merge-grid'<'uk-width-1-1'rt>>" .
+                "<'row uk-grid'<'uk-width-1-1 uk-margin-small-bottom'B><'uk-width-1-2@s'f><'#dtc-filters.uk-width-1-2@s'>>".
+                "<'row uk-grid dt-merge-grid'<'uk-width-1-1'rt>>".
                 "<'row uk-grid dt-merge-grid uk-grid-collapse'<'uk-width-1-2@s'l><'uk-width-1-2@s'i><'uk-width-1-1'p>>"
             )
             ->responsive()
@@ -141,7 +132,7 @@ abstract class DataTableBase extends DataTable
             ->colReorder()
             ->scrollX()
             ->orderMulti()
-            ->language(['url' => url('/vendor/datatables/lang/datatables.' . config('app.locale') . '.json')])
+            ->language(['url' => url('/vendor/datatables/lang/datatables.'.config('app.locale').'.json')])
             ->parameters([
                 'initComplete' => $this->getInitCompleteFunction(),
             ]);
@@ -149,8 +140,6 @@ abstract class DataTableBase extends DataTable
 
     /**
      * This function should return the columns displayed by the table
-     *
-     * @return array
      */
     abstract protected function getColumns(): array;
 
@@ -161,13 +150,11 @@ abstract class DataTableBase extends DataTable
      */
     protected function dateRangeHandler(): array
     {
-        return ['date_range' => '$("#' . self::DATE_RANGE_ID . '").val()'];
+        return ['date_range' => '$("#'.self::DATE_RANGE_ID.'").val()'];
     }
 
     /**
      * initComplete script for DataTable instance
-     *
-     * @return string
      */
     protected function getInitCompleteFunction(): string
     {
@@ -176,8 +163,6 @@ abstract class DataTableBase extends DataTable
 
     /**
      * Function to create actions column
-     *
-     * @return Column
      */
     protected function actionsColumn(): Column
     {
@@ -188,8 +173,6 @@ abstract class DataTableBase extends DataTable
      * Get decorated data as defined in datatables ajax response.
      * Overwrites the base class's function, by printing only the
      * current page visible in the datatable.
-     *
-     * @return array
      */
     protected function getAjaxResponseData(): array
     {
@@ -203,8 +186,6 @@ abstract class DataTableBase extends DataTable
      * Get mapped columns versus final decorated output.
      * Overwrites the base function, by displaying the columns in the order
      * set by the user in the datatable UI.
-     *
-     * @return array
      */
     protected function getDataForPrint(): array
     {
@@ -215,14 +196,11 @@ abstract class DataTableBase extends DataTable
 
     /**
      * Orders the table columns based on the request
-     *
-     * @param Collection $columns
-     * @return Collection
      */
     private function orderColumnsInRequestOrder(Collection $columns): Collection
     {
         $order = array_flip(Arr::pluck($this->request->get('columns'), 'data'));
-        $newColumns = array_fill(0, sizeof($columns), null);
+        $newColumns = array_fill(0, count($columns), null);
 
         foreach ($columns->all() as $column) {
             $key = $column->data;
@@ -236,14 +214,11 @@ abstract class DataTableBase extends DataTable
     /**
      * Filters columns, so only the visible ones are rendered.
      * Make sure that the columns are in the user's defined order (done with colReorder).
-     *
-     * @param $columns
-     * @return array
      */
-    private function onlyVisibleColumns($columns): array
+    private function onlyVisibleColumns(array $columns): array
     {
         $shownColumns = [];
-        $show = Arr::pluck($this->request->get('columns'), 'show');
+        $show = Arr::pluck($this->request->input('columns'), 'show');
 
         foreach ($columns as $key => $value) {
             if ($show[$key] === 'true') {
@@ -258,7 +233,6 @@ abstract class DataTableBase extends DataTable
      * Get mapped columns versus final decorated output.
      * Overwrites the base function, by displaying the columns in the order
      * set by the user in the datatable UI.
-     * @return array
      */
     protected function getDataForExport(): array
     {

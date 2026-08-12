@@ -12,8 +12,8 @@ class TransactionsByTypeChart extends BaseChart
 {
     public function build(Wallet $wallet): PolarAreaChart
     {
-        /// https://stackoverflow.com/a/24888904
-        /// https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
+        // https://stackoverflow.com/a/24888904
+        // https://laravelquestions.com/2021/06/27/how-to-get-sum-and-count-date-with-groupby-in-laravel/
         $amountByType = $this->getTransactionBaseQuery($wallet->id)
             ->selectRaw('transaction_type_id, SUM(amount) as amount')
             ->whereIn('transaction_type_id', [TransactionType::INCOME, TransactionType::EXPENSE])
@@ -28,7 +28,6 @@ class TransactionsByTypeChart extends BaseChart
         $labels = ChartDataHandler::from(
             TransactionType::all()->pluck('name')
         )->translate();
-
 
         return $this->chart->polarAreaChart()
             ->setTitle(__('Transaction amounts by type'))

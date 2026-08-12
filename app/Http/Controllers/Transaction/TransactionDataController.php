@@ -23,9 +23,6 @@ class TransactionDataController extends Controller
 {
     /**
      * Stores the items (in the session) for a transaction
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function storeItems(Request $request): RedirectResponse
     {
@@ -39,10 +36,6 @@ class TransactionDataController extends Controller
     /**
      * Store partial transaction data in the session
      *
-     * @param Request $request
-     * @param int $validationType
-     * @param string $redirectRoute
-     * @return RedirectResponse
      * @see TransactionValidator for more info
      */
     private function partialDataStore(Request $request, int $validationType, string $redirectRoute): RedirectResponse
@@ -61,9 +54,6 @@ class TransactionDataController extends Controller
 
     /**
      * Store the payment details of the transaction
-     *
-     * @param Request $request
-     * @return RedirectResponse
      */
     public function storePayment(Request $request): RedirectResponse
     {
@@ -76,15 +66,12 @@ class TransactionDataController extends Controller
 
     /**
      * Store the transaction(s) in the database
-     *
-     * @param TransactionMultiStoreRequest $request
-     * @return Factory|View|Redirector|Application|RedirectResponse
      */
     public function store(TransactionMultiStoreRequest $request): Factory|View|Redirector|Application|RedirectResponse
     {
-        /// Note: Data is already validated
+        // Note: Data is already validated
         $transactionData = $request->all();
-        $sharedProps = array_filter($transactionData, static fn($value) => !\is_array($value));
+        $sharedProps = array_filter($transactionData, static fn ($value) => ! \is_array($value));
 
         $newTransactions = [];
         $now = Carbon::now()->toDateTimeString();
@@ -92,7 +79,7 @@ class TransactionDataController extends Controller
         foreach ($transactionData['scope'] as $key => $scope) {
             $newTransactions[] = array_merge([
                 'scope' => $scope,
-                'amount' => (integer) ($transactionData['amount'][$key] * 100),
+                'amount' => (int) ($transactionData['amount'][$key] * 100),
                 'created_at' => $now,
                 'updated_at' => $now,
             ], $sharedProps);
@@ -100,15 +87,12 @@ class TransactionDataController extends Controller
 
         Transaction::insert($newTransactions);
         $request->session()->forget(keys: 'transaction');
-        return TransactionFeedback::success('created', sizeof($newTransactions));
+
+        return TransactionFeedback::success('created', count($newTransactions));
     }
 
     /**
      * Update a transaction
-     *
-     * @param Request $request
-     * @param string $id
-     * @return RedirectResponse
      */
     public function update(Request $request, string $id): RedirectResponse
     {
@@ -119,14 +103,14 @@ class TransactionDataController extends Controller
         if ($permissionCheck !== null) {
             $response = $permissionCheck;
         } else {
-            $wallet_id = $request->get('wallet_id');
+            $wallet_id = $request->input('wallet_id');
             $validationType = $wallet_id && ((string) $oldTransaction->wallet_id !== (string) $wallet_id)
                 ? TransactionValidator::EVERYTHING_REG
                 : TransactionValidator::EVERYTHING_NO_ACTIVE_WALLET;
             $validated = TransactionValidator::validate($request, $validationType);
 
             $updatedTransaction = new Transaction($validated);
-            if ($updatedTransaction->wallet && !Auth::user()->owns($updatedTransaction)) {
+            if (! Auth::user()->owns($updatedTransaction)) {
                 $response = TransactionFeedback::editError();
             } else {
                 $oldTransaction->fill($updatedTransaction->attributesToArray());
@@ -140,9 +124,6 @@ class TransactionDataController extends Controller
 
     /**
      * Delete a transaction from the database
-     *
-     * @param string $id
-     * @return RedirectResponse
      */
     public function delete(string $id): RedirectResponse
     {
@@ -154,6 +135,7 @@ class TransactionDataController extends Controller
         }
 
         $transaction->delete();
+
         return TransactionFeedback::success('removed');
     }
 }

@@ -20,9 +20,8 @@ class WalletIsActiveRule implements Rule
     /**
      * Check if the selected wallet is active
      *
-     * @param string $attribute
-     * @param mixed $value
-     * @return bool
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     public function passes($attribute, $value): bool
     {
@@ -31,8 +30,6 @@ class WalletIsActiveRule implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

@@ -11,14 +11,13 @@ class DailyBalanceChart extends BaseChart
 {
     /**
      * Current wallet
-     *
-     * @var Wallet
      */
     protected Wallet $wallet;
 
     public function build(Wallet $wallet): AreaChart
     {
         $this->wallet = $wallet;
+
         return $this->chart->AreaChart()
             ->setTitle(__('Daily balance'))
             ->addData($this->getData(), __('Balance'))

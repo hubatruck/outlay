@@ -11,33 +11,28 @@ use Yajra\DataTables\Html\Column;
 
 class TransactionsDataTable extends DataTableBase
 {
-
     protected array $dateColumns = ['transaction_date'];
 
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
-     * @return DataTableAbstract
+     * @param  mixed  $query  Results from query() method.
      */
     public function dataTable(mixed $query): DataTableAbstract
     {
         return parent::dataTable($query)
-            ->addColumn('actions', fn($row) =>
-                View::make('components.transaction-dt-actions')->with([
-                    'editURL' => route('transaction.view.update', ['id' => $row->transaction_id]),
-                    'deleteURL' => route('transaction.data.delete', ['id' => $row->transaction_id]),
-                ]))
+            ->addColumn('actions', fn ($row) => View::make('components.transaction-dt-actions')->with([
+                'editURL' => route('transaction.view.update', ['id' => $row->transaction_id]),
+                'deleteURL' => route('transaction.data.delete', ['id' => $row->transaction_id]),
+            ]))
             ->rawColumns(['actions'])
             ->blacklist(['actions'])
-            ->editColumn('transaction_date', fn($row) => $row->transaction_date->translatedFormat('Y/m/d, l'))
-            ->editColumn('type', fn($row) => __($row->transactionType->name));
+            ->editColumn('transaction_date', fn ($row) => $row->transaction_date->translatedFormat('Y/m/d, l'))
+            ->editColumn('type', fn ($row) => __($row->transactionType->name));
     }
 
     /**
      * Optional method if you want to use html builder.
-     *
-     * @return Builder
      */
     public function html(): Builder
     {
@@ -50,12 +45,10 @@ class TransactionsDataTable extends DataTableBase
 
     /**
      * Get query source of dataTable.
-     *
-     * @return HasManyThrough
      */
     protected function queryBase(): HasManyThrough
     {
-        /// https://stackoverflow.com/a/63285943
+        // https://stackoverflow.com/a/63285943
         return Auth::user()->transactions()
             ->with(['transactionType:id,name', 'wallet:id,name'])
             ->select('transactions.id as transaction_id', 'transactions.*');
@@ -63,8 +56,6 @@ class TransactionsDataTable extends DataTableBase
 
     /**
      * Get columns.
-     *
-     * @return array
      */
     protected function getColumns(): array
     {
@@ -80,11 +71,9 @@ class TransactionsDataTable extends DataTableBase
 
     /**
      * Get filename for export.
-     *
-     * @return string
      */
     protected function filename(): string
     {
-        return 'Transactions_' . date('YmdHis');
+        return 'Transactions_'.date('YmdHis');
     }
 }

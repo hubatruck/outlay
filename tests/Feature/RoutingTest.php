@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -12,8 +10,6 @@ class RoutingTest extends TestCase
 
     /**
      * Check if '/' route is redirected to /home
-     *
-     * @return void
      */
     public function test_redirect_root_to_home(): void
     {

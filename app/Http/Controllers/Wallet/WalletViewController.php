@@ -18,19 +18,16 @@ class WalletViewController extends Controller
 {
     /**
      * Editor view name
-     *
-     * @var string
      */
     private string $editorViewName = 'wallet/edit';
 
     /**
      * List all wallets view
-     *
-     * @return Factory|View|Application
      */
     public function list(): Factory|View|Application
     {
         $wallets = Auth::user()->wallets()->get()->sortBy('deleted_at');
+
         return view('wallet.list', compact('wallets'));
     }
 
@@ -46,28 +43,23 @@ class WalletViewController extends Controller
 
     /**
      * Show the view for editing wallet
-     *
-     * @param string $id
-     * @return View|Factory|RedirectResponse|Application
      */
     public function edit(string $id): View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->find($id);
 
         $permissionCheck = Wallet::check($wallet);
+
         return $permissionCheck ?: view($this->editorViewName, compact('wallet'));
     }
 
     /**
      * Show details page for wallet, if user owns it
-     *
-     * @param string $id
-     * @return View|Factory|RedirectResponse|Application
      */
     public function details(string $id): View|Factory|RedirectResponse|Application
     {
         $wallet = Wallet::withTrashed()->findOrFail($id);
-        if (!Auth::user()->owns($wallet)) {
+        if (! Auth::user()->owns($wallet)) {
             return WalletFeedback::viewError();
         }
 

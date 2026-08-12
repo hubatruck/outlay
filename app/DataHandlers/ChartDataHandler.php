@@ -11,31 +11,20 @@ class ChartDataHandler
 {
     /**
      * Date range of the data
-     *
-     * @var CarbonPeriod
      */
     protected CarbonPeriod $range;
 
     /**
      * Stored data
-     *
-     * @var array|Collection|null
      */
     protected Collection|array|null $data;
 
     /**
      * Floating point digit precision
-     *
-     * @var int
      */
     protected int $dataPrecision;
 
-    /**
-     * @param array|Collection|null $data
-     * @param CarbonPeriod|null $range
-     * @param int $dataPrecision
-     */
-    public function __construct(array|Collection $data = null, CarbonPeriod $range = null, int $dataPrecision = 2)
+    public function __construct(array|Collection|null $data = null, ?CarbonPeriod $range = null, int $dataPrecision = 2)
     {
         if ($data instanceof Collection) {
             $data = $data->toArray();
@@ -49,24 +38,16 @@ class ChartDataHandler
      * Create a new instance from a give data
      * This function eases usage of the class, by adding the ability to call statically the constructor,
      * instead of going the regular $someVar = new ChartDataHandler(...) way
-     *
-     * @param array|Collection|null $data
-     * @param CarbonPeriod|null $range
-     * @return ChartDataHandler
      */
-    public static function from(array|Collection $data = null, CarbonPeriod $range = null): ChartDataHandler
+    public static function from(array|Collection|null $data = null, ?CarbonPeriod $range = null): ChartDataHandler
     {
         return static::newInstance($data, $range);
     }
 
     /**
      * Creates a new instance of this class
-     *
-     * @param array|Collection|null $data
-     * @param CarbonPeriod|null $range
-     * @return ChartDataHandler
      */
-    protected static function newInstance(array|Collection $data = null, CarbonPeriod $range = null): ChartDataHandler
+    protected static function newInstance(array|Collection|null $data = null, ?CarbonPeriod $range = null): ChartDataHandler
     {
         return new ChartDataHandler($data, $range);
     }
@@ -74,31 +55,27 @@ class ChartDataHandler
     /**
      * Set the date range
      *
-     * @param CarbonPeriod $range
      * @return $this
      */
     public function setRange(CarbonPeriod $range): ChartDataHandler
     {
         $this->range = $range;
+
         return $this;
     }
 
     /**
      * Set the floating point precision
-     *
-     * @param int|mixed $dataPrecision
      */
-    public function setDataPrecision(mixed $dataPrecision): void
+    public function setDataPrecision(int $dataPrecision): void
     {
         $this->dataPrecision = $dataPrecision;
     }
 
     /**
      * Get the data
-     *
-     * @return array
      */
-    public function get(): array
+    public function get(): Collection|array|null
     {
         return $this->data;
     }
@@ -110,14 +87,14 @@ class ChartDataHandler
      */
     public function translate(): ChartDataHandler
     {
-        $this->data = array_map(static fn($item) => __($item), $this->data);
+        $this->data = array_map(static fn ($item) => __($item), $this->data);
+
         return $this;
     }
 
     /**
      * Fill out the keys of the array, so each day of the range is present
      *
-     * @param bool $convertKeysToEpochTime
      * @return $this
      */
     public function addMissingDays(bool $convertKeysToEpochTime = true): ChartDataHandler
@@ -126,7 +103,8 @@ class ChartDataHandler
             $this->data = $this->keysToEpoch()->data;
         }
 
-        $this->data = $this->eachDayOfTheRange(fn(Carbon $date) => $this->data[$date->getTimestampMs()] ?? 0);
+        $this->data = $this->eachDayOfTheRange(fn (Carbon $date) => $this->data[$date->getTimestampMs()] ?? 0);
+
         return $this;
     }
 
@@ -134,6 +112,7 @@ class ChartDataHandler
      * Converts data keys to Epoch time
      *
      * @return $this
+     *
      * @throws UnexpectedValueException When key is not parseable
      */
     public function keysToEpoch(): ChartDataHandler
@@ -141,10 +120,10 @@ class ChartDataHandler
         $newData = [];
         foreach ($this->data as $key => $value) {
             $newKey = strtotime($key);
-            if (!$newKey) {
+            if (! $newKey) {
                 throw new UnexpectedValueException("Failed to parse array key '$key' as date");
             }
-            $newData[$newKey . '000'] = $value;
+            $newData[$newKey.'000'] = $value;
         }
         $this->data = $newData;
 
@@ -153,9 +132,6 @@ class ChartDataHandler
 
     /**
      * Do something with each day of the given range
-     *
-     * @param callable $transformerCallback
-     * @return array
      */
     protected function eachDayOfTheRange(callable $transformerCallback): array
     {
@@ -175,15 +151,14 @@ class ChartDataHandler
     public function fillWithDaysOfRange(): ChartDataHandler
     {
         $this->data = $this->eachDayOfTheRange(
-            fn($date) => $date->getTimestampMs()
+            fn ($date) => $date->getTimestampMs()
         );
+
         return $this;
     }
 
     /**
      * Get keys of the stored data
-     *
-     * @return array
      */
     public function keys(): array
     {

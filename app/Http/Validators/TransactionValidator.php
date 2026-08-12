@@ -40,13 +40,8 @@ class TransactionValidator
 
     /**
      * Validate the request's data
-     *
-     * @param Request|array $requestOrData
-     * @param int $type
-     * @param bool $doRedirect
-     * @return array|MessageBag
      */
-    public static function validate(Request|array $requestOrData, int $type, bool $doRedirect = true): array|MessageBag
+    public static function validate(Request $requestOrData, int $type, bool $doRedirect = true): array|Request|MessageBag
     {
         $rules = self::getRulesFor($type);
 
@@ -63,9 +58,6 @@ class TransactionValidator
 
     /**
      * Get validation rules for a specific validation type
-     *
-     * @param int $type
-     * @return array
      */
     public static function getRulesFor(int $type): array
     {
@@ -101,25 +93,23 @@ class TransactionValidator
 
     /**
      * Generate payment validator rules
-     *
-     * @param bool $walletMustBeActive
-     * @return array
      */
     private static function paymentValidatorRules(bool $walletMustBeActive = true): array
     {
         $walletRules = ['bail'];
         if ($walletMustBeActive) {
-            $walletRules[] = new UserOwnsWalletRule();
-            $walletRules[] = new WalletIsActiveRule();
+            $walletRules[] = new UserOwnsWalletRule;
+            $walletRules[] = new WalletIsActiveRule;
             $walletRules[] = Auth::user()->hasAnyActiveWallet() ? 'required' : 'nullable';
         }
+
         return [
             'wallet_id' => $walletRules,
             'transaction_type_id' => [
                 'required',
                 Rule::in(TransactionType::all()->pluck('id')->toArray()),
             ],
-            'transaction_date' => 'required|date|date_format:' . globalDateFormat(),
+            'transaction_date' => 'required|date|date_format:'.globalDateFormat(),
         ];
     }
 }

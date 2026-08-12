@@ -6,12 +6,8 @@ use Illuminate\Http\RedirectResponse;
 
 class TransferFeedback
 {
-
     /**
      * Redirect user with success message
-     *
-     * @param string $performedAction
-     * @return RedirectResponse
      */
     public static function success(string $performedAction = 'created'): RedirectResponse
     {
@@ -28,8 +24,6 @@ class TransferFeedback
 
     /**
      * Alert for cases when the user does not have a wallet
-     *
-     * @return array
      */
     public static function noWalletMsg(): array
     {
@@ -47,20 +41,17 @@ class TransferFeedback
     }
 
     /**
-     * @param string $mainMsg Primary message
-     * @param string $link Link for create action
-     * @param string $createMsg Create action message
-     * @return string
+     * @param  string  $mainMsg  Primary message
+     * @param  string  $link  Link for create action
+     * @param  string  $createMsg  Create action message
      */
     private static function messageWithLink(string $mainMsg, string $link, string $createMsg): string
     {
-        return $mainMsg . '<br><a class="uk-link" href="' . $link . '">' . $createMsg . '</a>';
+        return "$mainMsg<br><a class=\"uk-link\" href=\"$link\">$createMsg</a>";
     }
 
     /**
      * Alert for cases when the user does not have an active wallet
-     *
-     * @return array
      */
     public static function noActiveWalletMsg(): array
     {
@@ -85,9 +76,8 @@ class TransferFeedback
     public static function warnIrreversibleTransfer(): array
     {
         return [
-            'content' =>
-                '<strong>' . __('Warning') . '</strong>: '
-                . __('Please be careful when selecting the destination wallet. Sending sums to wallets that have a name next to them and marked \'External\' is irreversible, as those belong to other users.'),
+            'content' => '<strong>'.__('Warning').'</strong>: '
+                .__('Please be careful when selecting the destination wallet. Sending sums to wallets that have a name next to them and marked \'External\' is irreversible, as those belong to other users.'),
             'type' => 'warning',
         ];
     }

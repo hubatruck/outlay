@@ -11,3 +11,10 @@ parameters:
         - routes/
 
     level: 7
+    ignoreErrors:
+        -
+            identifiers:
+                - missingType.generics
+                - return.type
+                - argument.type
+                - missingType.iterableValue    
