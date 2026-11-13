@@ -13,7 +13,7 @@
         "arielmejiadev/larapex-charts": "10.0",
         "barryvdh/laravel-snappy": "1.0.5",
         "h4cc/wkhtmltopdf-amd64": "0.12.4",
-        "laravel/framework": "13.25.0",
+        "laravel/framework": "13.40.0",
         "laravel/tinker": "3.0.2",
         "laravel/ui": "4.6.3",
         "maatwebsite/excel": "3.1.69",
